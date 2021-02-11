@@ -18,5 +18,7 @@ ABGToken::ABGToken()
 void ABGToken::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetReplicateMovement(true);
 	
 }
