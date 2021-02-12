@@ -20,18 +20,4 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGPlayerController|Movement")
 	void UpdateTransformOnServer(FTransform NewTransform);
-
-protected:
-
-	// Server-side movement functions
-	// UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGPlayerController|Movement")
-	// void MoveForward_Server(float Value);
-	//
-	// UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGPlayerController|Movement")
-	// void MoveRight_Server(float Value);
-
-	// UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGPlayerController|Movement")
-	// void ServerSetTransform(FTransform Transform);
-
-
 };
