@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// © 2021 Matthew Barham. All Rights Reserved.
+
+#pragma once
 
 #include "Engine/DataTable.h"
 #include "BGTypes.generated.h"
@@ -13,4 +15,22 @@ struct  FBGTokenBank : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class ABGToken> TokenClassReference;
+};
+
+USTRUCT(BlueprintType)
+struct FBGPlayerInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText PlayerName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 bGameMasterPermissions : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLinearColor PlayerColor;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 bReady : 1;
 };

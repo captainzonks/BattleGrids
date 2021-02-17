@@ -1,10 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// © 2021 Matthew Barham. All Rights Reserved.
 
 
 #include "BGPawn.h"
 
-
-#include "BGPlayerController.h"
+#include "BGGamePlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -19,6 +18,8 @@ ABGPawn::ABGPawn()
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
 	RootComponent = CapsuleComponent;
+	CapsuleComponent->SetCapsuleHalfHeight(90.f);
+	CapsuleComponent->SetCapsuleRadius(90.f);
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	StaticMeshComponent->SetupAttachment(CapsuleComponent);
@@ -105,5 +106,5 @@ void ABGPawn::Turn(float Value)
 
 void ABGPawn::UpdateTransform(FTransform NewTransform)
 {
-	Cast<ABGPlayerController>(Controller)->UpdateTransformOnServer(NewTransform);
+	Cast<ABGGamePlayerController>(Controller)->UpdateTransformOnServer(NewTransform);
 }

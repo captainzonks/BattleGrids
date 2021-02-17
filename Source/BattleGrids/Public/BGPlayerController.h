@@ -1,8 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// © 2021 Matthew Barham. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "BGTypes.h"
 #include "GameFramework/PlayerController.h"
 #include "BGPlayerController.generated.h"
 
@@ -16,8 +18,10 @@ class BATTLEGRIDS_API ABGPlayerController : public APlayerController
 
 public:
 
-	virtual void SetupInputComponent() override;
+	ABGPlayerController();
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGPlayerController|Movement")
-	void UpdateTransformOnServer(FTransform NewTransform);
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGPlayerController|Config")
+	FBGPlayerInfo PlayerInfo;
 };

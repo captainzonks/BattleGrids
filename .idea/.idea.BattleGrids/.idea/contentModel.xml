@@ -81,7 +81,10 @@
           <e p="BattleGrids.h" t="Include" />
           <e p="Private" t="Include">
             <e p="BGBoard.cpp" t="Include" />
+            <e p="BGGameInstance.cpp" t="Include" />
             <e p="BGGameModeBase.cpp" t="Include" />
+            <e p="BGGamePlayerController.cpp" t="Include" />
+            <e p="BGLobbyPlayerController.cpp" t="Include" />
             <e p="BGPawn.cpp" t="Include" />
             <e p="BGPlayerController.cpp" t="Include" />
             <e p="BGTile.cpp" t="Include" />
@@ -89,7 +92,10 @@
           </e>
           <e p="Public" t="Include">
             <e p="BGBoard.h" t="Include" />
+            <e p="BGGameInstance.h" t="Include" />
             <e p="BGGameModeBase.h" t="Include" />
+            <e p="BGGamePlayerController.h" t="Include" />
+            <e p="BGLobbyPlayerController.h" t="Include" />
             <e p="BGPawn.h" t="Include" />
             <e p="BGPlayerController.h" t="Include" />
             <e p="BGTile.h" t="Include" />
