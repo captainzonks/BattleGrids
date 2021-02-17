@@ -87,6 +87,7 @@
             <e p="BGLobbyPlayerController.cpp" t="Include" />
             <e p="BGPawn.cpp" t="Include" />
             <e p="BGPlayerController.cpp" t="Include" />
+            <e p="BGSaveGame.cpp" t="Include" />
             <e p="BGTile.cpp" t="Include" />
             <e p="BGToken.cpp" t="Include" />
           </e>
@@ -98,6 +99,7 @@
             <e p="BGLobbyPlayerController.h" t="Include" />
             <e p="BGPawn.h" t="Include" />
             <e p="BGPlayerController.h" t="Include" />
+            <e p="BGSaveGame.h" t="Include" />
             <e p="BGTile.h" t="Include" />
             <e p="BGToken.h" t="Include" />
             <e p="BGTypes.h" t="Include" />

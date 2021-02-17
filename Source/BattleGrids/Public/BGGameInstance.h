@@ -13,5 +13,8 @@ UCLASS()
 class BATTLEGRIDS_API UBGGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	class UBGSaveGame* SaveGame;
 };
