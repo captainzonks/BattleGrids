@@ -3,6 +3,9 @@
 
 #include "BGToken.h"
 
+#include "BGPlayerController.h"
+#include "Engine/DemoNetDriver.h"
+
 // Sets default values
 ABGToken::ABGToken()
 {
@@ -16,6 +19,13 @@ ABGToken::ABGToken()
 	StaticMeshComponent->bIgnoreRadialImpulse = true;
 	StaticMeshComponent->SetLinearDamping(2.f);
 	StaticMeshComponent->SetAngularDamping(2.f);
+}
+
+void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGToken, PlayerControllerPermissions)
 }
 
 void ABGToken::ToggleLockTokenInPlace_Implementation(bool bLock)
@@ -45,6 +55,19 @@ void ABGToken::ToggleTokenPhysicsAndCollision_Implementation(bool const bPhysics
 	StaticMeshComponent->SetSimulatePhysics(bPhysicsOn);
 	StaticMeshComponent->SetEnableGravity(bGravityOn);
 	StaticMeshComponent->SetCollisionEnabled(CollisionType);
+}
+
+bool ABGToken::PlayerControllerHasPermissions(ABGPlayerController const* PlayerController)
+{
+	for (auto PC : PlayerControllerPermissions)
+	{
+		if (PC == PlayerController)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 // Called when the game starts or when spawned

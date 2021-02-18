@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
-#include "GeometryCollection/GeometryCollectionSimulationTypes.h"
 
 #include "BGToken.generated.h"
+
+class ABGPlayerController;
 
 UCLASS()
 class BATTLEGRIDS_API ABGToken : public AActor
@@ -16,6 +18,8 @@ class BATTLEGRIDS_API ABGToken : public AActor
 public:
 	// Sets default values for this actor's properties
 	ABGToken();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Multicast, toggles whether or not the token position and rotation is locked.
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
@@ -30,6 +34,9 @@ public:
 	void ToggleTokenPhysicsAndCollision(bool const bPhysicsOn, bool const bGravityOn,
 	                                    ECollisionEnabled::Type const CollisionType);
 
+	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
+	bool PlayerControllerHasPermissions(ABGPlayerController const* PlayerController);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,4 +46,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BGToken|Config")
 	FText TokenName;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGToken|Config")
+	TArray<ABGPlayerController*> PlayerControllerPermissions;
 };

@@ -21,6 +21,8 @@ public:
 	ABGPlayerController();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	FBGPlayerInfo GetPlayerInfo() const { return PlayerInfo; }
 
 protected:
 
