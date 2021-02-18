@@ -8,7 +8,7 @@
 #include "BGGameModeBase.generated.h"
 
 /**
- * 
+ * Primary Game Mode Base class for gameplay
  */
 UCLASS()
 class BATTLEGRIDS_API ABGGameModeBase : public AGameModeBase
@@ -19,4 +19,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameModeBase|Config")
 	TArray<TSubclassOf<class ABGToken>> CharacterTokens;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameModeBase|Config")
+	TArray<APlayerController*> ConnectedPlayers;
 };
