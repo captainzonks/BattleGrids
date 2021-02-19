@@ -3,30 +3,30 @@
 
 #include "BGTile.h"
 
+#include "Engine/EngineTypes.h"
+
 // Sets default values
 ABGTile::ABGTile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 0.25f));
+	StaticMeshComponent->SetIsReplicated(true);
+}
 
+void ABGTile::ToggleTileVisibility_Implementation(bool const bHide)
+{
+	StaticMeshComponent->SetVisibility(!bHide);
+	StaticMeshComponent->SetCollisionEnabled(bHide
+		                                         ? ECollisionEnabled::Type::QueryOnly
+		                                         : ECollisionEnabled::Type::QueryAndPhysics);
 }
 
 // Called when the game starts or when spawned
 void ABGTile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
-
-// Called every frame
-void ABGTile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

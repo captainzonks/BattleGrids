@@ -84,9 +84,11 @@
             <e p="BGGameInstance.cpp" t="Include" />
             <e p="BGGameModeBase.cpp" t="Include" />
             <e p="BGGamePlayerController.cpp" t="Include" />
+            <e p="BGGameStateBase.cpp" t="Include" />
             <e p="BGLobbyPlayerController.cpp" t="Include" />
             <e p="BGPawn.cpp" t="Include" />
             <e p="BGPlayerController.cpp" t="Include" />
+            <e p="BGPlayerState.cpp" t="Include" />
             <e p="BGSaveGame.cpp" t="Include" />
             <e p="BGTile.cpp" t="Include" />
             <e p="BGToken.cpp" t="Include" />
@@ -96,9 +98,11 @@
             <e p="BGGameInstance.h" t="Include" />
             <e p="BGGameModeBase.h" t="Include" />
             <e p="BGGamePlayerController.h" t="Include" />
+            <e p="BGGameStateBase.h" t="Include" />
             <e p="BGLobbyPlayerController.h" t="Include" />
             <e p="BGPawn.h" t="Include" />
             <e p="BGPlayerController.h" t="Include" />
+            <e p="BGPlayerState.h" t="Include" />
             <e p="BGSaveGame.h" t="Include" />
             <e p="BGTile.h" t="Include" />
             <e p="BGToken.h" t="Include" />

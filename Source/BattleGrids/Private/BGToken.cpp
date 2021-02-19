@@ -25,7 +25,7 @@ void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABGToken, PlayerControllerPermissions)
+	DOREPLIFETIME(ABGToken, PlayerPermissions)
 }
 
 void ABGToken::ToggleLockTokenInPlace_Implementation(bool bLock)
@@ -57,11 +57,11 @@ void ABGToken::ToggleTokenPhysicsAndCollision_Implementation(bool const bPhysics
 	StaticMeshComponent->SetCollisionEnabled(CollisionType);
 }
 
-bool ABGToken::PlayerControllerHasPermissions(ABGPlayerController const* PlayerController)
+bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerState)
 {
-	for (auto PC : PlayerControllerPermissions)
+	for (auto It : PlayerPermissions)
 	{
-		if (PC == PlayerController)
+		if (It == PlayerState)
 		{
 			return true;
 		}

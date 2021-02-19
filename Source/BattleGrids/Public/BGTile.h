@@ -14,15 +14,15 @@ class BATTLEGRIDS_API ABGTile : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABGTile();
-	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGTile|Functions")
+	void ToggleTileVisibility(bool bHide);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent* StaticMeshComponent;
 
 };

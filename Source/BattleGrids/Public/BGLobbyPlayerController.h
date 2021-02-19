@@ -13,5 +13,4 @@ UCLASS()
 class BATTLEGRIDS_API ABGLobbyPlayerController : public ABGPlayerController
 {
 	GENERATED_BODY()
-	
 };

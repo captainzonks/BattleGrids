@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "BGTypes.h"
 #include "GameFramework/PlayerController.h"
 #include "BGPlayerController.generated.h"
 
@@ -19,13 +18,4 @@ class BATTLEGRIDS_API ABGPlayerController : public APlayerController
 public:
 
 	ABGPlayerController();
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
-	FBGPlayerInfo GetPlayerInfo() const { return PlayerInfo; }
-
-protected:
-
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGPlayerController|Config")
-	FBGPlayerInfo PlayerInfo;
 };

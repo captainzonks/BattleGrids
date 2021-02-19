@@ -8,7 +8,7 @@
 
 #include "BGToken.generated.h"
 
-class ABGPlayerController;
+class ABGPlayerState;
 
 UCLASS()
 class BATTLEGRIDS_API ABGToken : public AActor
@@ -35,7 +35,7 @@ public:
 	                                    ECollisionEnabled::Type const CollisionType);
 
 	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
-	bool PlayerControllerHasPermissions(ABGPlayerController const* PlayerController);
+	bool PlayerHasPermissions(ABGPlayerState const* PlayerState);
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,5 +48,5 @@ protected:
 	FText TokenName;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGToken|Config")
-	TArray<ABGPlayerController*> PlayerControllerPermissions;
+	TArray<ABGPlayerState*> PlayerPermissions;
 };
