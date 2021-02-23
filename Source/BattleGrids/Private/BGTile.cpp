@@ -19,7 +19,7 @@ ABGTile::ABGTile()
 
 void ABGTile::ToggleTileVisibility_Implementation(bool const bHide)
 {
-	StaticMeshComponent->SetVisibility(!bHide);
+	StaticMeshComponent->SetVisibility(!bHide, true);
 	StaticMeshComponent->SetCollisionEnabled(bHide
 		                                         ? ECollisionEnabled::Type::QueryOnly
 		                                         : ECollisionEnabled::Type::QueryAndPhysics);
