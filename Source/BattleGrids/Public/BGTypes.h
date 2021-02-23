@@ -34,3 +34,18 @@ struct FBGPlayerInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bReady : 1;
 };
+
+USTRUCT(BlueprintType)
+struct FBGTileInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int X;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Y;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Z;
+};

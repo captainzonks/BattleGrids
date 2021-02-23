@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// © 2021 Matthew Barham. All Rights Reserved.
 
 #pragma once
 
@@ -15,12 +15,24 @@ public:
 	// Sets default values for this actor's properties
 	ABGBoard();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
+	void ShrinkBoard(int const& X, int const& Y);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
+	void GrowBoard(int const& X, int const& Y);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
+	FVector2D BoardSize;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
+	TArray<class ABGTile*> BoardTiles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
+	TSubclassOf<ABGTile> TileToSpawnReference;
 };
