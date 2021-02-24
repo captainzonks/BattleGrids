@@ -25,5 +25,8 @@ protected:
 	void RotateToken(float Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	class ABGToken* SelectedToken;
+	class ABGToken* GrabbedToken;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	class ABGBoard* GrabbedBoard;
 };

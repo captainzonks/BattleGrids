@@ -6,7 +6,7 @@
 #include "BGTypes.generated.h"
 
 USTRUCT(BlueprintType)
-struct  FBGTokenBank : public FTableRowBase
+struct FBGTokenBank : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,7 @@ struct FBGPlayerInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLinearColor PlayerColor;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bReady : 1;
 };
@@ -48,4 +48,16 @@ struct FBGTileInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Z;
+
+	FBGTileInfo() = default;
+
+	FBGTileInfo(int const NewX, int const NewY, int const NewZ)
+		: X(NewX), Y(NewY), Z(NewZ) {}
+};
+
+UENUM(BlueprintType)
+enum class EBGGrabbedObjectType : uint8
+{
+	Token UMETA(DisplayName = "Token"),
+	Board UMETA(DisplayName = "Board")
 };

@@ -77,3 +77,10 @@ void ABGToken::BeginPlay()
 
 	SetReplicateMovement(true);
 }
+
+void ABGToken::FellOutOfWorld(const UDamageType& dmgType)
+{
+	Super::FellOutOfWorld(dmgType);
+
+	Destroy();
+}

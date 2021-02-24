@@ -16,9 +16,9 @@ void ABGGamePlayerController::RotateToken(float Value)
 {
 	if (Value != 0)
 	{
-		if (SelectedToken)
+		if (GrabbedToken)
 		{
-			auto const OriginalRotation = SelectedToken->GetActorRotation().GetDenormalized();
+			auto const OriginalRotation = GrabbedToken->GetActorRotation().GetDenormalized();
 			float const Remainder = FMath::Fmod(OriginalRotation.Yaw, 45.f);
 
 			// If we have a Yaw that is greater than or equal to 360 degrees, use 0 instead
@@ -51,7 +51,7 @@ void ABGGamePlayerController::RotateToken(float Value)
 
 			auto NewRotation = FRotator(0.f, Quotient, 0.f);
 			NewRotation.Normalize();
-			SelectedToken->SetActorRotation(NewRotation);
+			GrabbedToken->SetActorRotation(NewRotation);
 		}
 	}
 }

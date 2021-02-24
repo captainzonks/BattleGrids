@@ -15,9 +15,16 @@ public:
 	// Sets default values for this actor's properties
 	ABGBoard();
 
+	/* Build out a new grid of tiles.
+	 * Will not execute if BoardTiles array is not empty. */
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
+	void BuildBoard(FVector const& CenteredLocation, int const& X, int const& Y);
+
+	/* Shrinks board in both X and Y axes to the specified new X,Y size */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
 	void ShrinkBoard(int const& X, int const& Y);
 
+	/* Grows board in both X and Y axes to the specified new X,Y size */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
 	void GrowBoard(int const& X, int const& Y);
 
@@ -33,6 +40,6 @@ protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	TArray<class ABGTile*> BoardTiles;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	TSubclassOf<ABGTile> TileToSpawnReference;
 };

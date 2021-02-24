@@ -3,6 +3,8 @@
 
 #include "BGTile.h"
 
+
+#include "Engine/DemoNetDriver.h"
 #include "Engine/EngineTypes.h"
 
 // Sets default values
@@ -23,10 +25,19 @@ void ABGTile::ToggleTileVisibility_Implementation(bool const bHide)
 	StaticMeshComponent->SetCollisionEnabled(bHide
 		                                         ? ECollisionEnabled::Type::QueryOnly
 		                                         : ECollisionEnabled::Type::QueryAndPhysics);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
 }
 
 // Called when the game starts or when spawned
 void ABGTile::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ABGTile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGTile, BoardReference)
+	DOREPLIFETIME(ABGTile, TileInfo)
 }
