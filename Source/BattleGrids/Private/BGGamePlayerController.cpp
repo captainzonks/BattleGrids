@@ -4,12 +4,20 @@
 #include "BGGamePlayerController.h"
 
 #include "BGToken.h"
+#include "Engine/DemoNetDriver.h"
 
 void ABGGamePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
 	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
+}
+
+void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGGamePlayerController, ControlMode)
 }
 
 void ABGGamePlayerController::RotateToken(float Value)

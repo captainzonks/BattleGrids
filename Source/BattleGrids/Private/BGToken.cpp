@@ -3,7 +3,6 @@
 
 #include "BGToken.h"
 
-#include "BGPlayerController.h"
 #include "Engine/DemoNetDriver.h"
 
 // Sets default values
