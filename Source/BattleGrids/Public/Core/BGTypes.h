@@ -64,7 +64,9 @@ struct FBGTileInfo
 	FBGTileInfo() = default;
 
 	FBGTileInfo(int const NewX, int const NewY, int const NewZ)
-		: X(NewX), Y(NewY), Z(NewZ) {}
+		: X(NewX), Y(NewY), Z(NewZ)
+	{
+	}
 };
 
 UENUM(BlueprintType)

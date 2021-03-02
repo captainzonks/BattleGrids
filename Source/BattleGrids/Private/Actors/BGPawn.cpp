@@ -1,9 +1,9 @@
 // © 2021 Matthew Barham. All Rights Reserved.
 
 
-#include "BGPawn.h"
+#include "Actors/BGPawn.h"
 
-#include "BGGamePlayerController.h"
+#include "Core/Gameplay/BGGamePlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -68,39 +68,30 @@ void ABGPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ABGPawn::MoveForward(float Value)
 {
 	if (Value != 0.f)
-	{
 		AddMovementInput(CameraComponent->GetForwardVector(), Value);
-	}
 	UpdateTransform(GetActorTransform());
 }
 
 void ABGPawn::MoveRight(float Value)
 {
 	if (Value != 0.f)
-	{
 		AddMovementInput(CameraComponent->GetRightVector(), Value);
-	}
 	UpdateTransform(GetActorTransform());
 }
 
 void ABGPawn::LookUp(float Value)
 {
 	if (Value != 0.f)
-	{
 		// StaticMeshComponent->AddRelativeRotation(FRotator(-1.f * Value, 0.f, 0.f));
 		SetActorRelativeRotation(GetActorRotation() + FRotator(-1.f * Value, 0.f, 0.f));
-	}
 	UpdateTransform(GetActorTransform());
 }
 
 void ABGPawn::Turn(float Value)
 {
 	if (Value != 0.f)
-	{
 		// StaticMeshComponent->AddRelativeRotation(FRotator(0.f, Value, 0.f));
 		SetActorRelativeRotation(GetActorRotation() + FRotator(0.f, Value, 0.f));
-
-	}
 	UpdateTransform(GetActorTransform());
 }
 

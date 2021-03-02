@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
-using System.Collections.Generic;
 
 public class BattleGridsTarget : TargetRules
 {
@@ -10,6 +9,6 @@ public class BattleGridsTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "BattleGrids" } );
+		ExtraModuleNames.AddRange(new[] {"BattleGrids"});
 	}
 }

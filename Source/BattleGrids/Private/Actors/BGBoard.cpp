@@ -1,10 +1,10 @@
 // © 2021 Matthew Barham. All Rights Reserved.
 
 
-#include "BGBoard.h"
+#include "Actors/BGBoard.h"
 
 
-#include "BGTile.h"
+#include "Actors/BGTile.h"
 #include "Engine/DemoNetDriver.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -27,7 +27,6 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 
 		// 2D Grid Execution Macro, rewritten in C++
 		for (auto OuterIndex{0}; OuterIndex <= Y - 1; ++OuterIndex)
-		{
 			for (auto InnerIndex{0}; InnerIndex <= X - 1; ++InnerIndex)
 			{
 				// Prepare a fresh Transform
@@ -56,16 +55,14 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 					SpawnedTile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 				}
 			}
-		}
 	}
 }
 
 void ABGBoard::ShrinkBoard_Implementation(int const& X, int const& Y)
 {
 	int TilesToRemoveCount{};
-	
+
 	for (auto Tile : BoardTiles)
-	{
 		// Check if Tile is valid and not pending kill,
 		// then check if its X or Y is greater than the incoming shrink size
 		if (Tile->IsValidLowLevel() && !Tile->IsPendingKillOrUnreachable() && Tile->GetTileInfo().X > X - 1 || Tile->
@@ -74,18 +71,15 @@ void ABGBoard::ShrinkBoard_Implementation(int const& X, int const& Y)
 			Tile->Destroy();
 			++TilesToRemoveCount;
 		}
-	}
 
 	// After tiles have been marked to kill, clean out the BoardTiles array
 	// with a reverse for loop to as to not encounter off-by-one errors
 	for (int i{BoardTiles.Num() - 1}; TilesToRemoveCount != 0; --i)
-	{
 		if (BoardTiles[i]->IsPendingKill())
 		{
 			BoardTiles.RemoveAt(i);
 			--TilesToRemoveCount;
 		}
-	}
 
 	BoardSize.X = X;
 	BoardSize.Y = Y;
@@ -97,10 +91,9 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 	if (TileToSpawnReference.Get()->IsValidLowLevel())
 	{
 		TArray<ABGTile*> NewTileArray;
-		
+
 		// Grows board in the X-axis
 		for (auto Tile : BoardTiles)
-		{
 			// Check if Tile is valid and not pending kill, if it's the current final X-row,
 			// and its X is less than the new final X-row
 			if (Tile->IsValidLowLevel() && !Tile->IsPendingKillOrUnreachable() && Tile->GetTileInfo().X == BoardSize.X -
@@ -129,7 +122,6 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 					SpawnedTile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 				}
 			}
-		}
 
 		BoardTiles.Append(NewTileArray);
 		NewTileArray.Empty();
@@ -138,7 +130,6 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 
 		// Grows board in the Y-axis
 		for (auto Tile : BoardTiles)
-		{
 			// Check if Tile is valid and not pending kill,
 			// then check if it's the current final X-row, and its X is less than the new final X-row
 			if (Tile->IsValidLowLevel() && !Tile->IsPendingKillOrUnreachable() && Tile->GetTileInfo().Y == BoardSize.Y -
@@ -167,7 +158,6 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 					SpawnedTile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 				}
 			}
-		}
 
 		BoardTiles.Append(NewTileArray);
 

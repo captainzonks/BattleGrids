@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BGPlayerController.h"
+#include "Core/BGPlayerController.h"
 #include "BGLobbyPlayerController.generated.h"
 
 /**

@@ -22,7 +22,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Multicast, toggles whether or not the token position and rotation is locked.
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
+	UFUNCTION(NetMulticast, Unreliable, BlueprintCallable, Category = "BGToken|Functions")
 	void ToggleLockTokenInPlace(bool bLock);
 
 	// Returns the locked state of the token.
@@ -30,7 +30,7 @@ public:
 	bool GetIsTokenLocked() const;
 
 	// Multicast, toggles physics and collision on the token
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
+	UFUNCTION(NetMulticast, Unreliable, BlueprintCallable, Category = "BGToken|Functions")
 	void ToggleTokenPhysicsAndCollision(bool const bPhysicsOn, bool const bGravityOn,
 	                                    ECollisionEnabled::Type const CollisionType);
 

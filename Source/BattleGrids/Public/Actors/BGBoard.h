@@ -10,8 +10,8 @@ UCLASS()
 class BATTLEGRIDS_API ABGBoard : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ABGBoard();
 
@@ -36,7 +36,7 @@ protected:
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	FVector2D BoardSize;
-	
+
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	TArray<class ABGTile*> BoardTiles;
 

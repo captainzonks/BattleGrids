@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BGToken.h"
+#include "Actors/BGToken.h"
 
 #include "Engine/DemoNetDriver.h"
 
@@ -42,9 +42,7 @@ bool ABGToken::GetIsTokenLocked() const
 {
 	auto const Body = StaticMeshComponent->GetBodyInstance();
 	if (Body->bLockXTranslation && Body->bLockYTranslation && Body->bLockZTranslation)
-	{
 		return true;
-	}
 	return false;
 }
 
@@ -59,12 +57,8 @@ void ABGToken::ToggleTokenPhysicsAndCollision_Implementation(bool const bPhysics
 bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerState)
 {
 	for (auto It : PlayerPermissions)
-	{
 		if (It == PlayerState)
-		{
 			return true;
-		}
-	}
 
 	return false;
 }
@@ -74,7 +68,7 @@ void ABGToken::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetReplicateMovement(true);
+	SetReplicatingMovement(true);
 }
 
 void ABGToken::FellOutOfWorld(const UDamageType& dmgType)

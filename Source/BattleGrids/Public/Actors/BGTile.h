@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "BGTypes.h"
+#include "Core/BGTypes.h"
 #include "GameFramework/Actor.h"
 #include "BGTile.generated.h"
 
@@ -24,6 +24,8 @@ public:
 	/// Getters
 
 	FBGTileInfo GetTileInfo() const { return TileInfo; }
+
+	class UStaticMeshComponent* GetStaticMeshComponent() const { return StaticMeshComponent; }
 
 	class ABGBoard* GetBoardReference() const { return BoardReference; }
 

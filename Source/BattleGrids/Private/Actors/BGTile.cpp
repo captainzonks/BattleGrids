@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BGTile.h"
+#include "Actors/BGTile.h"
 
 
 #include "Engine/DemoNetDriver.h"
