@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+
+#include "BGGameplayGameModeBase.h"
 #include "Core/BGPlayerController.h"
 #include "Core/BGTypes.h"
 
@@ -86,6 +88,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void AddSplinePointToStructureSpline();
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, int const& Index);
+
 	////////////////////////
 	/// Board Functions
 
@@ -117,7 +122,8 @@ protected:
 	                                        ECollisionEnabled::Type const CollisionType);
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void MoveTokenToLocation_Server(ABGToken* TokenToMove, AActor* TargetActor, bool const bHolding,
+	void MoveTokenToLocation_Server(ABGToken* TokenToMove, AActor* TargetActor, FHitResult const& TargetHitResult,
+	                                bool const bHolding,
 	                                FRotator const TokenRotation);
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
@@ -139,7 +145,7 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& RowName);
-	
+
 	/* Asks the GameMode to make a modification to the GrabbedStructure reference */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ModifyStructureLength_Server(ABGSplineStructure* StructureToModify, int const& PointIndex,
@@ -147,14 +153,17 @@ protected:
 
 	/* Asks the GameMode to add a new spline point to the GrabbedStructure reference */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-    void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
-                                                int const& Index);
+	void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
+	                                            int const& Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void RemoveStructureInstanceAtIndex_Server(ABGSplineStructure* StructureToModify, int const& Index);
 
 	/// Boards
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SpawnNewBoard_Server(int const& Zed, int const& X, int const& Y);
-	
+
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void MoveBoardToLocation_Server(ABGBoard* BoardToMove, FVector const& NewLocation);
 
@@ -194,4 +203,16 @@ protected:
 
 	UPROPERTY()
 	AActor* LastTargetedActor{};
+
+	UPROPERTY()
+	FHitResult LastHitResult{};
 };
+
+inline void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementation(
+	ABGSplineStructure* StructureToModify, int const& Index)
+{
+	if (StructureToModify)
+	{
+		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, Index);
+	}
+}

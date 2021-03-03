@@ -97,6 +97,7 @@ void ABGGamePlayerController::ReleaseObject()
 	GrabbedStructure = nullptr;
 	GrabbedBoard = nullptr;
 	LastTargetedActor = nullptr;
+	LastHitResult.Reset();
 	NearestIndexToClick = -1;
 }
 
@@ -109,20 +110,19 @@ void ABGGamePlayerController::HandleTokenSelection()
 
 		SetTokenCollisionAndPhysics(GrabbedToken, true, false, ECollisionEnabled::Type::PhysicsOnly);
 
-		FHitResult HitResult;
-		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult))
+		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, LastHitResult))
 		{
-			if (HitResult.bBlockingHit && HitResult.GetActor()->IsValidLowLevel())
+			if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *HitResult.GetActor()->GetName())
+				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
-				if (HitResult.GetActor()->GetClass() == ABGTile::StaticClass())
+				if (LastHitResult.GetActor()->GetClass() == ABGTile::StaticClass())
 				{
-					if (!Cast<ABGTile>(HitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
+					if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
 						return;
 				}
 
-				LastTargetedActor = HitResult.GetActor();
+				LastTargetedActor = LastHitResult.GetActor();
 				MoveTokenToLocation(true);
 			}
 		}
@@ -145,7 +145,7 @@ void ABGGamePlayerController::SetTokenCollisionAndPhysics(ABGToken* TokenToModif
 
 void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 {
-	if (GrabbedToken)
+	if (GrabbedToken && LastTargetedActor)
 	{
 		FRotator const Rotation = FRotator(0.f, GrabbedToken->GetActorRotation().Yaw, 0.f);
 
@@ -155,21 +155,38 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 			float ZedValue;
 			bHolding ? ZedValue = 100.f : ZedValue = 50.f;
 
-			FVector ActorOrigin{};
-			FVector ActorBoxExtent{};
-			LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-
 			FVector Location;
-			Location.X = ActorOrigin.X;
-			Location.Y = ActorOrigin.Y;
-			Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
+
+			if (auto const SplineStructure = Cast<ABGSplineStructure>(LastTargetedActor))
+			{
+				FTransform Transform;
+				SplineStructure->GetInstancedStaticMeshComponent()->GetInstanceTransform(
+					LastHitResult.Item, Transform, true);
+				auto const MeshBounds = SplineStructure->GetStaticMeshReference()->GetBounds();
+
+				Location.X = Transform.GetLocation().X;
+				Location.Y = Transform.GetLocation().Y;
+				Location.Z = ZedValue + Transform.GetLocation().Z + MeshBounds.BoxExtent.Z;
+			}
+
+			else
+			{
+				FVector ActorOrigin{};
+				FVector ActorBoxExtent{};
+
+				LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+
+				Location.X = ActorOrigin.X;
+				Location.Y = ActorOrigin.Y;
+				Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
+			}
 
 			GrabbedToken->SetActorLocation(Location, false, nullptr, ETeleportType::TeleportPhysics);
 			GrabbedToken->SetActorRotation(Rotation, ETeleportType::TeleportPhysics);
 		}
 
 		// Make a server call to ask the GameMode to move the token
-		MoveTokenToLocation_Server(GrabbedToken, LastTargetedActor, bHolding, Rotation);
+		MoveTokenToLocation_Server(GrabbedToken, LastTargetedActor, LastHitResult, bHolding, Rotation);
 	}
 }
 
@@ -248,6 +265,18 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 		}
 
 		ModifyStructureLength();
+	}
+}
+
+void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, int const& Index)
+{
+	if (StructureToModify)
+	{
+		if (!HasAuthority())
+		{
+			StructureToModify->GetInstancedStaticMeshComponent()->RemoveInstance(Index);
+		}
+		RemoveStructureInstanceAtIndex_Server(StructureToModify, Index);
 	}
 }
 
@@ -396,12 +425,14 @@ void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(FVector
 }
 
 void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, AActor* TargetActor,
+                                                                        FHitResult const& TargetHitResult,
                                                                         bool const bHolding,
                                                                         FRotator const TokenRotation)
 {
 	if (TokenToMove && TargetActor)
 	{
-		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, TargetActor, bHolding, TokenRotation);
+		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, TargetActor, TargetHitResult, bHolding,
+		                                             TokenRotation);
 	}
 }
 
