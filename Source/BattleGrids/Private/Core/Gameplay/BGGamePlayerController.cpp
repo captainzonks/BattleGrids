@@ -25,7 +25,9 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 	case EBGGrabbedObjectType::Structure:
 		HandleStructureSelection();
 		break;
-	case EBGGrabbedObjectType::Board: break;
+	case EBGGrabbedObjectType::Board:
+		HandleBoardSelection();
+		break;
 	default: ;
 	}
 }
@@ -46,12 +48,8 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// DOREPLIFETIME(ABGGamePlayerController, ControlMode)
-	// DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
-	// DOREPLIFETIME(ABGGamePlayerController, GrabbedToken)
-	// DOREPLIFETIME(ABGGamePlayerController, GrabbedStructure)
-	// DOREPLIFETIME(ABGGamePlayerController, GrabbedBoard)
-	// DOREPLIFETIME(ABGGamePlayerController, LastTargetedActor)
+	DOREPLIFETIME(ABGGamePlayerController, ControlMode)
+	DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
 }
 
 void ABGGamePlayerController::SelectObject()
@@ -64,13 +62,21 @@ void ABGGamePlayerController::SelectObject()
 		UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *HitResult.GetActor()->GetName())
 
 		if ((GrabbedToken = Cast<ABGToken>(HitResult.GetActor()))->IsValidLowLevel())
+		{
 			GrabbedObject = EBGGrabbedObjectType::Token;
+			return;
+		}
 
 		if ((GrabbedStructure = Cast<ABGSplineStructure>(HitResult.GetActor()))->IsValidLowLevel())
+		{
 			GrabbedObject = EBGGrabbedObjectType::Structure;
+			return;
+		}
 
 		if ((GrabbedBoard = Cast<ABGBoard>(HitResult.GetActor()))->IsValidLowLevel())
+		{
 			GrabbedObject = EBGGrabbedObjectType::Board;
+		}
 	}
 }
 
@@ -83,7 +89,7 @@ void ABGGamePlayerController::ReleaseObject()
 		if (LastTargetedActor)
 		{
 			MoveTokenToLocation(false);
-			SetTokenCollisionAndPhysics_Server(GrabbedToken, true, true, ECollisionEnabled::Type::QueryAndPhysics);
+			SetTokenCollisionAndPhysics(GrabbedToken, true, true, ECollisionEnabled::Type::QueryAndPhysics);
 		}
 	}
 
@@ -101,12 +107,12 @@ void ABGGamePlayerController::HandleTokenSelection()
 		if (!GetGameMasterPermissions() && !GrabbedToken->PlayerHasPermissions(GetPlayerState<ABGPlayerState>()))
 			return;
 
-		SetTokenCollisionAndPhysics_Server(GrabbedToken, true, false, ECollisionEnabled::Type::PhysicsOnly);
+		SetTokenCollisionAndPhysics(GrabbedToken, true, false, ECollisionEnabled::Type::PhysicsOnly);
 
 		FHitResult HitResult;
 		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult))
 		{
-			if (HitResult.GetActor()->IsValidLowLevel())
+			if (HitResult.bBlockingHit && HitResult.GetActor()->IsValidLowLevel())
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *HitResult.GetActor()->GetName())
 
@@ -120,6 +126,20 @@ void ABGGamePlayerController::HandleTokenSelection()
 				MoveTokenToLocation(true);
 			}
 		}
+	}
+}
+
+void ABGGamePlayerController::SetTokenCollisionAndPhysics(ABGToken* TokenToModify, bool const bPhysicsOn,
+                                                          bool const bGravityOn,
+                                                          ECollisionEnabled::Type const CollisionType)
+{
+	if (TokenToModify)
+	{
+		if (!HasAuthority())
+		{
+			TokenToModify->SetTokenPhysicsAndCollision(bPhysicsOn, bGravityOn, CollisionType);
+		}
+		SetTokenCollisionAndPhysics_Server(TokenToModify, bPhysicsOn, bGravityOn, CollisionType);
 	}
 }
 
@@ -186,6 +206,12 @@ void ABGGamePlayerController::ModifyStructureLength()
 			NearestIndexToClick = FMath::RoundToInt(
 				GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(GridSnappedIntersection));
 
+		if (!HasAuthority())
+		{
+			GrabbedStructure->SetLocationOfSplinePoint(NearestIndexToClick, GridSnappedIntersection);
+			GrabbedStructure->AddMeshToSpline();
+		}
+
 		ModifyStructureLength_Server(GrabbedStructure, NearestIndexToClick, GridSnappedIntersection);
 	}
 }
@@ -207,11 +233,13 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 				GrabbedStructure->GetActorLocation(),
 				FVector(0.f, 0.f, 1.f));
 
+			// 2021/03/03 To be polished...points don't seem to add regularly where we expect each time
 			// Insert a new spline point at an index found near the intersection
-			AddSplinePointToStructureSpline_Server(GrabbedStructure, GrabbedStructure->GetSplineComponent()->
-			                                       FindLocationClosestToWorldLocation(
-				                                       Intersection,
-				                                       ESplineCoordinateSpace::World),
+			AddSplinePointToStructureSpline_Server(GrabbedStructure,
+			                                       GrabbedStructure->GetSplineComponent()->
+			                                                         FindLocationClosestToWorldLocation(
+				                                                         Intersection,
+				                                                         ESplineCoordinateSpace::World),
 			                                       FMath::RoundToInt(GrabbedStructure->
 			                                                         GetSplineComponent()->
 			                                                         FindInputKeyClosestToWorldLocation(
@@ -223,11 +251,158 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 	}
 }
 
+void ABGGamePlayerController::HandleBoardSelection()
+{
+	if (GrabbedBoard)
+	{
+		if (!GetGameMasterPermissions())
+		{
+			return;
+		}
+
+		FVector WorldPosition;
+		FVector WorldDirection;
+
+		DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+
+		auto const GridSnappedIntersection = FMath::LinePlaneIntersection(WorldPosition,
+		                                                                  WorldDirection * 2000.f + WorldPosition,
+		                                                                  GrabbedBoard->GetActorLocation(),
+		                                                                  FVector(0.f, 0.f, 1.f)).GridSnap(105.f);
+
+		MoveBoardToLocation(GridSnappedIntersection);
+	}
+}
+
+void ABGGamePlayerController::MoveBoardToLocation(FVector const& Location)
+{
+	if (GrabbedBoard)
+	{
+		if (!HasAuthority())
+		{
+			GrabbedBoard->SetActorLocation(Location);
+		}
+		MoveBoardToLocation_Server(GrabbedBoard, Location);
+	}
+}
+
+void ABGGamePlayerController::ToggleTileVisibility(ABGTile* TileToToggle)
+{
+	if (TileToToggle)
+	{
+		if (!HasAuthority())
+		{
+			TileToToggle->ToggleTileVisibility(TileToToggle->GetStaticMeshComponent()->GetVisibleFlag());
+		}
+		ToggleTileVisibility_Server(TileToToggle);
+	}
+}
+
+void ABGGamePlayerController::ShrinkBoard(ABGBoard* BoardToShrink)
+{
+	if (BoardToShrink)
+	{
+		if (!HasAuthority())
+		{
+			BoardToShrink->ShrinkBoard(BoardToShrink->GetBoardSize().X - 1, BoardToShrink->GetBoardSize().Y - 1);
+		}
+		ShrinkBoard_Server(BoardToShrink);
+	}
+}
+
+void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
+{
+	if (BoardToGrow)
+	{
+		if (!HasAuthority())
+		{
+			BoardToGrow->GrowBoard(BoardToGrow->GetBoardSize().X + 1, BoardToGrow->GetBoardSize().Y + 1);
+		}
+		GrowBoard_Server(BoardToGrow);
+	}
+}
+
+void ABGGamePlayerController::ShrinkBoard_Server_Implementation(ABGBoard* BoardToShrink)
+{
+	if (BoardToShrink)
+	{
+		ABGGameplayGameModeBase::ShrinkBoard(BoardToShrink);
+	}
+}
+
+void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToGrow)
+{
+	if (BoardToGrow)
+	{
+		ABGGameplayGameModeBase::GrowBoard(BoardToGrow);
+	}
+}
+
+void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(FVector const& Location,
+                                                                             FName const& RowName)
+{
+	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnStructureAtLocation(Location, RowName);
+}
+
+void ABGGamePlayerController::SpawnNewBoard_Server_Implementation(int const& Zed, int const& X, int const& Y)
+{
+	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewBoard(Zed, X, Y);
+}
+
+void ABGGamePlayerController::DestroyToken_Server_Implementation(ABGToken* TokenToDestroy)
+{
+	if (TokenToDestroy)
+	{
+		ABGGameplayGameModeBase::DestroyToken(TokenToDestroy);
+	}
+}
+
+void ABGGamePlayerController::ToggleTokenPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
+	ABGToken* TokenToToggle)
+{
+	if (PlayerStateToToggle && TokenToToggle)
+	{
+		ABGGameplayGameModeBase::ToggleTokenPermissionsForPlayer(PlayerStateToToggle, TokenToToggle);
+	}
+}
+
+void ABGGamePlayerController::RotateToken_Server_Implementation(ABGToken* TokenToRotate, FRotator const& NewRotation)
+{
+	if (TokenToRotate)
+	{
+		TokenToRotate->SetActorRotation(NewRotation);
+	}
+}
+
+void ABGGamePlayerController::ResetTokenRotation_Server_Implementation(ABGToken* TokenToReset)
+{
+	if (TokenToReset)
+	{
+		TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+	}
+}
+
+void ABGGamePlayerController::ToggleTokenLockInPlace_Server_Implementation(ABGToken* TokenToToggle, bool bLock)
+{
+	if (TokenToToggle)
+	{
+		ABGGameplayGameModeBase::ToggleTokenLockInPlace(TokenToToggle, bLock);
+	}
+}
+
+void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(FVector const& Location, FName const& RowName)
+{
+	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(Location, RowName);
+}
+
 void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, AActor* TargetActor,
                                                                         bool const bHolding,
                                                                         FRotator const TokenRotation)
 {
-	ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, TargetActor, bHolding, TokenRotation);
+	if (TokenToMove && TargetActor)
+	{
+		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, TargetActor, bHolding, TokenRotation);
+	}
 }
 
 void ABGGamePlayerController::SetTokenCollisionAndPhysics_Server_Implementation(ABGToken* TokenToModify,
@@ -294,8 +469,78 @@ void ABGGamePlayerController::RotateToken(float Value)
 
 			auto NewRotation = FRotator(0.f, Quotient, 0.f);
 			NewRotation.Normalize();
-			GrabbedToken->SetActorRotation(NewRotation);
+
+			if (!HasAuthority())
+			{
+				GrabbedToken->SetActorRotation(NewRotation);
+			}
+			RotateToken_Server(GrabbedToken, NewRotation);
 		}
+}
+
+void ABGGamePlayerController::ResetTokenRotation(ABGToken* TokenToReset)
+{
+	if (TokenToReset)
+	{
+		if (!HasAuthority())
+		{
+			TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+		}
+		ResetTokenRotation_Server(TokenToReset);
+	}
+}
+
+void ABGGamePlayerController::ToggleTokenLockInPlace(ABGToken* TokenToToggle, bool bLock)
+{
+	if (TokenToToggle)
+	{
+		if (!HasAuthority())
+		{
+			TokenToToggle->ToggleLockTokenInPlace(bLock);
+		}
+		ToggleTokenLockInPlace_Server(TokenToToggle, bLock);
+	}
+}
+
+void ABGGamePlayerController::ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle,
+                                                              ABGToken* TokenToToggle)
+{
+	if (PlayerStateToToggle && TokenToToggle)
+	{
+		if (!HasAuthority())
+		{
+			TokenToToggle->PlayerHasPermissions(PlayerStateToToggle)
+				? TokenToToggle->RemovePlayerFromPermissionsArray(PlayerStateToToggle)
+				: TokenToToggle->AddPlayerToPermissionsArray(PlayerStateToToggle);
+		}
+
+		ToggleTokenPermissionsForPlayer_Server(PlayerStateToToggle, TokenToToggle);
+	}
+}
+
+void ABGGamePlayerController::DestroyToken(ABGToken* TokenToDestroy)
+{
+	if (TokenToDestroy)
+	{
+		DestroyToken_Server(TokenToDestroy);
+	}
+}
+
+void ABGGamePlayerController::MoveBoardToLocation_Server_Implementation(ABGBoard* BoardToMove,
+                                                                        FVector const& NewLocation)
+{
+	if (BoardToMove)
+	{
+		BoardToMove->SetActorLocation(NewLocation);
+	}
+}
+
+void ABGGamePlayerController::ToggleTileVisibility_Server_Implementation(ABGTile* TileToToggle)
+{
+	if (TileToToggle)
+	{
+		ABGGameplayGameModeBase::ToggleTileVisibility(TileToToggle);
+	}
 }
 
 bool ABGGamePlayerController::GetGameMasterPermissions() const

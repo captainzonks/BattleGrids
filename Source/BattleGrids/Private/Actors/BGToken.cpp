@@ -46,7 +46,7 @@ bool ABGToken::GetIsTokenLocked() const
 	return false;
 }
 
-void ABGToken::ToggleTokenPhysicsAndCollision_Implementation(bool const bPhysicsOn, bool const bGravityOn,
+void ABGToken::SetTokenPhysicsAndCollision_Implementation(bool const bPhysicsOn, bool const bGravityOn,
                                                              ECollisionEnabled::Type const CollisionType)
 {
 	StaticMeshComponent->SetSimulatePhysics(bPhysicsOn);
@@ -60,6 +60,27 @@ bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerState)
 		if (It == PlayerState)
 			return true;
 
+	return false;
+}
+
+bool ABGToken::AddPlayerToPermissionsArray(ABGPlayerState* PlayerStateToAdd)
+{
+	if (PlayerPermissions.IsValidIndex(PlayerPermissions.AddUnique(PlayerStateToAdd)))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ABGToken::RemovePlayerFromPermissionsArray(ABGPlayerState* PlayerStateToRemove)
+{
+	if (PlayerPermissions.Contains(PlayerStateToRemove))
+	{
+		if (PlayerPermissions.Remove(PlayerStateToRemove) != 0)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 

@@ -3,10 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Core/BGPlayerController.h"
 #include "Core/BGTypes.h"
 
 #include "BGGamePlayerController.generated.h"
+
+class ABGBoard;
+class ABGPlayerState;
+class ABGTile;
 
 /**
  * 
@@ -27,70 +32,149 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	/////////////////////////
+	/// Control Functions
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void SelectObject();
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void ReleaseObject();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
+	bool GetGameMasterPermissions() const;
 
 	////////////////////////
 	/// Token Functions
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void HandleTokenSelection();
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
+	void SetTokenCollisionAndPhysics(ABGToken* TokenToModify, bool const bPhysicsOn, bool const bGravityOn,
+	                                 ECollisionEnabled::Type const CollisionType);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void MoveTokenToLocation(bool const bHolding);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void RotateToken(float Value);
 
-	////////////////////////
-	/// Structural Functions
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
+	void ResetTokenRotation(ABGToken* TokenToReset);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
+	void ToggleTokenLockInPlace(ABGToken* TokenToToggle, bool bLock);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
+	void ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
+	void DestroyToken(ABGToken* TokenToDestroy);
+
+	////////////////////////
+	/// Structure Functions
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void HandleStructureSelection();
 
 	/* Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid */
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ModifyStructureLength();
 
 	/* Adds a new spline point to a spline by finding the nearest index to the mouse's location and inserts it */
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Input")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void AddSplinePointToStructureSpline();
 
+	////////////////////////
+	/// Board Functions
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void HandleBoardSelection();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void MoveBoardToLocation(FVector const& Location);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void ToggleTileVisibility(ABGTile* TileToToggle);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void ShrinkBoard(ABGBoard* BoardToShrink);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void GrowBoard(ABGBoard* BoardToGrow);
 
 	////////////////////////
 	/// NETWORK Functions
 
 	/// Tokens
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& RowName);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SetTokenCollisionAndPhysics_Server(ABGToken* TokenToModify, bool const bPhysicsOn, bool const bGravityOn,
 	                                        ECollisionEnabled::Type const CollisionType);
 
-	UFUNCTION(Server, Unreliable, Category = "BGGamePlayerController|Network")
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void MoveTokenToLocation_Server(ABGToken* TokenToMove, AActor* TargetActor, bool const bHolding,
 	                                FRotator const TokenRotation);
 
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void RotateToken_Server(ABGToken* TokenToRotate, FRotator const& NewRotation);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ResetTokenRotation_Server(ABGToken* TokenToReset);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ToggleTokenLockInPlace_Server(ABGToken* TokenToToggle, bool bLock);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ToggleTokenPermissionsForPlayer_Server(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void DestroyToken_Server(ABGToken* TokenToDestroy);
+
 	/// Structures
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& RowName);
+	
 	/* Asks the GameMode to make a modification to the GrabbedStructure reference */
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ModifyStructureLength_Server(ABGSplineStructure* StructureToModify, int const& PointIndex,
 	                                  FVector const& NewLocation);
 
 	/* Asks the GameMode to add a new spline point to the GrabbedStructure reference */
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
-	void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
-	                                            int const& Index);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+    void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
+                                                int const& Index);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Permissions")
-	bool GetGameMasterPermissions() const;
+	/// Boards
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void SpawnNewBoard_Server(int const& Zed, int const& X, int const& Y);
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void MoveBoardToLocation_Server(ABGBoard* BoardToMove, FVector const& NewLocation);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ToggleTileVisibility_Server(ABGTile* TileToToggle);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ShrinkBoard_Server(ABGBoard* BoardToShrink);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void GrowBoard_Server(ABGBoard* BoardToGrow);
+
+
+	///////////////////////
+	/// Variables
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGControlMode ControlMode{EBGControlMode::Move};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGGrabbedObjectType GrabbedObject{EBGGrabbedObjectType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")

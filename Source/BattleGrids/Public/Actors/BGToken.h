@@ -22,7 +22,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Multicast, toggles whether or not the token position and rotation is locked.
-	UFUNCTION(NetMulticast, Unreliable, BlueprintCallable, Category = "BGToken|Functions")
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
 	void ToggleLockTokenInPlace(bool bLock);
 
 	// Returns the locked state of the token.
@@ -30,12 +30,26 @@ public:
 	bool GetIsTokenLocked() const;
 
 	// Multicast, toggles physics and collision on the token
-	UFUNCTION(NetMulticast, Unreliable, BlueprintCallable, Category = "BGToken|Functions")
-	void ToggleTokenPhysicsAndCollision(bool const bPhysicsOn, bool const bGravityOn,
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
+	void SetTokenPhysicsAndCollision(bool const bPhysicsOn, bool const bGravityOn,
 	                                    ECollisionEnabled::Type const CollisionType);
 
+	// Checks whether or not a PlayerState exists in the Token's permissions array
 	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
 	bool PlayerHasPermissions(ABGPlayerState const* PlayerState);
+
+	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
+	bool AddPlayerToPermissionsArray(ABGPlayerState* PlayerStateToAdd);
+
+	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
+	bool RemovePlayerFromPermissionsArray(ABGPlayerState* PlayerStateToRemove);
+
+	//////////////////////
+	/// Getters
+	
+	class UStaticMeshComponent* GetStaticMeshComponent() const { return StaticMeshComponent; }
+
+	TArray<ABGPlayerState*> GetPlayerPermissions() const { return PlayerPermissions; }
 
 protected:
 	// Called when the game starts or when spawned

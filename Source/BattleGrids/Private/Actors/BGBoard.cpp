@@ -169,6 +169,8 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 void ABGBoard::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	SetReplicatingMovement(true);
 }
 
 void ABGBoard::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

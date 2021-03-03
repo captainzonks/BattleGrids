@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BGBoard.generated.h"
 
+class ABGTile;
+
 UCLASS()
 class BATTLEGRIDS_API ABGBoard : public AActor
 {
@@ -28,6 +30,15 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGBoard|Functions")
 	void GrowBoard(int const& X, int const& Y);
 
+	///////////////////
+	/// Getters
+
+	FVector2D GetBoardSize() const { return BoardSize; }
+
+	int GetZedLevel() const { return ZedLevel; }
+
+	TArray<ABGTile*> GetBoardTiles() const { return BoardTiles; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,9 +47,12 @@ protected:
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	FVector2D BoardSize;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
+	int ZedLevel{};
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
-	TArray<class ABGTile*> BoardTiles;
+	TArray<ABGTile*> BoardTiles;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGBoard|Config")
 	TSubclassOf<ABGTile> TileToSpawnReference;
