@@ -93,6 +93,12 @@ void ABGGamePlayerController::ReleaseObject()
 		}
 	}
 
+	if (GrabbedStructure)
+	{
+		SetStructurePhysicsAndCollision(GrabbedStructure, true,
+		                                ECollisionEnabled::Type::QueryAndPhysics);
+	}
+
 	GrabbedToken = nullptr;
 	GrabbedStructure = nullptr;
 	GrabbedBoard = nullptr;
@@ -103,20 +109,22 @@ void ABGGamePlayerController::ReleaseObject()
 
 void ABGGamePlayerController::HandleTokenSelection()
 {
-	if (GrabbedToken)
+	if (GrabbedToken && ControlMode == EBGControlMode::Move)
 	{
 		if (!GetGameMasterPermissions() && !GrabbedToken->PlayerHasPermissions(GetPlayerState<ABGPlayerState>()))
 			return;
 
 		SetTokenCollisionAndPhysics(GrabbedToken, true, false, ECollisionEnabled::Type::PhysicsOnly);
 
+		LastHitResult.Reset();
+		LastTargetedActor = nullptr;
 		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, LastHitResult))
 		{
 			if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
-				if (LastHitResult.GetActor()->GetClass() == ABGTile::StaticClass())
+				if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 				{
 					if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
 						return;
@@ -149,44 +157,44 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 	{
 		FRotator const Rotation = FRotator(0.f, GrabbedToken->GetActorRotation().Yaw, 0.f);
 
+		float ZedValue;
+		bHolding ? ZedValue = 100.f : ZedValue = 50.f;
+
+		FVector Location;
+
+		if (auto const SplineStructure = Cast<ABGSplineStructure>(LastTargetedActor))
+		{
+			FTransform Transform;
+			SplineStructure->GetInstancedStaticMeshComponent()->GetInstanceTransform(
+				LastHitResult.Item, Transform, true);
+			auto const MeshBounds = SplineStructure->GetStaticMeshReference()->GetBounds();
+
+			Location.X = Transform.GetLocation().X;
+			Location.Y = Transform.GetLocation().Y;
+			Location.Z = ZedValue + Transform.GetLocation().Z + MeshBounds.BoxExtent.Z;
+		}
+
+		else
+		{
+			FVector ActorOrigin{};
+			FVector ActorBoxExtent{};
+
+			LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+
+			Location.X = ActorOrigin.X;
+			Location.Y = ActorOrigin.Y;
+			Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
+		}
+
 		// Move the token locally if we are a client
 		if (!HasAuthority())
 		{
-			float ZedValue;
-			bHolding ? ZedValue = 100.f : ZedValue = 50.f;
-
-			FVector Location;
-
-			if (auto const SplineStructure = Cast<ABGSplineStructure>(LastTargetedActor))
-			{
-				FTransform Transform;
-				SplineStructure->GetInstancedStaticMeshComponent()->GetInstanceTransform(
-					LastHitResult.Item, Transform, true);
-				auto const MeshBounds = SplineStructure->GetStaticMeshReference()->GetBounds();
-
-				Location.X = Transform.GetLocation().X;
-				Location.Y = Transform.GetLocation().Y;
-				Location.Z = ZedValue + Transform.GetLocation().Z + MeshBounds.BoxExtent.Z;
-			}
-
-			else
-			{
-				FVector ActorOrigin{};
-				FVector ActorBoxExtent{};
-
-				LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-
-				Location.X = ActorOrigin.X;
-				Location.Y = ActorOrigin.Y;
-				Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
-			}
-
 			GrabbedToken->SetActorLocation(Location, false, nullptr, ETeleportType::TeleportPhysics);
 			GrabbedToken->SetActorRotation(Rotation, ETeleportType::TeleportPhysics);
 		}
 
 		// Make a server call to ask the GameMode to move the token
-		MoveTokenToLocation_Server(GrabbedToken, LastTargetedActor, LastHitResult, bHolding, Rotation);
+		MoveTokenToLocation_Server(GrabbedToken, Location, Rotation);
 	}
 }
 
@@ -195,9 +203,34 @@ void ABGGamePlayerController::HandleStructureSelection()
 	if (!GetGameMasterPermissions())
 		return;
 
-	if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
-		AddSplinePointToStructureSpline();
-	ModifyStructureLength();
+	switch (ControlMode)
+	{
+	case EBGControlMode::Build:
+		if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
+			AddSplinePointToStructureSpline();
+		ModifyStructureLength();
+		break;
+	case EBGControlMode::Edit: break;
+	case EBGControlMode::Move:
+		MoveStructure();
+		break;
+	default: ;
+	}
+}
+
+void ABGGamePlayerController::SetStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify,
+                                                              bool const bGravityOn,
+                                                              ECollisionEnabled::Type const CollisionType)
+{
+	if (StructureToModify)
+	{
+		if (!HasAuthority())
+		{
+			StructureToModify->SetStructurePhysicsAndCollision(bGravityOn, CollisionType);
+		}
+
+		SetStructurePhysicsAndCollision_Server(StructureToModify, bGravityOn, CollisionType);
+	}
 }
 
 void ABGGamePlayerController::ModifyStructureLength()
@@ -268,6 +301,53 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 	}
 }
 
+void ABGGamePlayerController::MoveStructure()
+{
+	if (GrabbedStructure)
+	{
+		SetStructurePhysicsAndCollision(GrabbedStructure, false, ECollisionEnabled::Type::PhysicsOnly);
+		FVector Location{};
+
+		UE_LOG(LogTemp, Warning, TEXT("Moving Structure"))
+
+		LastHitResult.Reset();
+		LastTargetedActor = nullptr;
+		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, LastHitResult))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hit on Visibility Channel"))
+
+			if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
+
+				if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
+					return;
+
+				LastTargetedActor = LastHitResult.GetActor();
+
+				FVector ActorOrigin{};
+				FVector ActorBoxExtent{};
+
+				LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+
+				Location.X = ActorOrigin.X;
+				Location.Y = ActorOrigin.Y;
+				Location.Z = ActorOrigin.Z + ActorBoxExtent.Z;
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		if (!HasAuthority())
+		{
+			GrabbedStructure->SetActorLocation(Location);
+		}
+		MoveStructure_Server(GrabbedStructure, Location);
+	}
+}
+
 void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, int const& Index)
 {
 	if (StructureToModify)
@@ -277,6 +357,49 @@ void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure*
 			StructureToModify->GetInstancedStaticMeshComponent()->RemoveInstance(Index);
 		}
 		RemoveStructureInstanceAtIndex_Server(StructureToModify, Index);
+	}
+}
+
+void ABGGamePlayerController::ResetStructure(ABGSplineStructure* StructureToReset) const
+{
+	if (StructureToReset)
+	{
+		if (!HasAuthority())
+		{
+			if (StructureToReset->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
+			{
+				// clear all spline points except for indices 0 and 1
+				for (int i{StructureToReset->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
+				{
+					StructureToReset->GetSplineComponent()->RemoveSplinePoint(i - 1);
+				}
+			}
+
+			// reset Spline Point 0 to actor's origin
+			StructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
+				0, StructureToReset->GetActorLocation(), ESplineCoordinateSpace::World, true);
+
+			// reset Spline Point 1 to 105.f away the origin
+			auto Location = StructureToReset->GetActorLocation();
+			Location.X += 50.f;
+
+			StructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
+				1, Location, ESplineCoordinateSpace::World, true);
+
+			StructureToReset->AddMeshToSpline();
+		}
+	}
+}
+
+void ABGGamePlayerController::DestroyStructure(ABGSplineStructure* StructureToDestroy)
+{
+	if (StructureToDestroy)
+	{
+		if (!HasAuthority())
+		{
+			StructureToDestroy->Destroy();
+		}
+		DestroyStructure_Server(StructureToDestroy);
 	}
 }
 
@@ -348,6 +471,23 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 			BoardToGrow->GrowBoard(BoardToGrow->GetBoardSize().X + 1, BoardToGrow->GetBoardSize().Y + 1);
 		}
 		GrowBoard_Server(BoardToGrow);
+	}
+}
+
+void ABGGamePlayerController::MoveStructure_Server_Implementation(ABGSplineStructure* StructureToMove,
+                                                                  FVector const& Location)
+{
+	if (StructureToMove)
+	{
+		ABGGameplayGameModeBase::MoveStructure(StructureToMove, Location);
+	}
+}
+
+void ABGGamePlayerController::ResetStructure_Server_Implementation(ABGSplineStructure* StructureToReset)
+{
+	if (StructureToReset)
+	{
+		ABGGameplayGameModeBase::ResetStructure(StructureToReset);
 	}
 }
 
@@ -424,15 +564,12 @@ void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(FVector
 	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(Location, RowName);
 }
 
-void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, AActor* TargetActor,
-                                                                        FHitResult const& TargetHitResult,
-                                                                        bool const bHolding,
+void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, FVector const& Location,
                                                                         FRotator const TokenRotation)
 {
-	if (TokenToMove && TargetActor)
+	if (TokenToMove)
 	{
-		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, TargetActor, TargetHitResult, bHolding,
-		                                             TokenRotation);
+		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, Location, TokenRotation);
 	}
 }
 
@@ -585,4 +722,33 @@ bool ABGGamePlayerController::GetGameMasterPermissions() const
 void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform NewTransform)
 {
 	GetPawn()->SetActorTransform(NewTransform);
+}
+
+void ABGGamePlayerController::SetStructurePhysicsAndCollision_Server_Implementation(
+	ABGSplineStructure* StructureToModify,
+	bool const bGravityOn,
+	ECollisionEnabled::Type const CollisionType)
+{
+	if (StructureToModify)
+	{
+		ABGGameplayGameModeBase::SetStructurePhysicsAndCollision(StructureToModify, bGravityOn,
+		                                                         CollisionType);
+	}
+}
+
+void ABGGamePlayerController::DestroyStructure_Server_Implementation(ABGSplineStructure* StructureToDestroy)
+{
+	if (StructureToDestroy)
+	{
+		ABGGameplayGameModeBase::DestroyStructure(StructureToDestroy);
+	}
+}
+
+void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementation(
+	ABGSplineStructure* StructureToModify, int const& Index)
+{
+	if (StructureToModify)
+	{
+		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, Index);
+	}
 }

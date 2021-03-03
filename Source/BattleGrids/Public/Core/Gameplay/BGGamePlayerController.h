@@ -80,6 +80,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void HandleStructureSelection();
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void SetStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify, bool const bGravityOn,
+	                                     ECollisionEnabled::Type const CollisionType);
+
 	/* Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ModifyStructureLength();
@@ -89,7 +93,16 @@ protected:
 	void AddSplinePointToStructureSpline();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void MoveStructure();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, int const& Index);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void ResetStructure(ABGSplineStructure* StructureToReset) const;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void DestroyStructure(ABGSplineStructure* StructureToDestroy);
 
 	////////////////////////
 	/// Board Functions
@@ -122,8 +135,7 @@ protected:
 	                                        ECollisionEnabled::Type const CollisionType);
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void MoveTokenToLocation_Server(ABGToken* TokenToMove, AActor* TargetActor, FHitResult const& TargetHitResult,
-	                                bool const bHolding,
+	void MoveTokenToLocation_Server(ABGToken* TokenToMove, FVector const& Location,
 	                                FRotator const TokenRotation);
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
@@ -146,6 +158,10 @@ protected:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& RowName);
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* StructureToModify, bool const bGravityOn,
+	                                            ECollisionEnabled::Type const CollisionType);
+
 	/* Asks the GameMode to make a modification to the GrabbedStructure reference */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ModifyStructureLength_Server(ABGSplineStructure* StructureToModify, int const& PointIndex,
@@ -156,8 +172,17 @@ protected:
 	void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
 	                                            int const& Index);
 
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void MoveStructure_Server(ABGSplineStructure* StructureToMove, FVector const& Location);
+
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void RemoveStructureInstanceAtIndex_Server(ABGSplineStructure* StructureToModify, int const& Index);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ResetStructure_Server(ABGSplineStructure* StructureToReset);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void DestroyStructure_Server(ABGSplineStructure* StructureToDestroy);
 
 	/// Boards
 
@@ -207,12 +232,3 @@ protected:
 	UPROPERTY()
 	FHitResult LastHitResult{};
 };
-
-inline void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index)
-{
-	if (StructureToModify)
-	{
-		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, Index);
-	}
-}
