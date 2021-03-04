@@ -96,10 +96,15 @@ protected:
 	void MoveStructure();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, FString const& InstanceName, int const& Index);
-	
+	void RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, FString const& InstanceName,
+	                                    int const& Index);
+
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void AddDoorToStructureAtIndex(ABGSplineStructure* StructureToModify, int const& Index);
+	void ModifyInstanceMeshAtIndex(ABGSplineStructure* StructureToModify, int const& Index,
+	                               FString const& NewInstanceName,
+	                               UStaticMesh* StaticMesh,
+	                               UMaterialInstance* MaterialInstance,
+	                               FString const& OldInstanceName = "WallInstance");
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ResetStructure(ABGSplineStructure* StructureToReset) const;
@@ -179,10 +184,15 @@ protected:
 	void MoveStructure_Server(ABGSplineStructure* StructureToMove, FVector const& Location);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void RemoveStructureInstanceAtIndex_Server(ABGSplineStructure* StructureToModify, FString const& InstanceName, int const& Index);
+	void RemoveStructureInstanceAtIndex_Server(ABGSplineStructure* StructureToModify, FString const& InstanceName,
+	                                           int const& Index);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void AddDoorToStructureAtIndex_Server(ABGSplineStructure* StructureToModify, int const& Index);
+	void ModifyInstanceMeshAtIndex_Server(ABGSplineStructure* StructureToModify, int const& Index,
+	                                      FString const& NewInstanceName,
+	                                      UStaticMesh* StaticMesh,
+	                                      UMaterialInstance* MaterialInstance,
+	                                      FString const& OldInstanceName = "WallInstance");
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ResetStructure_Server(ABGSplineStructure* StructureToReset);

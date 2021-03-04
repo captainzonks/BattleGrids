@@ -166,7 +166,8 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 		{
 			FTransform Transform;
 
-			if (auto const InstancedStaticMeshComponent = SplineStructure->GetWallInstancedStaticMeshComponent())
+			if (auto const InstancedStaticMeshComponent = SplineStructure->GetInstancedStaticMeshComponentByString(
+				LastHitResult.GetComponent()->GetName()))
 			{
 				InstancedStaticMeshComponent->GetInstanceTransform(LastHitResult.Item, Transform, true);
 
@@ -378,16 +379,20 @@ void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure*
 			}
 		}
 		RemoveStructureInstanceAtIndex_Server(StructureToModify, InstanceName, Index);
-
 	}
 }
 
-void ABGGamePlayerController::AddDoorToStructureAtIndex(ABGSplineStructure* StructureToModify, int const& Index)
+void ABGGamePlayerController::ModifyInstanceMeshAtIndex(ABGSplineStructure* StructureToModify, int const& Index,
+                                                        FString const& NewInstanceName,
+                                                        UStaticMesh* StaticMesh,
+                                                        UMaterialInstance* MaterialInstance,
+                                                        FString const& OldInstanceName)
 {
 	if (StructureToModify)
 	{
 		// Just go straight to server call
-		AddDoorToStructureAtIndex_Server(StructureToModify, Index);
+		ModifyInstanceMeshAtIndex_Server(StructureToModify, Index, NewInstanceName, StaticMesh,
+		                                 MaterialInstance, OldInstanceName);
 	}
 }
 
@@ -505,12 +510,15 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 	}
 }
 
-void ABGGamePlayerController::AddDoorToStructureAtIndex_Server_Implementation(ABGSplineStructure* StructureToModify,
-                                                                              int const& Index)
+void ABGGamePlayerController::ModifyInstanceMeshAtIndex_Server_Implementation(
+	ABGSplineStructure* StructureToModify, int const& Index, FString const& NewInstanceName, UStaticMesh* StaticMesh,
+	UMaterialInstance* MaterialInstance, FString const& OldInstanceName)
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::AddDoorToStructureAtIndex(StructureToModify, Index);
+		ABGGameplayGameModeBase::ModifyInstanceMeshAtIndex(StructureToModify, Index, NewInstanceName,
+		                                                   StaticMesh,
+		                                                   MaterialInstance, OldInstanceName);
 	}
 }
 
