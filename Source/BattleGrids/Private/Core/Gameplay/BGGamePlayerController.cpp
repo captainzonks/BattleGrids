@@ -165,13 +165,17 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 		if (auto const SplineStructure = Cast<ABGSplineStructure>(LastTargetedActor))
 		{
 			FTransform Transform;
-			SplineStructure->GetInstancedStaticMeshComponent()->GetInstanceTransform(
-				LastHitResult.Item, Transform, true);
-			auto const MeshBounds = SplineStructure->GetStaticMeshReference()->GetBounds();
 
-			Location.X = Transform.GetLocation().X;
-			Location.Y = Transform.GetLocation().Y;
-			Location.Z = ZedValue + Transform.GetLocation().Z + MeshBounds.BoxExtent.Z;
+			if (auto const InstancedStaticMeshComponent = SplineStructure->GetWallInstancedStaticMeshComponent())
+			{
+				InstancedStaticMeshComponent->GetInstanceTransform(LastHitResult.Item, Transform, true);
+
+				auto const MeshBounds = SplineStructure->GetPrimaryStaticMeshReference()->GetBounds();
+
+				Location.X = Transform.GetLocation().X;
+				Location.Y = Transform.GetLocation().Y;
+				Location.Z = ZedValue + Transform.GetLocation().Z + MeshBounds.BoxExtent.Z;
+			}
 		}
 
 		else
@@ -348,15 +352,42 @@ void ABGGamePlayerController::MoveStructure()
 	}
 }
 
-void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, int const& Index)
+void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify,
+                                                             FString const& InstanceName, int const& Index)
 {
 	if (StructureToModify)
 	{
 		if (!HasAuthority())
 		{
-			StructureToModify->GetInstancedStaticMeshComponent()->RemoveInstance(Index);
+			if (StructureToModify->GetInstanceComponents().Num() > 0)
+			{
+				for (auto Instance : StructureToModify->GetInstanceComponents())
+				{
+					if (Instance)
+					{
+						if (Instance->GetName().Equals(InstanceName))
+						{
+							if (auto CastInstance = Cast<UInstancedStaticMeshComponent>(Instance))
+							{
+								CastInstance->RemoveInstance(Index);
+								return;
+							}
+						}
+					}
+				}
+			}
 		}
-		RemoveStructureInstanceAtIndex_Server(StructureToModify, Index);
+		RemoveStructureInstanceAtIndex_Server(StructureToModify, InstanceName, Index);
+
+	}
+}
+
+void ABGGamePlayerController::AddDoorToStructureAtIndex(ABGSplineStructure* StructureToModify, int const& Index)
+{
+	if (StructureToModify)
+	{
+		// Just go straight to server call
+		AddDoorToStructureAtIndex_Server(StructureToModify, Index);
 	}
 }
 
@@ -471,6 +502,15 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 			BoardToGrow->GrowBoard(BoardToGrow->GetBoardSize().X + 1, BoardToGrow->GetBoardSize().Y + 1);
 		}
 		GrowBoard_Server(BoardToGrow);
+	}
+}
+
+void ABGGamePlayerController::AddDoorToStructureAtIndex_Server_Implementation(ABGSplineStructure* StructureToModify,
+                                                                              int const& Index)
+{
+	if (StructureToModify)
+	{
+		ABGGameplayGameModeBase::AddDoorToStructureAtIndex(StructureToModify, Index);
 	}
 }
 
@@ -745,10 +785,10 @@ void ABGGamePlayerController::DestroyStructure_Server_Implementation(ABGSplineSt
 }
 
 void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index)
+	ABGSplineStructure* StructureToModify, FString const& InstanceName, int const& Index)
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, Index);
+		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, InstanceName, Index);
 	}
 }

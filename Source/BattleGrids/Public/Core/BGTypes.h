@@ -30,6 +30,28 @@ struct FBGStructureBank : public FTableRowBase
 };
 
 USTRUCT(BlueprintType)
+struct FBGStructureInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* StaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMaterialInstance* MaterialInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTransform Transform;
+
+	FBGStructureInfo() = default;
+
+	FBGStructureInfo(UStaticMesh* NewStaticMesh, UMaterialInstance* NewMaterialInstance, FTransform const NewTransform)
+		: StaticMesh(NewStaticMesh), MaterialInstance(NewMaterialInstance), Transform(NewTransform)
+	{
+	}
+};
+
+USTRUCT(BlueprintType)
 struct FBGPlayerInfo
 {
 	GENERATED_BODY()
