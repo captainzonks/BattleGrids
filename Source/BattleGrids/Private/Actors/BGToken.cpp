@@ -14,10 +14,18 @@ ABGToken::ABGToken()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetCollisionProfileName("Token");
 	StaticMeshComponent->bIgnoreRadialForce = true;
 	StaticMeshComponent->bIgnoreRadialImpulse = true;
 	StaticMeshComponent->SetLinearDamping(2.f);
 	StaticMeshComponent->SetAngularDamping(2.f);
+	StaticMeshComponent->SetIsReplicated(true);
+}
+
+void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh, UMaterialInstance* MaterialInstance) const
+{
+	StaticMeshComponent->SetStaticMesh(StaticMesh);
+	StaticMeshComponent->SetMaterial(0, MaterialInstance);
 }
 
 void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

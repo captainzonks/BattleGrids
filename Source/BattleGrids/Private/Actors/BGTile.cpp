@@ -15,7 +15,8 @@ ABGTile::ABGTile()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	RootComponent = StaticMeshComponent;
-	StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 0.25f));
+	StaticMeshComponent->SetCollisionProfileName("Tile");
+	StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	StaticMeshComponent->SetIsReplicated(true);
 }
 

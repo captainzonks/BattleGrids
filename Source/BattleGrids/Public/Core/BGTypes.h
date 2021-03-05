@@ -6,27 +6,27 @@
 #include "BGTypes.generated.h"
 
 USTRUCT(BlueprintType)
-struct FBGTokenBank : public FTableRowBase
+struct FBGStaticMeshBank : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText TokenName;
+	FText StaticMeshName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ABGToken> TokenClassReference;
+	class UStaticMesh* StaticMesh;
 };
 
 USTRUCT(BlueprintType)
-struct FBGStructureBank : public FTableRowBase
+struct FBGMaterialInstanceBank : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText StructureName;
+	FText MaterialInstanceName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class ABGSplineStructure> StructureClassReference;
+	class UMaterialInstance* MaterialInstance;
 };
 
 USTRUCT(BlueprintType)

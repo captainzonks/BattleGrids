@@ -23,7 +23,7 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 	{
 		BoardSize.X = X;
 		BoardSize.Y = Y;
-		float const SectorSize = 105.f;
+		float const SectorSize = 100.f;
 
 		// 2D Grid Execution Macro, rewritten in C++
 		for (auto OuterIndex{0}; OuterIndex <= Y - 1; ++OuterIndex)
@@ -31,11 +31,10 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 			{
 				// Prepare a fresh Transform
 				FVector SpawnLocation =
-					(FVector(static_cast<float>(InnerIndex) - static_cast<float>(X) / 2.f,
+					FVector(static_cast<float>(InnerIndex) - static_cast<float>(X) / 2.f,
 					         static_cast<float>(OuterIndex) - static_cast<float>(Y) / 2.f,
 					         0.f)
 						* SectorSize
-						+ SectorSize * FVector(0.5f, 0.5f, 0.f))
 					* 1.f
 					+ CenteredLocation;
 
@@ -100,9 +99,9 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				1
 				&& Tile->GetTileInfo().X < X)
 			{
-				// Prepare the new Tile's transform location to be 105cm spaced beyond the current Tile in the X-axis
+				// Prepare the new Tile's transform location to be 100cm spaced beyond the current Tile in the X-axis
 				FTransform SpawnTransform = Tile->GetActorTransform();
-				SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(105.f, 0, 0));
+				SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(100.f, 0, 0));
 				// reset the scale to 1,1,1 to prevent quartering the copied 0.25f Z-axis off the reference Tile's transform
 				SpawnTransform.SetScale3D(FVector::OneVector);
 
@@ -136,9 +135,9 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				1
 				&& Tile->GetTileInfo().Y < Y)
 			{
-				// Prepare the new Tile's transform location to be 105cm spaced beyond the current Tile in the Y-axis
+				// Prepare the new Tile's transform location to be 100cm spaced beyond the current Tile in the Y-axis
 				FTransform SpawnTransform = Tile->GetActorTransform();
-				SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(0, 105.f, 0));
+				SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(0, 100.f, 0));
 				// reset the scale to 1,1,1 to prevent quartering the copied 0.25f Z-axis off the reference Tile's transform
 				SpawnTransform.SetScale3D(FVector::OneVector);
 
@@ -169,7 +168,7 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 void ABGBoard::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	SetReplicatingMovement(true);
 }
 

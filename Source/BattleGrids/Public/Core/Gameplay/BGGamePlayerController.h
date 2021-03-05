@@ -105,6 +105,9 @@ protected:
 	                               UStaticMesh* StaticMesh,
 	                               UMaterialInstance* MaterialInstance,
 	                               FString const& OldInstanceName = "WallInstance");
+	                               
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ResetStructure(ABGSplineStructure* StructureToReset) const;
@@ -136,7 +139,7 @@ protected:
 	/// Tokens
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& RowName);
+	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SetTokenCollisionAndPhysics_Server(ABGToken* TokenToModify, bool const bPhysicsOn, bool const bGravityOn,
@@ -164,7 +167,7 @@ protected:
 	/// Structures
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& RowName);
+	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* StructureToModify, bool const bGravityOn,
@@ -194,6 +197,9 @@ protected:
 	                                      UMaterialInstance* MaterialInstance,
 	                                      FString const& OldInstanceName = "WallInstance");
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void ToggleLockStructureInPlace_Server(ABGSplineStructure* StructureToLock, bool const bLock);
+	
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ResetStructure_Server(ABGSplineStructure* StructureToReset);
 

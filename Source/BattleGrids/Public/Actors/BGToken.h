@@ -19,6 +19,10 @@ public:
 	// Sets default values for this actor's properties
 	ABGToken();
 
+	// Call when spawning Token via DeferredActorSpawn function to set the mesh and material
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
+	void InitializeMeshAndMaterial(UStaticMesh* StaticMesh, UMaterialInstance* MaterialInstance) const;
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Multicast, toggles whether or not the token position and rotation is locked.
