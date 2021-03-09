@@ -34,6 +34,12 @@ protected:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Gameplay Data")
+	void GetRowNamesOfObjectTypeFromGameMode(EBGObjectType const& ObjectType);
+
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Gameplay Data")
+	void GetRowNamesOfObjectTypeFromGameMode_Server(EBGObjectType const& ObjectType);
+
 	/////////////////////////
 	/// Control Functions
 
@@ -105,7 +111,7 @@ protected:
 	                               UStaticMesh* StaticMesh,
 	                               UMaterialInstance* MaterialInstance,
 	                               FString const& OldInstanceName = "WallInstance");
-	                               
+
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock);
 
@@ -167,14 +173,17 @@ protected:
 	/// Structures
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
+	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& PrimaryMeshName,
+	                                     FName const& PrimaryMaterialName,
+	                                     FName const& SecondaryMeshName,
+	                                     FName const& SecondaryMaterialName);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* StructureToModify, bool const bGravityOn,
 	                                            ECollisionEnabled::Type const CollisionType);
 
 	/* Asks the GameMode to make a modification to the GrabbedStructure reference */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ModifyStructureLength_Server(ABGSplineStructure* StructureToModify, int const& PointIndex,
 	                                  FVector const& NewLocation);
 
@@ -199,7 +208,7 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ToggleLockStructureInPlace_Server(ABGSplineStructure* StructureToLock, bool const bLock);
-	
+
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ResetStructure_Server(ABGSplineStructure* StructureToReset);
 
@@ -231,7 +240,7 @@ protected:
 	EBGControlMode ControlMode{EBGControlMode::Move};
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	EBGGrabbedObjectType GrabbedObject{EBGGrabbedObjectType::None};
+	EBGObjectType GrabbedObject{EBGObjectType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	class ABGToken* GrabbedToken;
@@ -241,6 +250,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	class ABGBoard* GrabbedBoard;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	TArray<FName> TokenNames;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	TArray<FName> StructureNames;
 
 	//////////////////////////////////////////
 	/// Variables (Not Exposed to Blueprints)

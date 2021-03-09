@@ -18,14 +18,14 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 
 	switch (GrabbedObject)
 	{
-	case EBGGrabbedObjectType::None: break;
-	case EBGGrabbedObjectType::Token:
+	case EBGObjectType::None: break;
+	case EBGObjectType::Token:
 		HandleTokenSelection();
 		break;
-	case EBGGrabbedObjectType::Structure:
+	case EBGObjectType::Structure:
 		HandleStructureSelection();
 		break;
-	case EBGGrabbedObjectType::Board:
+	case EBGObjectType::Board:
 		HandleBoardSelection();
 		break;
 	default: ;
@@ -50,6 +50,31 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 	DOREPLIFETIME(ABGGamePlayerController, ControlMode)
 	DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
+	DOREPLIFETIME(ABGGamePlayerController, TokenNames)
+	DOREPLIFETIME(ABGGamePlayerController, StructureNames)
+}
+
+void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGObjectType const& ObjectType)
+{
+	GetRowNamesOfObjectTypeFromGameMode_Server(ObjectType);
+}
+
+void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Implementation(
+	EBGObjectType const& ObjectType)
+{
+	switch (ObjectType)
+	{
+	case EBGObjectType::None: break;
+	case EBGObjectType::Token:
+		TokenNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->GetRowNamesOfType(ObjectType);
+		break;
+	case EBGObjectType::Structure:
+		StructureNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->
+			GetRowNamesOfType(ObjectType);
+		break;
+	case EBGObjectType::Board: break;
+	default: ;
+	}
 }
 
 void ABGGamePlayerController::SelectObject()
@@ -63,26 +88,26 @@ void ABGGamePlayerController::SelectObject()
 
 		if ((GrabbedToken = Cast<ABGToken>(HitResult.GetActor()))->IsValidLowLevel())
 		{
-			GrabbedObject = EBGGrabbedObjectType::Token;
+			GrabbedObject = EBGObjectType::Token;
 			return;
 		}
 
 		if ((GrabbedStructure = Cast<ABGSplineStructure>(HitResult.GetActor()))->IsValidLowLevel())
 		{
-			GrabbedObject = EBGGrabbedObjectType::Structure;
+			GrabbedObject = EBGObjectType::Structure;
 			return;
 		}
 
 		if ((GrabbedBoard = Cast<ABGBoard>(HitResult.GetActor()))->IsValidLowLevel())
 		{
-			GrabbedObject = EBGGrabbedObjectType::Board;
+			GrabbedObject = EBGObjectType::Board;
 		}
 	}
 }
 
 void ABGGamePlayerController::ReleaseObject()
 {
-	GrabbedObject = EBGGrabbedObjectType::None;
+	GrabbedObject = EBGObjectType::None;
 
 	if (GrabbedToken)
 	{
@@ -259,7 +284,8 @@ void ABGGamePlayerController::ModifyStructureLength()
 
 		UE_LOG(LogTemp, Warning, TEXT("Number of Instance Components: %i"),
 		       GrabbedStructure->GetInstancedStaticMeshComponentByString("WallInstance")->GetInstanceCount())
-		if (NearestIndexToClick == -1)
+
+		if (NearestIndexToClick < 0)
 		{
 			if (GrabbedStructure->GetInstancedStaticMeshComponentByString("WallInstance")->GetInstanceCount() < 2)
 			{
@@ -276,6 +302,7 @@ void ABGGamePlayerController::ModifyStructureLength()
 
 		if (!HasAuthority())
 		{
+			UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
 			GrabbedStructure->SetLocationOfSplinePoint(NearestIndexToClick, GridSnappedIntersection);
 			GrabbedStructure->UpdateStructureMesh();
 		}
@@ -303,34 +330,41 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 
 			Intersection.Z = GrabbedStructure->GetActorLocation().Z;
 
-			/* TODO: find out if nearest index to click is an endpoint, if so add spline point to end, otherwise add one in middle */
-			// (also, fix the Reliable buffer fill crash issue)
-			
-			// auto Param = GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(Intersection);
-			// double IntPart, FractPart;
-			//
-			// FractPart = modf(Param, &IntPart);
-			//
-			// if (IntPart == 0 && FractPart < 0.3)
-			// {
-			// 	NearestIndexToClick = 0;
-			// }
-			// else if (IntPart == 0 && FractPart > 0.6)
-			// {
-			// 	NearestIndexToClick = 1;
-			// }
+			auto const ClosestKey = GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(
+				Intersection);
 
-			NearestIndexToClick = FMath::RoundToInt(
-				GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(Intersection));
+			const auto TotalSplinePoints = GrabbedStructure->GetSplineComponent()->GetNumberOfSplinePoints();
 
-			// 2021/03/03 To be polished...points don't seem to add regularly where we expect each time
-			// Insert a new spline point at an index found near the intersection
-			AddSplinePointToStructureSpline_Server(GrabbedStructure,
-			                                       Intersection,
-			                                       NearestIndexToClick);
+			double IntegralPart;
+
+			double const DecimalPart = modf(ClosestKey, &IntegralPart);
+
+			// within 0.5f, plus or minus 0.15f
+			if (DecimalPart >= 0.35f && DecimalPart <= 0.65f)
+			{
+				NearestIndexToClick = ++IntegralPart;
+			}
+
+			else if (DecimalPart < 0.35f && IntegralPart == 0)
+			{
+				NearestIndexToClick = IntegralPart;
+			}
+
+			else if ((DecimalPart > 0.65f || DecimalPart == 0.f) && IntegralPart == TotalSplinePoints - 1)
+			{
+				NearestIndexToClick = TotalSplinePoints;
+			}
+
+			if (NearestIndexToClick >= 0)
+			{
+				AddSplinePointToStructureSpline_Server(GrabbedStructure, Intersection, NearestIndexToClick);
+			}
 		}
 
-		ModifyStructureLength();
+		// Delay necessary for Spline Points to be updated/shifted so that new index is grabbed for movement, and not old one
+		FTimerHandle SplinePointUpdateTimer;
+		GetWorldTimerManager().SetTimer(SplinePointUpdateTimer, this, &ABGGamePlayerController::ModifyStructureLength,
+		                                0.2f, false);
 	}
 }
 
@@ -603,12 +637,13 @@ void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToG
 	}
 }
 
-void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(FVector const& Location,
-                                                                             FName const& MeshName,
-                                                                             FName const& MaterialName)
+void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(
+	FVector const& Location, FName const& PrimaryMeshName,
+	FName const& PrimaryMaterialName, FName const& SecondaryMeshName,
+	FName const& SecondaryMaterialName)
 {
 	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnStructureAtLocation(
-		Location, MeshName, MaterialName);
+		Location, PrimaryMeshName, PrimaryMaterialName, SecondaryMeshName, SecondaryMaterialName);
 	UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
 }
 
@@ -702,7 +737,8 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline_Server_Implementat
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::AddPointToSpline(StructureToModify, ClickLocation, Index);
+		ABGGameplayGameModeBase::AddSplinePointToStructureSpline(StructureToModify, ClickLocation,
+		                                                         Index);
 	}
 }
 

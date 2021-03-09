@@ -5,6 +5,23 @@
 #include "Engine/DataTable.h"
 #include "BGTypes.generated.h"
 
+UENUM(BlueprintType)
+enum class EBGObjectType : uint8
+{
+	None UMETA(DisplayName = "None"),
+    Token UMETA(DisplayName = "Token"),
+    Structure UMETA(DisplayName = "Structure"),
+    Board UMETA(DisplayName = "Board")
+};
+
+UENUM(BlueprintType)
+enum class EBGControlMode : uint8
+{
+	Build UMETA(DisplayName = "Build"),
+    Edit UMETA(DisplayName = "Edit"),
+    Move UMETA(DisplayName = "Move")
+};
+
 USTRUCT(BlueprintType)
 struct FBGStaticMeshBank : public FTableRowBase
 {
@@ -15,6 +32,9 @@ struct FBGStaticMeshBank : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMesh* StaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EBGObjectType ObjectType;
 };
 
 USTRUCT(BlueprintType)
@@ -35,18 +55,37 @@ struct FBGStructureInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMesh* StaticMesh;
+	UStaticMesh* PrimaryStaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInstance* MaterialInstance;
+	UMaterialInstance* PrimaryMaterialInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform Transform;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* SecondaryStaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMaterialInstance* SecondaryMaterialInstance;
+
 	FBGStructureInfo() = default;
 
-	FBGStructureInfo(UStaticMesh* NewStaticMesh, UMaterialInstance* NewMaterialInstance, FTransform const NewTransform)
-		: StaticMesh(NewStaticMesh), MaterialInstance(NewMaterialInstance), Transform(NewTransform)
+	FBGStructureInfo(UStaticMesh* NewPrimaryStaticMesh, UMaterialInstance* NewPrimaryMaterialInstance,
+	                 FTransform const NewTransform)
+		: PrimaryStaticMesh(NewPrimaryStaticMesh), PrimaryMaterialInstance(NewPrimaryMaterialInstance),
+		  Transform(NewTransform)
+	{
+		SecondaryStaticMesh = nullptr;
+		SecondaryMaterialInstance = nullptr;
+	}
+
+	FBGStructureInfo(UStaticMesh* NewPrimaryStaticMesh, UMaterialInstance* NewPrimaryMaterialInstance,
+	                 FTransform const NewTransform,
+	                 UStaticMesh* NewSecondaryStaticMesh, UMaterialInstance* NewSecondaryMaterialInstance)
+		: PrimaryStaticMesh(NewPrimaryStaticMesh), PrimaryMaterialInstance(NewPrimaryMaterialInstance),
+		  Transform(NewTransform),
+		  SecondaryStaticMesh(NewSecondaryStaticMesh), SecondaryMaterialInstance(NewSecondaryMaterialInstance)
 	{
 	}
 };
@@ -89,21 +128,4 @@ struct FBGTileInfo
 		: X(NewX), Y(NewY), Z(NewZ)
 	{
 	}
-};
-
-UENUM(BlueprintType)
-enum class EBGGrabbedObjectType : uint8
-{
-	None UMETA(DisplayName = "None"),
-	Token UMETA(DisplayName = "Token"),
-	Structure UMETA(DisplayName = "Structure"),
-	Board UMETA(DisplayName = "Board")
-};
-
-UENUM(BlueprintType)
-enum class EBGControlMode : uint8
-{
-	Build UMETA(DisplayName = "Build"),
-	Edit UMETA(DisplayName = "Edit"),
-	Move UMETA(DisplayName = "Move")
 };
