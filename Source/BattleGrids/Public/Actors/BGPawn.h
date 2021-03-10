@@ -28,6 +28,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Movement")
 	void MoveForward(float Value);
 
@@ -44,7 +46,13 @@ protected:
 	class UCapsuleComponent* CapsuleComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* StaticMeshComponent;
+	class UStaticMeshComponent* MainStaticMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* PupilMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class USphereComponent* SphereMask;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UCameraComponent* CameraComponent;
@@ -54,6 +62,18 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UFloatingPawnMovement* FloatingPawnMovement;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	float MaskRadius {200.f};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	class UMaterialParameterCollection* ParameterCollection;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	FName VectorParameterName {"PrimeLocation"};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	FName ScalarParameterName {"Radius"};
 
 	uint8 bIsRightMouseButtonDown : 1;
 };
