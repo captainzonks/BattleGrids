@@ -77,8 +77,13 @@ void ABGPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UKismetMaterialLibrary::SetVectorParameterValue(this, ParameterCollection, VectorParameterName,
-	                                                SphereMask->GetComponentLocation());
+	if (ParameterCollection)
+	{
+		UKismetMaterialLibrary::SetVectorParameterValue(this, ParameterCollection, VectorParameterName,
+                                                SphereMask->GetComponentLocation());
+
+		UKismetMaterialLibrary::SetScalarParameterValue(this, ParameterCollection, ScalarParameterName, MaskRadius);
+	}
 }
 
 // Called to bind functionality to input
