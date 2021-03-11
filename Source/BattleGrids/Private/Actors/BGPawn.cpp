@@ -41,7 +41,7 @@ ABGPawn::ABGPawn()
 	SphereMask = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Mask"));
 	SphereMask->SetupAttachment(CameraComponent);
 	SphereMask->SetRelativeLocation(FVector(120.f, 0.f, 0.f));
-	SphereMask->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	SphereMask->SetCollisionProfileName("SphereMask");
 	SphereMask->SetSphereRadius(6.f);
 
 	PawnMovementComponent = CreateDefaultSubobject<UPawnMovementComponent>(TEXT("Pawn Movement"));
@@ -76,6 +76,9 @@ void ABGPawn::OnConstruction(const FTransform& Transform)
 void ABGPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// map the MaskRadius to the SphereMask size (200 / 6 = 33.3333 repeating)
+	SphereMask->SetSphereRadius(MaskRadius / 33.f);
 
 	if (ParameterCollection)
 	{

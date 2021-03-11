@@ -6,6 +6,7 @@
 #include "Actors/BGSplineStructure.h"
 #include "Actors/BGTile.h"
 #include "Actors/BGToken.h"
+#include "Components/BoxComponent.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
@@ -84,7 +85,7 @@ void ABGGamePlayerController::SelectObject()
 
 	if (HitResult.bBlockingHit && HitResult.GetActor()->IsValidLowLevel())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *HitResult.GetActor()->GetName())
+		UE_LOG(LogTemp, Warning, TEXT("LineTrace Hit Actor: %s"), *HitResult.GetActor()->GetName())
 
 		if ((GrabbedToken = Cast<ABGToken>(HitResult.GetActor()))->IsValidLowLevel())
 		{
@@ -111,11 +112,8 @@ void ABGGamePlayerController::ReleaseObject()
 
 	if (GrabbedToken)
 	{
-		if (LastTargetedActor)
-		{
-			MoveTokenToLocation(false);
-			SetTokenCollisionAndPhysics(GrabbedToken, true, true, ECollisionEnabled::Type::QueryAndPhysics);
-		}
+		MoveTokenToLocation(false);
+		SetTokenCollisionAndPhysics(GrabbedToken, true, true, ECollisionEnabled::Type::QueryAndPhysics);
 	}
 
 	if (GrabbedStructure)
@@ -151,6 +149,7 @@ void ABGGamePlayerController::HandleTokenSelection()
 
 				if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Cursor Hit A Tile"))
 					if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
 						return;
 				}
@@ -158,6 +157,10 @@ void ABGGamePlayerController::HandleTokenSelection()
 				LastTargetedActor = LastHitResult.GetActor();
 				MoveTokenToLocation(true);
 			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("NO HIT RESULT"))
 		}
 	}
 }
@@ -180,6 +183,8 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 {
 	if (GrabbedToken && LastTargetedActor)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastTargetedActor = %s"), *LastTargetedActor->GetName())
+
 		FRotator const Rotation = FRotator(0.f, GrabbedToken->GetActorRotation().Yaw, 0.f);
 
 		float ZedValue;
@@ -187,23 +192,11 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 
 		FVector Location;
 
-		if (auto const SplineStructure = Cast<ABGSplineStructure>(LastTargetedActor))
+		if (Cast<ABGSplineStructure>(LastTargetedActor))
 		{
-			FTransform Transform;
-
-			if (auto const InstancedStaticMeshComponent = SplineStructure->GetInstancedStaticMeshComponentByString(
-				LastHitResult.GetComponent()->GetName()))
-			{
-				InstancedStaticMeshComponent->GetInstanceTransform(LastHitResult.Item, Transform, true);
-
-				auto const MeshBounds = InstancedStaticMeshComponent->GetStaticMesh()->GetBounds();
-
-				Location.X = Transform.GetLocation().X;
-				Location.Y = Transform.GetLocation().Y;
-				Location.Z = ZedValue + MeshBounds.Origin.Z + MeshBounds.BoxExtent.Z;
-			}
+			Location = LastHitResult.GetComponent()->Bounds.Origin + FVector(
+				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + 50.f);
 		}
-
 		else
 		{
 			FVector ActorOrigin{};
@@ -219,8 +212,8 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 		// Move the token locally if we are a client
 		if (!HasAuthority())
 		{
-			GrabbedToken->SetActorLocation(Location, false, nullptr, ETeleportType::TeleportPhysics);
-			GrabbedToken->SetActorRotation(Rotation, ETeleportType::TeleportPhysics);
+			GrabbedToken->SetActorLocation(Location, true, nullptr, ETeleportType::None);
+			GrabbedToken->SetActorRotation(Rotation, ETeleportType::None);
 		}
 
 		// Make a server call to ask the GameMode to move the token
