@@ -9,17 +9,17 @@ UENUM(BlueprintType)
 enum class EBGObjectType : uint8
 {
 	None UMETA(DisplayName = "None"),
-    Token UMETA(DisplayName = "Token"),
-    Structure UMETA(DisplayName = "Structure"),
-    Board UMETA(DisplayName = "Board")
+	Token UMETA(DisplayName = "Token"),
+	Structure UMETA(DisplayName = "Structure"),
+	Board UMETA(DisplayName = "Board")
 };
 
 UENUM(BlueprintType)
 enum class EBGControlMode : uint8
 {
 	Build UMETA(DisplayName = "Build"),
-    Edit UMETA(DisplayName = "Edit"),
-    Move UMETA(DisplayName = "Move")
+	Edit UMETA(DisplayName = "Edit"),
+	Move UMETA(DisplayName = "Move")
 };
 
 USTRUCT(BlueprintType)
@@ -55,37 +55,35 @@ struct FBGStructureInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMesh* PrimaryStaticMesh;
+	UStaticMesh* WallStaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInstance* PrimaryMaterialInstance;
+	UMaterialInstance* WallMaskedMaterialInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* CornerStaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMaterialInstance* CornerMaskedMaterialInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* BaseStaticMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMaterialInstance* BaseMaterialInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform Transform;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMesh* SecondaryStaticMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInstance* SecondaryMaterialInstance;
-
 	FBGStructureInfo() = default;
 
-	FBGStructureInfo(UStaticMesh* NewPrimaryStaticMesh, UMaterialInstance* NewPrimaryMaterialInstance,
+	FBGStructureInfo(UStaticMesh* NewWallStaticMesh, UMaterialInstance* NewWallMaskedMaterialInstance,
+	                 UStaticMesh* NewCornerStaticMesh, UMaterialInstance* NewCornerMaskedMaterialInstance,
+	                 UStaticMesh* NewBaseStaticMesh, UMaterialInstance* NewBaseMaterialInstance,
 	                 FTransform const NewTransform)
-		: PrimaryStaticMesh(NewPrimaryStaticMesh), PrimaryMaterialInstance(NewPrimaryMaterialInstance),
-		  Transform(NewTransform)
-	{
-		SecondaryStaticMesh = nullptr;
-		SecondaryMaterialInstance = nullptr;
-	}
-
-	FBGStructureInfo(UStaticMesh* NewPrimaryStaticMesh, UMaterialInstance* NewPrimaryMaterialInstance,
-	                 FTransform const NewTransform,
-	                 UStaticMesh* NewSecondaryStaticMesh, UMaterialInstance* NewSecondaryMaterialInstance)
-		: PrimaryStaticMesh(NewPrimaryStaticMesh), PrimaryMaterialInstance(NewPrimaryMaterialInstance),
-		  Transform(NewTransform),
-		  SecondaryStaticMesh(NewSecondaryStaticMesh), SecondaryMaterialInstance(NewSecondaryMaterialInstance)
+		: WallStaticMesh(NewWallStaticMesh), WallMaskedMaterialInstance(NewWallMaskedMaterialInstance),
+		  CornerStaticMesh(NewCornerStaticMesh), CornerMaskedMaterialInstance(NewCornerMaskedMaterialInstance),
+		  BaseStaticMesh(NewBaseStaticMesh), BaseMaterialInstance(NewBaseMaterialInstance), Transform(NewTransform)
 	{
 	}
 };

@@ -173,10 +173,12 @@ protected:
 	/// Structures
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& PrimaryMeshName,
-	                                     FName const& PrimaryMaterialName,
-	                                     FName const& SecondaryMeshName,
-	                                     FName const& SecondaryMaterialName);
+	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& WallStaticMeshName,
+	                                     FName const& WallMaskedMaterialInstanceName,
+	                                     FName const& CornerStaticMeshName,
+	                                     FName const& CornerMaskedMaterialInstanceName,
+	                                     FName const& BaseStaticMeshName,
+	                                     FName const& BaseMaterialInstanceName);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* StructureToModify, bool const bGravityOn,

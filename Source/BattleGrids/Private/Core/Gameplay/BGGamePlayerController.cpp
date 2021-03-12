@@ -6,7 +6,6 @@
 #include "Actors/BGSplineStructure.h"
 #include "Actors/BGTile.h"
 #include "Actors/BGToken.h"
-#include "Components/BoxComponent.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
@@ -194,6 +193,11 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 
 		if (Cast<ABGSplineStructure>(LastTargetedActor))
 		{
+			if (LastHitResult.GetComponent()->GetName().Contains("Base"))
+			{
+				return;
+			}
+			
 			Location = LastHitResult.GetComponent()->Bounds.Origin + FVector(
 				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + 50.f);
 		}
@@ -631,12 +635,17 @@ void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToG
 }
 
 void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(
-	FVector const& Location, FName const& PrimaryMeshName,
-	FName const& PrimaryMaterialName, FName const& SecondaryMeshName,
-	FName const& SecondaryMaterialName)
+	FVector const& Location, FName const& WallStaticMeshName,
+	FName const& WallMaskedMaterialInstanceName,
+	FName const& CornerStaticMeshName,
+	FName const& CornerMaskedMaterialInstanceName,
+	FName const& BaseStaticMeshName,
+	FName const& BaseMaterialInstanceName)
 {
 	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnStructureAtLocation(
-		Location, PrimaryMeshName, PrimaryMaterialName, SecondaryMeshName, SecondaryMaterialName);
+		Location, WallStaticMeshName, WallMaskedMaterialInstanceName, CornerStaticMeshName,
+		CornerMaskedMaterialInstanceName, BaseStaticMeshName,
+		BaseMaterialInstanceName);
 	UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
 }
 
