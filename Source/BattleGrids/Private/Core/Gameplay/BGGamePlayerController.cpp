@@ -193,6 +193,7 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 
 		if (Cast<ABGSplineStructure>(LastTargetedActor))
 		{
+			// Don't move tokens on Bases
 			if (LastHitResult.GetComponent()->GetName().Contains("Base"))
 			{
 				return;
