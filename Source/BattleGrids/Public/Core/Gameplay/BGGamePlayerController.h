@@ -13,6 +13,7 @@
 
 class ABGBoard;
 class ABGPlayerState;
+class ABGStructure;
 class ABGTile;
 
 /**
@@ -111,6 +112,14 @@ protected:
 	                               UStaticMesh* StaticMesh,
 	                               UMaterialInstance* MaterialInstance,
 	                               FString const& OldInstanceName = "WallInstance");
+	                               
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void SpawnStructureActorAtSplineStructureIndex(ABGSplineStructure* StructureToModify, int const& Index,
+	                                               TSubclassOf<ABGStructure> StructureClassToSpawn,
+	                                               FString const& OldInstanceName = "WallInstance");
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void RestoreInstanceMeshAtIndex(ABGStructure* StructureToRemove);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock);
@@ -207,6 +216,14 @@ protected:
 	                                      UStaticMesh* StaticMesh,
 	                                      UMaterialInstance* MaterialInstance,
 	                                      FString const& OldInstanceName = "WallInstance");
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void SpawnStructureActorAtSplineStructureIndex_Server(ABGSplineStructure* StructureToModify, int const& Index,
+	                                                      TSubclassOf<ABGStructure> StructureClassToSpawn,
+	                                                      FString const& OldInstanceName = "WallInstance");
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void RestoreInstanceMeshAtIndex_Server(ABGStructure* StructureToRemove);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
 	void ToggleLockStructureInPlace_Server(ABGSplineStructure* StructureToLock, bool const bLock);

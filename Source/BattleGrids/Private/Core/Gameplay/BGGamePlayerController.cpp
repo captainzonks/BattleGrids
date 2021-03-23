@@ -4,6 +4,7 @@
 
 #include "Actors/BGBoard.h"
 #include "Actors/BGSplineStructure.h"
+#include "Actors/BGStructure.h"
 #include "Actors/BGTile.h"
 #include "Actors/BGToken.h"
 #include "Components/SplineComponent.h"
@@ -198,7 +199,7 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 			{
 				return;
 			}
-			
+
 			Location = LastHitResult.GetComponent()->Bounds.Origin + FVector(
 				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + 50.f);
 		}
@@ -455,6 +456,26 @@ void ABGGamePlayerController::ModifyInstanceMeshAtIndex(ABGSplineStructure* Stru
 	}
 }
 
+void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex(ABGSplineStructure* StructureToModify,
+                                                                        int const& Index,
+                                                                        TSubclassOf<ABGStructure> StructureClassToSpawn,
+                                                                        FString const& OldInstanceName)
+{
+	if (StructureToModify && StructureClassToSpawn)
+	{
+		SpawnStructureActorAtSplineStructureIndex_Server(StructureToModify, Index, StructureClassToSpawn,
+		                                                 OldInstanceName);
+	}
+}
+
+void ABGGamePlayerController::RestoreInstanceMeshAtIndex(ABGStructure* StructureToRemove)
+{
+	if (StructureToRemove)
+	{
+		RestoreInstanceMeshAtIndex_Server(StructureToRemove);
+	}
+}
+
 void ABGGamePlayerController::ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock)
 {
 	if (StructureToLock)
@@ -581,12 +602,31 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 	}
 }
 
+void ABGGamePlayerController::RestoreInstanceMeshAtIndex_Server_Implementation(ABGStructure* StructureToRemove)
+{
+	if (StructureToRemove)
+	{
+		ABGGameplayGameModeBase::RestoreSplineStructureAtIndex(StructureToRemove);
+	}
+}
+
+void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex_Server_Implementation(
+	ABGSplineStructure* StructureToModify, int const& Index, TSubclassOf<ABGStructure> StructureClassToSpawn,
+	FString const& OldInstanceName)
+{
+	if (StructureToModify && StructureClassToSpawn)
+	{
+		ABGGameplayGameModeBase::SpawnStructureActorAtSplineStructureIndex(
+			StructureToModify, Index, StructureClassToSpawn, OldInstanceName);
+	}
+}
+
 void ABGGamePlayerController::ToggleLockStructureInPlace_Server_Implementation(ABGSplineStructure* StructureToLock,
                                                                                bool const bLock)
 {
 	if (StructureToLock)
 	{
-		ABGGameplayGameModeBase::ToggleLockStructureInPlace(StructureToLock, bLock);
+		ABGGameplayGameModeBase::ToggleLockSplineStructureInPlace(StructureToLock, bLock);
 	}
 }
 
@@ -596,7 +636,7 @@ void ABGGamePlayerController::ModifyInstanceMeshAtIndex_Server_Implementation(
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::ModifyInstanceMeshAtIndex(StructureToModify, Index, NewInstanceName,
+		ABGGameplayGameModeBase::ModifySplineStructureInstanceMeshAtIndex(StructureToModify, Index, NewInstanceName,
 		                                                   StaticMesh,
 		                                                   MaterialInstance, OldInstanceName);
 	}
@@ -607,7 +647,7 @@ void ABGGamePlayerController::MoveStructure_Server_Implementation(ABGSplineStruc
 {
 	if (StructureToMove)
 	{
-		ABGGameplayGameModeBase::MoveStructure(StructureToMove, Location);
+		ABGGameplayGameModeBase::MoveSplineStructure(StructureToMove, Location);
 	}
 }
 
@@ -615,7 +655,7 @@ void ABGGamePlayerController::ResetStructure_Server_Implementation(ABGSplineStru
 {
 	if (StructureToReset)
 	{
-		ABGGameplayGameModeBase::ResetStructure(StructureToReset);
+		ABGGameplayGameModeBase::ResetSplineStructure(StructureToReset);
 	}
 }
 
@@ -643,7 +683,7 @@ void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(
 	FName const& BaseStaticMeshName,
 	FName const& BaseMaterialInstanceName)
 {
-	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnStructureAtLocation(
+	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnSplineStructureAtLocation(
 		Location, WallStaticMeshName, WallMaskedMaterialInstanceName, CornerStaticMeshName,
 		CornerMaskedMaterialInstanceName, BaseStaticMeshName,
 		BaseMaterialInstanceName);
@@ -730,7 +770,7 @@ void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::ModifyStructureLength(StructureToModify, PointIndex, NewLocation);
+		ABGGameplayGameModeBase::ModifySplineStructureLength(StructureToModify, PointIndex, NewLocation);
 	}
 }
 
@@ -740,7 +780,7 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline_Server_Implementat
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::AddSplinePointToStructureSpline(StructureToModify, ClickLocation,
+		ABGGameplayGameModeBase::AddSplinePointToSplineStructure(StructureToModify, ClickLocation,
 		                                                         Index);
 	}
 }
@@ -873,7 +913,7 @@ void ABGGamePlayerController::SetStructurePhysicsAndCollision_Server_Implementat
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::SetStructurePhysicsAndCollision(StructureToModify, bGravityOn,
+		ABGGameplayGameModeBase::SetSplineStructurePhysicsAndCollision(StructureToModify, bGravityOn,
 		                                                         CollisionType);
 	}
 }
@@ -882,7 +922,7 @@ void ABGGamePlayerController::DestroyStructure_Server_Implementation(ABGSplineSt
 {
 	if (StructureToDestroy)
 	{
-		ABGGameplayGameModeBase::DestroyStructure(StructureToDestroy);
+		ABGGameplayGameModeBase::DestroySplineStructure(StructureToDestroy);
 	}
 }
 
@@ -891,6 +931,6 @@ void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementati
 {
 	if (StructureToModify)
 	{
-		ABGGameplayGameModeBase::RemoveStructureInstanceAtIndex(StructureToModify, InstanceName, Index);
+		ABGGameplayGameModeBase::RemoveSplineStructureInstanceAtIndex(StructureToModify, InstanceName, Index);
 	}
 }
