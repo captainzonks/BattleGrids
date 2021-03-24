@@ -24,7 +24,7 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 		HandleTokenSelection();
 		break;
 	case EBGObjectType::Structure:
-		HandleStructureSelection();
+		HandleSplineStructureSelection();
 		break;
 	case EBGObjectType::Board:
 		HandleBoardSelection();
@@ -118,8 +118,8 @@ void ABGGamePlayerController::ReleaseObject()
 
 	if (GrabbedStructure)
 	{
-		SetStructurePhysicsAndCollision(GrabbedStructure, true,
-		                                ECollisionEnabled::Type::QueryAndPhysics);
+		SetSplineStructurePhysicsAndCollision(GrabbedStructure, true,
+		                                      ECollisionEnabled::Type::QueryAndPhysics);
 	}
 
 	GrabbedToken = nullptr;
@@ -227,9 +227,9 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 	}
 }
 
-void ABGGamePlayerController::HandleStructureSelection()
+void ABGGamePlayerController::HandleSplineStructureSelection()
 {
-	if (!GetGameMasterPermissions() || GrabbedStructure->GetLockedStatus())
+	if (!GetGameMasterPermissions() || GrabbedStructure->GetLocked())
 		return;
 
 	switch (ControlMode)
@@ -237,22 +237,34 @@ void ABGGamePlayerController::HandleStructureSelection()
 	case EBGControlMode::Build:
 		if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
 		{
-			AddSplinePointToStructureSpline();
+			AddSplinePointToSplineStructure();
 			break;
 		}
-		ModifyStructureLength();
+		ModifySplineStructureLength();
 		break;
 	case EBGControlMode::Edit: break;
 	case EBGControlMode::Move:
-		MoveStructure();
+		MoveSplineStructure();
 		break;
 	default: ;
 	}
 }
 
-void ABGGamePlayerController::SetStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify,
-                                                              bool const bGravityOn,
-                                                              ECollisionEnabled::Type const CollisionType)
+void ABGGamePlayerController::SpawnSplineStructureAtLocation(FVector const& Location, FName const& WallStaticMeshName,
+                                                             FName const& WallMaskedMaterialInstanceName,
+                                                             FName const& CornerStaticMeshName,
+                                                             FName const& CornerMaskedMaterialInstanceName,
+                                                             FName const& BaseStaticMeshName,
+                                                             FName const& BaseMaterialInstanceName)
+{
+	SpawnSplineStructureAtLocation_Server(Location, WallStaticMeshName, WallMaskedMaterialInstanceName,
+	                                      CornerStaticMeshName, CornerMaskedMaterialInstanceName, BaseStaticMeshName,
+	                                      BaseMaterialInstanceName);
+}
+
+void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify,
+                                                                    bool const bGravityOn,
+                                                                    ECollisionEnabled::Type const CollisionType)
 {
 	if (StructureToModify)
 	{
@@ -265,7 +277,7 @@ void ABGGamePlayerController::SetStructurePhysicsAndCollision(ABGSplineStructure
 	}
 }
 
-void ABGGamePlayerController::ModifyStructureLength()
+void ABGGamePlayerController::ModifySplineStructureLength()
 {
 	if (GrabbedStructure)
 	{
@@ -310,7 +322,7 @@ void ABGGamePlayerController::ModifyStructureLength()
 	}
 }
 
-void ABGGamePlayerController::AddSplinePointToStructureSpline()
+void ABGGamePlayerController::AddSplinePointToSplineStructure()
 {
 	if (GrabbedStructure)
 	{
@@ -362,16 +374,17 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline()
 
 		// Delay necessary for Spline Points to be updated/shifted so that new index is grabbed for movement, and not old one
 		FTimerHandle SplinePointUpdateTimer;
-		GetWorldTimerManager().SetTimer(SplinePointUpdateTimer, this, &ABGGamePlayerController::ModifyStructureLength,
+		GetWorldTimerManager().SetTimer(SplinePointUpdateTimer, this,
+		                                &ABGGamePlayerController::ModifySplineStructureLength,
 		                                0.2f, false);
 	}
 }
 
-void ABGGamePlayerController::MoveStructure()
+void ABGGamePlayerController::MoveSplineStructure()
 {
 	if (GrabbedStructure)
 	{
-		SetStructurePhysicsAndCollision(GrabbedStructure, false, ECollisionEnabled::Type::PhysicsOnly);
+		SetSplineStructurePhysicsAndCollision(GrabbedStructure, false, ECollisionEnabled::Type::PhysicsOnly);
 		FVector Location{};
 
 		UE_LOG(LogTemp, Warning, TEXT("Moving Structure"))
@@ -413,40 +426,12 @@ void ABGGamePlayerController::MoveStructure()
 	}
 }
 
-void ABGGamePlayerController::RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify,
-                                                             FString const& InstanceName, int const& Index)
-{
-	if (StructureToModify)
-	{
-		if (!HasAuthority())
-		{
-			if (StructureToModify->GetInstanceComponents().Num() > 0)
-			{
-				for (auto Instance : StructureToModify->GetInstanceComponents())
-				{
-					if (Instance)
-					{
-						if (Instance->GetName().Equals(InstanceName))
-						{
-							if (auto CastInstance = Cast<UInstancedStaticMeshComponent>(Instance))
-							{
-								CastInstance->RemoveInstance(Index);
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-		RemoveStructureInstanceAtIndex_Server(StructureToModify, InstanceName, Index);
-	}
-}
-
-void ABGGamePlayerController::ModifyInstanceMeshAtIndex(ABGSplineStructure* StructureToModify, int const& Index,
-                                                        FString const& NewInstanceName,
-                                                        UStaticMesh* StaticMesh,
-                                                        UMaterialInstance* MaterialInstance,
-                                                        FString const& OldInstanceName)
+void ABGGamePlayerController::ModifySplineStructureInstanceMeshAtIndex(ABGSplineStructure* StructureToModify,
+                                                                       int const& Index,
+                                                                       FString const& NewInstanceName,
+                                                                       UStaticMesh* StaticMesh,
+                                                                       UMaterialInstance* MaterialInstance,
+                                                                       FString const& OldInstanceName)
 {
 	if (StructureToModify)
 	{
@@ -468,66 +453,90 @@ void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex(ABGSplin
 	}
 }
 
-void ABGGamePlayerController::RestoreInstanceMeshAtIndex(ABGStructure* StructureToRemove)
+void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+                                                                     int const& Index, FString const& InstanceName)
+{
+	if (StructureToModify)
+	{
+		RemoveInstanceAtIndexOnSplineStructure_Server(StructureToModify, Index, InstanceName);
+	}
+}
+
+void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+                                                                      FTransform const& NewInstanceTransform,
+                                                                      FString const& InstanceName)
+{
+	if (StructureToModify)
+	{
+		RestoreInstanceAtIndexOnSplineStructure_Server(StructureToModify, NewInstanceTransform, InstanceName);
+	}
+}
+
+void ABGGamePlayerController::DestroyStructureActor(ABGStructure* StructureToRemove)
 {
 	if (StructureToRemove)
 	{
-		RestoreInstanceMeshAtIndex_Server(StructureToRemove);
+		DestroyStructureActor_Server(StructureToRemove);
 	}
 }
 
-void ABGGamePlayerController::ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock)
+void ABGGamePlayerController::ToggleLockSplineStructureInPlace(ABGSplineStructure* SplineStructureToLock,
+                                                               bool const bNewLocked)
+{
+	if (SplineStructureToLock)
+	{
+		ToggleLockSplineStructureInPlace_Server(SplineStructureToLock, bNewLocked);
+	}
+}
+
+void ABGGamePlayerController::ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked)
 {
 	if (StructureToLock)
 	{
-		if (!HasAuthority())
-		{
-			StructureToLock->ToggleLockStructureInPlace(bLock);
-		}
-		ToggleLockStructureInPlace_Server(StructureToLock, bLock);
+		ToggleLockStructure_Server(StructureToLock, bNewLocked);
 	}
 }
 
-void ABGGamePlayerController::ResetStructure(ABGSplineStructure* StructureToReset) const
+void ABGGamePlayerController::ResetSplineStructure(ABGSplineStructure* SplineStructureToReset) const
 {
-	if (StructureToReset)
+	if (SplineStructureToReset)
 	{
 		if (!HasAuthority())
 		{
-			if (StructureToReset->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
+			if (SplineStructureToReset->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
 			{
 				// clear all spline points except for indices 0 and 1
-				for (int i{StructureToReset->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
+				for (int i{SplineStructureToReset->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
 				{
-					StructureToReset->GetSplineComponent()->RemoveSplinePoint(i - 1);
+					SplineStructureToReset->GetSplineComponent()->RemoveSplinePoint(i - 1);
 				}
 			}
 
 			// reset Spline Point 0 to actor's origin
-			StructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
-				0, StructureToReset->GetActorLocation(), ESplineCoordinateSpace::World, true);
+			SplineStructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
+				0, SplineStructureToReset->GetActorLocation(), ESplineCoordinateSpace::World, true);
 
 			// reset Spline Point 1 to 105.f away the origin
-			auto Location = StructureToReset->GetActorLocation();
+			auto Location = SplineStructureToReset->GetActorLocation();
 			Location.X += 50.f;
 
-			StructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
+			SplineStructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
 				1, Location, ESplineCoordinateSpace::World, true);
 
-			StructureToReset->UpdateStructureMesh();
+			SplineStructureToReset->UpdateStructureMesh();
 		}
 	}
 }
 
-void ABGGamePlayerController::DestroyStructure(ABGSplineStructure* StructureToDestroy)
+void ABGGamePlayerController::DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy)
 {
-	if (StructureToDestroy)
+	if (SplineStructureToDestroy)
 	{
 		if (!HasAuthority())
 		{
-			StructureToDestroy->Destroy();
+			SplineStructureToDestroy->Destroy();
 		}
-		DestroyStructure_Server(StructureToDestroy);
+		DestroySplineStructure_Server(SplineStructureToDestroy);
 	}
 }
 
@@ -602,11 +611,39 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 	}
 }
 
-void ABGGamePlayerController::RestoreInstanceMeshAtIndex_Server_Implementation(ABGStructure* StructureToRemove)
+void ABGGamePlayerController::ToggleLockStructure_Server_Implementation(
+	ABGStructure* StructureToLock, bool const bNewLocked)
 {
-	if (StructureToRemove)
+	if (HasAuthority() && StructureToLock)
 	{
-		ABGGameplayGameModeBase::RestoreSplineStructureAtIndex(StructureToRemove);
+		StructureToLock->ToggleStructureLock(bNewLocked);
+	}
+}
+
+void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure_Server_Implementation(
+	ABGSplineStructure* StructureToModify, FTransform const& NewInstanceTransform, FString const& InstanceName)
+{
+	if (HasAuthority() && StructureToModify)
+	{
+		StructureToModify->RestoreInstanceMeshAtIndex(NewInstanceTransform, InstanceName);
+	}
+}
+
+void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure_Server_Implementation(
+	ABGSplineStructure* StructureToModify, int const& Index, FString const& InstanceName)
+{
+	if (HasAuthority() && StructureToModify)
+	{
+		StructureToModify->RemoveInstanceMeshAtIndex(Index, InstanceName);
+	}
+}
+
+void ABGGamePlayerController::DestroyStructureActor_Server_Implementation(
+	ABGStructure* StructureToRemove)
+{
+	if (HasAuthority() && StructureToRemove)
+	{
+		ABGGameplayGameModeBase::DestroyStructureActor(StructureToRemove);
 	}
 }
 
@@ -614,19 +651,20 @@ void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex_Server_I
 	ABGSplineStructure* StructureToModify, int const& Index, TSubclassOf<ABGStructure> StructureClassToSpawn,
 	FString const& OldInstanceName)
 {
-	if (StructureToModify && StructureClassToSpawn)
+	if (HasAuthority() && StructureToModify && StructureClassToSpawn)
 	{
 		ABGGameplayGameModeBase::SpawnStructureActorAtSplineStructureIndex(
 			StructureToModify, Index, StructureClassToSpawn, OldInstanceName);
 	}
 }
 
-void ABGGamePlayerController::ToggleLockStructureInPlace_Server_Implementation(ABGSplineStructure* StructureToLock,
-                                                                               bool const bLock)
+void ABGGamePlayerController::ToggleLockSplineStructureInPlace_Server_Implementation(
+	ABGSplineStructure* SplineStructureToLock,
+	bool const bNewLocked)
 {
-	if (StructureToLock)
+	if (HasAuthority() && SplineStructureToLock)
 	{
-		ABGGameplayGameModeBase::ToggleLockSplineStructureInPlace(StructureToLock, bLock);
+		SplineStructureToLock->ToggleLockStructureInPlace(bNewLocked);
 	}
 }
 
@@ -634,26 +672,26 @@ void ABGGamePlayerController::ModifyInstanceMeshAtIndex_Server_Implementation(
 	ABGSplineStructure* StructureToModify, int const& Index, FString const& NewInstanceName, UStaticMesh* StaticMesh,
 	UMaterialInstance* MaterialInstance, FString const& OldInstanceName)
 {
-	if (StructureToModify)
+	if (HasAuthority() && StructureToModify)
 	{
 		ABGGameplayGameModeBase::ModifySplineStructureInstanceMeshAtIndex(StructureToModify, Index, NewInstanceName,
-		                                                   StaticMesh,
-		                                                   MaterialInstance, OldInstanceName);
+		                                                                  StaticMesh,
+		                                                                  MaterialInstance, OldInstanceName);
 	}
 }
 
 void ABGGamePlayerController::MoveStructure_Server_Implementation(ABGSplineStructure* StructureToMove,
                                                                   FVector const& Location)
 {
-	if (StructureToMove)
+	if (HasAuthority() && StructureToMove)
 	{
 		ABGGameplayGameModeBase::MoveSplineStructure(StructureToMove, Location);
 	}
 }
 
-void ABGGamePlayerController::ResetStructure_Server_Implementation(ABGSplineStructure* StructureToReset)
+void ABGGamePlayerController::ResetSplineStructure_Server_Implementation(ABGSplineStructure* StructureToReset)
 {
-	if (StructureToReset)
+	if (HasAuthority() && StructureToReset)
 	{
 		ABGGameplayGameModeBase::ResetSplineStructure(StructureToReset);
 	}
@@ -661,7 +699,7 @@ void ABGGamePlayerController::ResetStructure_Server_Implementation(ABGSplineStru
 
 void ABGGamePlayerController::ShrinkBoard_Server_Implementation(ABGBoard* BoardToShrink)
 {
-	if (BoardToShrink)
+	if (HasAuthority() && BoardToShrink)
 	{
 		ABGGameplayGameModeBase::ShrinkBoard(BoardToShrink);
 	}
@@ -669,13 +707,13 @@ void ABGGamePlayerController::ShrinkBoard_Server_Implementation(ABGBoard* BoardT
 
 void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToGrow)
 {
-	if (BoardToGrow)
+	if (HasAuthority() && BoardToGrow)
 	{
 		ABGGameplayGameModeBase::GrowBoard(BoardToGrow);
 	}
 }
 
-void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(
+void ABGGamePlayerController::SpawnSplineStructureAtLocation_Server_Implementation(
 	FVector const& Location, FName const& WallStaticMeshName,
 	FName const& WallMaskedMaterialInstanceName,
 	FName const& CornerStaticMeshName,
@@ -683,21 +721,27 @@ void ABGGamePlayerController::SpawnStructureAtLocation_Server_Implementation(
 	FName const& BaseStaticMeshName,
 	FName const& BaseMaterialInstanceName)
 {
-	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnSplineStructureAtLocation(
-		Location, WallStaticMeshName, WallMaskedMaterialInstanceName, CornerStaticMeshName,
-		CornerMaskedMaterialInstanceName, BaseStaticMeshName,
-		BaseMaterialInstanceName);
-	UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
+	if (HasAuthority())
+	{
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnSplineStructureAtLocation(
+			Location, WallStaticMeshName, WallMaskedMaterialInstanceName, CornerStaticMeshName,
+			CornerMaskedMaterialInstanceName, BaseStaticMeshName,
+			BaseMaterialInstanceName);
+		UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
+	}
 }
 
 void ABGGamePlayerController::SpawnNewBoard_Server_Implementation(int const& Zed, int const& X, int const& Y)
 {
-	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewBoard(Zed, X, Y);
+	if (HasAuthority())
+	{
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewBoard(Zed, X, Y);
+	}
 }
 
 void ABGGamePlayerController::DestroyToken_Server_Implementation(ABGToken* TokenToDestroy)
 {
-	if (TokenToDestroy)
+	if (HasAuthority() && TokenToDestroy)
 	{
 		ABGGameplayGameModeBase::DestroyToken(TokenToDestroy);
 	}
@@ -706,7 +750,7 @@ void ABGGamePlayerController::DestroyToken_Server_Implementation(ABGToken* Token
 void ABGGamePlayerController::ToggleTokenPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
 	ABGToken* TokenToToggle)
 {
-	if (PlayerStateToToggle && TokenToToggle)
+	if (HasAuthority() && PlayerStateToToggle && TokenToToggle)
 	{
 		ABGGameplayGameModeBase::ToggleTokenPermissionsForPlayer(PlayerStateToToggle, TokenToToggle);
 	}
@@ -714,7 +758,7 @@ void ABGGamePlayerController::ToggleTokenPermissionsForPlayer_Server_Implementat
 
 void ABGGamePlayerController::RotateToken_Server_Implementation(ABGToken* TokenToRotate, FRotator const& NewRotation)
 {
-	if (TokenToRotate)
+	if (HasAuthority() && TokenToRotate)
 	{
 		TokenToRotate->SetActorRotation(NewRotation);
 	}
@@ -722,7 +766,7 @@ void ABGGamePlayerController::RotateToken_Server_Implementation(ABGToken* TokenT
 
 void ABGGamePlayerController::ResetTokenRotation_Server_Implementation(ABGToken* TokenToReset)
 {
-	if (TokenToReset)
+	if (HasAuthority() && TokenToReset)
 	{
 		TokenToReset->SetActorRotation(FRotator::ZeroRotator);
 	}
@@ -730,7 +774,7 @@ void ABGGamePlayerController::ResetTokenRotation_Server_Implementation(ABGToken*
 
 void ABGGamePlayerController::ToggleTokenLockInPlace_Server_Implementation(ABGToken* TokenToToggle, bool bLock)
 {
-	if (TokenToToggle)
+	if (HasAuthority() && TokenToToggle)
 	{
 		ABGGameplayGameModeBase::ToggleTokenLockInPlace(TokenToToggle, bLock);
 	}
@@ -739,16 +783,19 @@ void ABGGamePlayerController::ToggleTokenLockInPlace_Server_Implementation(ABGTo
 void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(
 	FVector const& Location, FName const& MeshName, FName const& MaterialName)
 {
-	Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(
-		Location, MeshName, MaterialName);
+	if (HasAuthority())
+	{
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(
+			Location, MeshName, MaterialName);
 
-	UE_LOG(LogTemp, Warning, TEXT("Spawning Token At Location (server)"))
+		UE_LOG(LogTemp, Warning, TEXT("Spawning Token At Location (server)"))
+	}
 }
 
 void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, FVector const& Location,
                                                                         FRotator const TokenRotation)
 {
-	if (TokenToMove)
+	if (HasAuthority() && TokenToMove)
 	{
 		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, Location, TokenRotation);
 	}
@@ -758,7 +805,7 @@ void ABGGamePlayerController::SetTokenCollisionAndPhysics_Server_Implementation(
 	bool const bPhysicsOn, bool const bGravityOn,
 	ECollisionEnabled::Type const CollisionType)
 {
-	if (TokenToModify)
+	if (HasAuthority() && TokenToModify)
 	{
 		ABGGameplayGameModeBase::SetTokenPhysicsAndCollision(TokenToModify, bPhysicsOn, bGravityOn, CollisionType);
 	}
@@ -768,7 +815,7 @@ void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
 	ABGSplineStructure* StructureToModify, int const& PointIndex,
 	FVector const& NewLocation)
 {
-	if (StructureToModify)
+	if (HasAuthority() && StructureToModify)
 	{
 		ABGGameplayGameModeBase::ModifySplineStructureLength(StructureToModify, PointIndex, NewLocation);
 	}
@@ -778,7 +825,7 @@ void ABGGamePlayerController::AddSplinePointToStructureSpline_Server_Implementat
 	ABGSplineStructure* StructureToModify,
 	FVector const& ClickLocation, int const& Index)
 {
-	if (StructureToModify)
+	if (HasAuthority() && StructureToModify)
 	{
 		ABGGameplayGameModeBase::AddSplinePointToSplineStructure(StructureToModify, ClickLocation,
 		                                                         Index);
@@ -914,23 +961,14 @@ void ABGGamePlayerController::SetStructurePhysicsAndCollision_Server_Implementat
 	if (StructureToModify)
 	{
 		ABGGameplayGameModeBase::SetSplineStructurePhysicsAndCollision(StructureToModify, bGravityOn,
-		                                                         CollisionType);
+		                                                               CollisionType);
 	}
 }
 
-void ABGGamePlayerController::DestroyStructure_Server_Implementation(ABGSplineStructure* StructureToDestroy)
+void ABGGamePlayerController::DestroySplineStructure_Server_Implementation(ABGSplineStructure* StructureToDestroy)
 {
 	if (StructureToDestroy)
 	{
 		ABGGameplayGameModeBase::DestroySplineStructure(StructureToDestroy);
-	}
-}
-
-void ABGGamePlayerController::RemoveStructureInstanceAtIndex_Server_Implementation(
-	ABGSplineStructure* StructureToModify, FString const& InstanceName, int const& Index)
-{
-	if (StructureToModify)
-	{
-		ABGGameplayGameModeBase::RemoveSplineStructureInstanceAtIndex(StructureToModify, InstanceName, Index);
 	}
 }

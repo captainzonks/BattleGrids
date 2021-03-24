@@ -85,50 +85,71 @@ protected:
 	/// Structure Functions
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void HandleStructureSelection();
+	void HandleSplineStructureSelection();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void SetStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify, bool const bGravityOn,
-	                                     ECollisionEnabled::Type const CollisionType);
-
-	/* Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid */
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void ModifyStructureLength();
-
-	/* Adds a new spline point to a spline by finding the nearest index to the mouse's location and inserts it */
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void AddSplinePointToStructureSpline();
+	void SpawnSplineStructureAtLocation(FVector const& Location, FName const& WallStaticMeshName,
+	                                    FName const& WallMaskedMaterialInstanceName,
+	                                    FName const& CornerStaticMeshName,
+	                                    FName const& CornerMaskedMaterialInstanceName,
+	                                    FName const& BaseStaticMeshName,
+	                                    FName const& BaseMaterialInstanceName);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void MoveStructure();
+	void SetSplineStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify, bool const bGravityOn,
+	                                           ECollisionEnabled::Type const CollisionType);
+
+	// Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void ModifySplineStructureLength();
+
+	// Adds a new spline point to a spline by finding the nearest index to the mouse's location and inserts it
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void AddSplinePointToSplineStructure();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void RemoveStructureInstanceAtIndex(ABGSplineStructure* StructureToModify, FString const& InstanceName,
-	                                    int const& Index);
+	void MoveSplineStructure();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void ModifyInstanceMeshAtIndex(ABGSplineStructure* StructureToModify, int const& Index,
-	                               FString const& NewInstanceName,
-	                               UStaticMesh* StaticMesh,
-	                               UMaterialInstance* MaterialInstance,
-	                               FString const& OldInstanceName = "WallInstance");
-	                               
+	void ModifySplineStructureInstanceMeshAtIndex(ABGSplineStructure* StructureToModify, int const& Index,
+	                                              FString const& NewInstanceName,
+	                                              UStaticMesh* StaticMesh,
+	                                              UMaterialInstance* MaterialInstance,
+	                                              FString const& OldInstanceName = "WallInstance");
+
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void SpawnStructureActorAtSplineStructureIndex(ABGSplineStructure* StructureToModify, int const& Index,
 	                                               TSubclassOf<ABGStructure> StructureClassToSpawn,
 	                                               FString const& OldInstanceName = "WallInstance");
 
+	// Removes an Instance at the Index provided on a Spline Structure
+	// By default, removes from the WallInstance
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void RestoreInstanceMeshAtIndex(ABGStructure* StructureToRemove);
+	void RemoveInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify, int const& Index,
+	                                            FString const& InstanceName = "WallInstance");
+
+	// Restores an Instance on a Spline Structure
+	// By default, restores on the WallInstance
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Network")
+	void RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+	                                             FTransform const& NewInstanceTransform,
+	                                             FString const& InstanceName = "WallInstance");
+
+	// Destroys a Structure Actor
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void DestroyStructureActor(ABGStructure* StructureToRemove);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void ToggleLockStructureInPlace(ABGSplineStructure* StructureToLock, bool const bLock);
+	void ToggleLockSplineStructureInPlace(ABGSplineStructure* SplineStructureToLock, bool const bNewLocked);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void ResetStructure(ABGSplineStructure* StructureToReset) const;
+	void ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void DestroyStructure(ABGSplineStructure* StructureToDestroy);
+	void ResetSplineStructure(ABGSplineStructure* SplineStructureToReset) const;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	void DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy);
 
 	////////////////////////
 	/// Board Functions
@@ -181,58 +202,67 @@ protected:
 
 	/// Structures
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnStructureAtLocation_Server(FVector const& Location, FName const& WallStaticMeshName,
-	                                     FName const& WallMaskedMaterialInstanceName,
-	                                     FName const& CornerStaticMeshName,
-	                                     FName const& CornerMaskedMaterialInstanceName,
-	                                     FName const& BaseStaticMeshName,
-	                                     FName const& BaseMaterialInstanceName);
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void SpawnSplineStructureAtLocation_Server(FVector const& Location, FName const& WallStaticMeshName,
+	                                           FName const& WallMaskedMaterialInstanceName,
+	                                           FName const& CornerStaticMeshName,
+	                                           FName const& CornerMaskedMaterialInstanceName,
+	                                           FName const& BaseStaticMeshName,
+	                                           FName const& BaseMaterialInstanceName);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* StructureToModify, bool const bGravityOn,
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void SetStructurePhysicsAndCollision_Server(ABGSplineStructure* SplineStructureToModify, bool const bGravityOn,
 	                                            ECollisionEnabled::Type const CollisionType);
 
-	/* Asks the GameMode to make a modification to the GrabbedStructure reference */
-	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void ModifyStructureLength_Server(ABGSplineStructure* StructureToModify, int const& PointIndex,
+	// Asks the GameMode to make a modification to the GrabbedStructure reference
+	UFUNCTION(Server, Unreliable, Category = "BGGamePlayerController|Network")
+	void ModifyStructureLength_Server(ABGSplineStructure* SplineStructureToModify, int const& PointIndex,
 	                                  FVector const& NewLocation);
 
-	/* Asks the GameMode to add a new spline point to the GrabbedStructure reference */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void AddSplinePointToStructureSpline_Server(ABGSplineStructure* StructureToModify, FVector const& ClickLocation,
+	// Asks the GameMode to add a new spline point to the GrabbedStructure reference
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void AddSplinePointToStructureSpline_Server(ABGSplineStructure* SplineStructureToModify,
+	                                            FVector const& ClickLocation,
 	                                            int const& Index);
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void MoveStructure_Server(ABGSplineStructure* StructureToMove, FVector const& Location);
+	UFUNCTION(Server, Unreliable, Category = "BGGamePlayerController|Network")
+	void MoveStructure_Server(ABGSplineStructure* SplineStructureToMove, FVector const& Location);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void RemoveStructureInstanceAtIndex_Server(ABGSplineStructure* StructureToModify, FString const& InstanceName,
-	                                           int const& Index);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void ModifyInstanceMeshAtIndex_Server(ABGSplineStructure* StructureToModify, int const& Index,
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void ModifyInstanceMeshAtIndex_Server(ABGSplineStructure* SplineStructureToModify, int const& Index,
 	                                      FString const& NewInstanceName,
 	                                      UStaticMesh* StaticMesh,
 	                                      UMaterialInstance* MaterialInstance,
 	                                      FString const& OldInstanceName = "WallInstance");
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void SpawnStructureActorAtSplineStructureIndex_Server(ABGSplineStructure* StructureToModify, int const& Index,
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void SpawnStructureActorAtSplineStructureIndex_Server(ABGSplineStructure* SplineStructureToModify, int const& Index,
 	                                                      TSubclassOf<ABGStructure> StructureClassToSpawn,
 	                                                      FString const& OldInstanceName = "WallInstance");
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void RestoreInstanceMeshAtIndex_Server(ABGStructure* StructureToRemove);
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void RemoveInstanceAtIndexOnSplineStructure_Server(ABGSplineStructure* SplineStructureToModify, int const& Index,
+	                                                   FString const& InstanceName = "WallInstance");
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void ToggleLockStructureInPlace_Server(ABGSplineStructure* StructureToLock, bool const bLock);
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void RestoreInstanceAtIndexOnSplineStructure_Server(ABGSplineStructure* SplineStructureToModify,
+	                                                    FTransform const& NewInstanceTransform,
+	                                                    FString const& InstanceName = "WallInstance");
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void ResetStructure_Server(ABGSplineStructure* StructureToReset);
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void DestroyStructureActor_Server(ABGStructure* StructureToRemove);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Network")
-	void DestroyStructure_Server(ABGSplineStructure* StructureToDestroy);
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void ToggleLockSplineStructureInPlace_Server(ABGSplineStructure* SplineStructureToLock, bool const bNewLocked);
+
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void ToggleLockStructure_Server(ABGStructure* StructureToLock, bool const bNewLocked);
+
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void ResetSplineStructure_Server(ABGSplineStructure* SplineStructureToReset);
+
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Network")
+	void DestroySplineStructure_Server(ABGSplineStructure* SplineStructureToDestroy);
 
 	/// Boards
 
