@@ -54,6 +54,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	bool GetGameMasterPermissions() const;
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
+	void OutlineObject();
+
 	////////////////////////
 	/// Token Functions
 
@@ -312,6 +315,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	class ABGBoard* GrabbedBoard;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	UStaticMeshComponent* CurrentOutlinedTarget{};
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	TArray<FName> TokenNames;

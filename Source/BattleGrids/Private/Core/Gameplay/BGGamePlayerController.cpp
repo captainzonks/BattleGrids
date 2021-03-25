@@ -20,7 +20,9 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 
 	switch (GrabbedObject)
 	{
-	case EBGObjectType::None: break;
+	case EBGObjectType::None:
+		OutlineObject();
+		break;
 	case EBGObjectType::Token:
 		HandleTokenSelection();
 		break;
@@ -967,6 +969,35 @@ bool ABGGamePlayerController::GetGameMasterPermissions() const
 		if (PS->GetPlayerInfo().bGameMasterPermissions)
 			return true;
 	return false;
+}
+
+void ABGGamePlayerController::OutlineObject()
+{
+	FHitResult HitResult;
+	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel5), true, HitResult))
+	{
+		if (HitResult.GetComponent()->IsValidLowLevel())
+		{
+			if (auto HitStaticMeshComponent = Cast<UStaticMeshComponent>(HitResult.GetComponent()))
+			{
+				if (CurrentOutlinedTarget && CurrentOutlinedTarget != HitStaticMeshComponent)
+				{
+					CurrentOutlinedTarget->SetRenderCustomDepth(false);
+				}
+			
+				CurrentOutlinedTarget = HitStaticMeshComponent;
+				HitStaticMeshComponent->SetRenderCustomDepth(true);
+			}
+		}
+	}
+	else
+	{
+		if (CurrentOutlinedTarget)
+		{
+			CurrentOutlinedTarget->SetRenderCustomDepth(false);
+			CurrentOutlinedTarget = nullptr;
+		}
+	}
 }
 
 void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform NewTransform)
