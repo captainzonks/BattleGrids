@@ -7,6 +7,7 @@
 #include "Actors/BGStructure.h"
 #include "Actors/BGTile.h"
 #include "Actors/BGToken.h"
+#include "Actors/Structures/BGDoor.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
@@ -201,7 +202,7 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 			}
 
 			Location = LastHitResult.GetComponent()->Bounds.Origin + FVector(
-				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + 50.f);
+				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + ZedValue);
 		}
 		else
 		{
@@ -218,8 +219,8 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 		// Move the token locally if we are a client
 		if (!HasAuthority())
 		{
-			GrabbedToken->SetActorLocation(Location, true, nullptr, ETeleportType::None);
-			GrabbedToken->SetActorRotation(Rotation, ETeleportType::None);
+			GrabbedToken->SetActorLocation(Location, true, nullptr, ETeleportType::ResetPhysics);
+			GrabbedToken->SetActorRotation(Rotation, ETeleportType::ResetPhysics);
 		}
 
 		// Make a server call to ask the GameMode to move the token
@@ -273,7 +274,7 @@ void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStr
 			StructureToModify->SetStructurePhysicsAndCollision(bGravityOn, CollisionType);
 		}
 
-		SetStructurePhysicsAndCollision_Server(StructureToModify, bGravityOn, CollisionType);
+		SetSplineStructurePhysicsAndCollision_Server(StructureToModify, bGravityOn, CollisionType);
 	}
 }
 
@@ -368,7 +369,7 @@ void ABGGamePlayerController::AddSplinePointToSplineStructure()
 
 			if (NearestIndexToClick >= 0)
 			{
-				AddSplinePointToStructureSpline_Server(GrabbedStructure, Intersection, NearestIndexToClick);
+				AddSplinePointToSplineStructure_Server(GrabbedStructure, Intersection, NearestIndexToClick);
 			}
 		}
 
@@ -422,7 +423,7 @@ void ABGGamePlayerController::MoveSplineStructure()
 		{
 			GrabbedStructure->SetActorLocation(Location);
 		}
-		MoveStructure_Server(GrabbedStructure, Location);
+		MoveSplineStructure_Server(GrabbedStructure, Location);
 	}
 }
 
@@ -494,6 +495,14 @@ void ABGGamePlayerController::ToggleLockStructure(ABGStructure* StructureToLock,
 	if (StructureToLock)
 	{
 		ToggleLockStructure_Server(StructureToLock, bNewLocked);
+	}
+}
+
+void ABGGamePlayerController::ToggleDoorOpenClose(ABGDoor* DoorToToggle)
+{
+	if (DoorToToggle)
+	{
+		ToggleDoorOpenClose_Server(DoorToToggle);
 	}
 }
 
@@ -611,6 +620,14 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 	}
 }
 
+void ABGGamePlayerController::ToggleDoorOpenClose_Server_Implementation(ABGDoor* DoorToToggle)
+{
+	if (HasAuthority() && DoorToToggle)
+	{
+		DoorToToggle->ToggleOpenClose();
+	}
+}
+
 void ABGGamePlayerController::ToggleLockStructure_Server_Implementation(
 	ABGStructure* StructureToLock, bool const bNewLocked)
 {
@@ -680,8 +697,8 @@ void ABGGamePlayerController::ModifyInstanceMeshAtIndex_Server_Implementation(
 	}
 }
 
-void ABGGamePlayerController::MoveStructure_Server_Implementation(ABGSplineStructure* StructureToMove,
-                                                                  FVector const& Location)
+void ABGGamePlayerController::MoveSplineStructure_Server_Implementation(ABGSplineStructure* StructureToMove,
+                                                                        FVector const& Location)
 {
 	if (HasAuthority() && StructureToMove)
 	{
@@ -797,6 +814,7 @@ void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken
 {
 	if (HasAuthority() && TokenToMove)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Moving Token To Location (server)"))
 		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, Location, TokenRotation);
 	}
 }
@@ -807,6 +825,7 @@ void ABGGamePlayerController::SetTokenCollisionAndPhysics_Server_Implementation(
 {
 	if (HasAuthority() && TokenToModify)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Changing Token Physics and Collision (server)"))
 		ABGGameplayGameModeBase::SetTokenPhysicsAndCollision(TokenToModify, bPhysicsOn, bGravityOn, CollisionType);
 	}
 }
@@ -821,7 +840,7 @@ void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
 	}
 }
 
-void ABGGamePlayerController::AddSplinePointToStructureSpline_Server_Implementation(
+void ABGGamePlayerController::AddSplinePointToSplineStructure_Server_Implementation(
 	ABGSplineStructure* StructureToModify,
 	FVector const& ClickLocation, int const& Index)
 {
@@ -953,7 +972,7 @@ void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform 
 	GetPawn()->SetActorTransform(NewTransform);
 }
 
-void ABGGamePlayerController::SetStructurePhysicsAndCollision_Server_Implementation(
+void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision_Server_Implementation(
 	ABGSplineStructure* StructureToModify,
 	bool const bGravityOn,
 	ECollisionEnabled::Type const CollisionType)

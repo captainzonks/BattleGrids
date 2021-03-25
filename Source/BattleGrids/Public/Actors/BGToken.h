@@ -9,6 +9,9 @@
 #include "BGToken.generated.h"
 
 class ABGPlayerState;
+class UCapsuleComponent;
+class UStaticMeshComponent;
+class UStaticMesh;
 
 UCLASS()
 class BATTLEGRIDS_API ABGToken : public AActor
@@ -21,7 +24,7 @@ public:
 
 	// Call when spawning Token via DeferredActorSpawn function to set the mesh and material
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
-	void InitializeMeshAndMaterial(UStaticMesh* StaticMesh, UMaterialInstance* MaterialInstance) const;
+	void InitializeMeshAndMaterial(UStaticMesh* ModelStaticMesh, UMaterialInstance* MaterialInstance, UStaticMesh* BaseStaticMesh) const;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -51,7 +54,7 @@ public:
 	//////////////////////
 	/// Getters
 	
-	class UStaticMeshComponent* GetStaticMeshComponent() const { return StaticMeshComponent; }
+	UStaticMeshComponent* GetTokenModelStaticMeshComponent() const { return TokenModelStaticMeshComponent; }
 
 	TArray<ABGPlayerState*> GetPlayerPermissions() const { return PlayerPermissions; }
 
@@ -60,9 +63,15 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void FellOutOfWorld(const UDamageType& dmgType) override;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UCapsuleComponent* CapsuleComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UStaticMeshComponent* TokenBaseStaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* StaticMeshComponent;
+	UStaticMeshComponent* TokenModelStaticMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BGToken|Config")
 	FText TokenName;

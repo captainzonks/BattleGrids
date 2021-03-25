@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Actors/BGToken.h"
 
+#include "Components/CapsuleComponent.h"
 #include "Engine/DemoNetDriver.h"
 
 // Sets default values
@@ -12,20 +12,39 @@ ABGToken::ABGToken()
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
 
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	RootComponent = StaticMeshComponent;
-	StaticMeshComponent->SetCollisionProfileName("Token");
-	StaticMeshComponent->bIgnoreRadialForce = true;
-	StaticMeshComponent->bIgnoreRadialImpulse = true;
-	StaticMeshComponent->SetLinearDamping(2.f);
-	StaticMeshComponent->SetAngularDamping(2.f);
-	StaticMeshComponent->SetIsReplicated(true);
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Base Scene Component"));
+	RootComponent = CapsuleComponent;
+	CapsuleComponent->SetSimulatePhysics(true);
+	CapsuleComponent->SetCollisionProfileName("TokenCapsule");
+	CapsuleComponent->SetCapsuleHalfHeight(50.f);
+	CapsuleComponent->SetCapsuleRadius(50.f);
+	CapsuleComponent->bIgnoreRadialForce = true;
+	CapsuleComponent->bIgnoreRadialImpulse = true;
+	CapsuleComponent->SetLinearDamping(2.f);
+	CapsuleComponent->SetAngularDamping(2.f);
+
+	TokenBaseStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Base Mesh"));
+	TokenBaseStaticMeshComponent->SetupAttachment(CapsuleComponent);
+	TokenBaseStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -55.f));
+	TokenBaseStaticMeshComponent->SetCollisionProfileName("Base");
+	TokenBaseStaticMeshComponent->SetIsReplicated(true);
+
+	TokenModelStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Model Mesh"));
+	TokenModelStaticMeshComponent->SetCollisionProfileName("Token");
+	TokenModelStaticMeshComponent->SetIsReplicated(true);
 }
 
-void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh, UMaterialInstance* MaterialInstance) const
+void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh,
+                                                        UMaterialInstance* MaterialInstance,
+                                                        UStaticMesh* BaseStaticMesh) const
 {
-	StaticMeshComponent->SetStaticMesh(StaticMesh);
-	StaticMeshComponent->SetMaterial(0, MaterialInstance);
+	if (BaseStaticMesh && StaticMesh && MaterialInstance)
+	{
+		TokenBaseStaticMeshComponent->SetStaticMesh(BaseStaticMesh);
+		TokenBaseStaticMeshComponent->SetMaterial(0, MaterialInstance);
+		TokenModelStaticMeshComponent->SetStaticMesh(StaticMesh);
+		TokenModelStaticMeshComponent->SetMaterial(0, MaterialInstance);
+	}
 }
 
 void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -37,29 +56,38 @@ void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 
 void ABGToken::ToggleLockTokenInPlace_Implementation(bool bLock)
 {
-	StaticMeshComponent->GetBodyInstance()->bLockXTranslation = bLock;
-	StaticMeshComponent->GetBodyInstance()->bLockYTranslation = bLock;
-	StaticMeshComponent->GetBodyInstance()->bLockZTranslation = bLock;
-	StaticMeshComponent->GetBodyInstance()->bLockXRotation = bLock;
-	StaticMeshComponent->GetBodyInstance()->bLockYRotation = bLock;
-	StaticMeshComponent->GetBodyInstance()->bLockZRotation = bLock;
-	StaticMeshComponent->GetBodyInstance()->SetDOFLock(EDOFMode::SixDOF);
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockXTranslation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockYTranslation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockZTranslation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockXRotation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockYRotation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockZRotation = bLock;
+	TokenBaseStaticMeshComponent->GetBodyInstance()->SetDOFLock(EDOFMode::SixDOF);
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockXTranslation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockYTranslation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockZTranslation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockXRotation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockYRotation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->bLockZRotation = bLock;
+	TokenModelStaticMeshComponent->GetBodyInstance()->SetDOFLock(EDOFMode::SixDOF);
 }
 
 bool ABGToken::GetIsTokenLocked() const
 {
-	auto const Body = StaticMeshComponent->GetBodyInstance();
+	auto const Body = TokenModelStaticMeshComponent->GetBodyInstance();
 	if (Body->bLockXTranslation && Body->bLockYTranslation && Body->bLockZTranslation)
 		return true;
 	return false;
 }
 
 void ABGToken::SetTokenPhysicsAndCollision_Implementation(bool const bPhysicsOn, bool const bGravityOn,
-                                                             ECollisionEnabled::Type const CollisionType)
+                                                          ECollisionEnabled::Type const CollisionType)
 {
-	StaticMeshComponent->SetSimulatePhysics(bPhysicsOn);
-	StaticMeshComponent->SetEnableGravity(bGravityOn);
-	StaticMeshComponent->SetCollisionEnabled(CollisionType);
+	CapsuleComponent->SetSimulatePhysics(bPhysicsOn);
+	CapsuleComponent->SetEnableGravity(bGravityOn);
+
+	TokenBaseStaticMeshComponent->SetCollisionEnabled(CollisionType);
+	TokenModelStaticMeshComponent->SetCollisionEnabled(CollisionType);
 }
 
 bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerState)
@@ -98,6 +126,10 @@ void ABGToken::BeginPlay()
 	Super::BeginPlay();
 
 	SetReplicatingMovement(true);
+	TokenModelStaticMeshComponent->SetSimulatePhysics(false);
+	TokenModelStaticMeshComponent->AttachToComponent(TokenBaseStaticMeshComponent,
+	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
+	                                                 TEXT("ModelRoot"));
 }
 
 void ABGToken::FellOutOfWorld(const UDamageType& dmgType)
