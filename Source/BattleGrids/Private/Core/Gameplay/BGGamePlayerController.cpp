@@ -316,7 +316,7 @@ void ABGGamePlayerController::ModifySplineStructureLength()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
 			GrabbedStructure->SetLocationOfSplinePoint(NearestIndexToClick, GridSnappedIntersection);
-			GrabbedStructure->UpdateStructureMesh();
+			GrabbedStructure->UpdateSplineStructureMesh();
 		}
 
 		ModifyStructureLength_Server(GrabbedStructure, NearestIndexToClick, GridSnappedIntersection);
@@ -464,12 +464,13 @@ void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure(ABGSplineSt
 }
 
 void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+                                                                      int const& Index,
                                                                       FTransform const& NewInstanceTransform,
                                                                       FString const& InstanceName)
 {
 	if (StructureToModify)
 	{
-		RestoreInstanceAtIndexOnSplineStructure_Server(StructureToModify, NewInstanceTransform, InstanceName);
+		RestoreInstanceAtIndexOnSplineStructure_Server(StructureToModify, Index, NewInstanceTransform, InstanceName);
 	}
 }
 
@@ -532,7 +533,7 @@ void ABGGamePlayerController::ResetSplineStructure(ABGSplineStructure* SplineStr
 			SplineStructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
 				1, Location, ESplineCoordinateSpace::World, true);
 
-			SplineStructureToReset->UpdateStructureMesh();
+			SplineStructureToReset->UpdateSplineStructureMesh();
 		}
 	}
 }
@@ -638,11 +639,12 @@ void ABGGamePlayerController::ToggleLockStructure_Server_Implementation(
 }
 
 void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure_Server_Implementation(
-	ABGSplineStructure* StructureToModify, FTransform const& NewInstanceTransform, FString const& InstanceName)
+	ABGSplineStructure* StructureToModify, int const& Index, FTransform const& NewInstanceTransform,
+	FString const& InstanceName)
 {
 	if (HasAuthority() && StructureToModify)
 	{
-		StructureToModify->RestoreInstanceMeshAtIndex(NewInstanceTransform, InstanceName);
+		StructureToModify->RestoreInstanceMeshAtIndex(Index, NewInstanceTransform, InstanceName);
 	}
 }
 

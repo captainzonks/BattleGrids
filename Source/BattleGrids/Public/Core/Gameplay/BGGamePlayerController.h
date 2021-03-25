@@ -132,7 +132,7 @@ protected:
 	// Restores an Instance on a Spline Structure
 	// By default, restores on the WallInstance
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+	void RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify, int const& Index,
 	                                             FTransform const& NewInstanceTransform,
 	                                             FString const& InstanceName = "WallInstance");
 
@@ -253,7 +253,7 @@ protected:
 	                                                   FString const& InstanceName = "WallInstance");
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void RestoreInstanceAtIndexOnSplineStructure_Server(ABGSplineStructure* SplineStructureToModify,
+	void RestoreInstanceAtIndexOnSplineStructure_Server(ABGSplineStructure* SplineStructureToModify, int const& Index,
 	                                                    FTransform const& NewInstanceTransform,
 	                                                    FString const& InstanceName = "WallInstance");
 
