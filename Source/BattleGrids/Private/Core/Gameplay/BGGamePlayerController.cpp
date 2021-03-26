@@ -974,28 +974,65 @@ bool ABGGamePlayerController::GetGameMasterPermissions() const
 void ABGGamePlayerController::OutlineObject()
 {
 	FHitResult HitResult;
-	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel5), true, HitResult))
+	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, HitResult))
 	{
-		if (HitResult.GetComponent()->IsValidLowLevel())
+		if (HitResult.GetActor()->IsValidLowLevel())
 		{
-			if (auto HitStaticMeshComponent = Cast<UStaticMeshComponent>(HitResult.GetComponent()))
+			TArray<UStaticMeshComponent*> StaticMeshComponents;
+
+			// Do we have a previous CurrentOutlinedActor, and is it not equal to the newly hit Actor?
+			if (CurrentOutlinedActor && CurrentOutlinedActor != HitResult.GetActor())
 			{
-				if (CurrentOutlinedTarget && CurrentOutlinedTarget != HitStaticMeshComponent)
+				// Turn off the RenderCustomDepth on all Static Mesh Components of the previous CurrentOutlinedActor
+				CurrentOutlinedActor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+
+				if (StaticMeshComponents.Num() > 0)
 				{
-					CurrentOutlinedTarget->SetRenderCustomDepth(false);
+					for (auto Comp : StaticMeshComponents)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (1)"))
+						Comp->SetRenderCustomDepth(false);
+					}
 				}
-			
-				CurrentOutlinedTarget = HitStaticMeshComponent;
-				HitStaticMeshComponent->SetRenderCustomDepth(true);
+			}
+
+			// Clear the array
+			StaticMeshComponents.Empty();
+
+			// set the pointer to the newly hit Actor
+			CurrentOutlinedActor = HitResult.GetActor();
+
+			// Fill it again with the new hit Actor's Static Mesh Components
+			HitResult.GetActor()->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+
+			// Turn the RenderCustomDepth on for the new hit Actor
+			if (StaticMeshComponents.Num() > 0)
+			{
+				for (auto Comp : StaticMeshComponents)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : True"))
+					Comp->SetRenderCustomDepth(true);
+				}
 			}
 		}
 	}
 	else
 	{
-		if (CurrentOutlinedTarget)
+		// Do we have a previous CurrentOutlinedActor
+		if (CurrentOutlinedActor)
 		{
-			CurrentOutlinedTarget->SetRenderCustomDepth(false);
-			CurrentOutlinedTarget = nullptr;
+			// Turn off the RenderCustomDepth on all Static Mesh Components of the previous CurrentOutlinedActor
+			TArray<UStaticMeshComponent*> StaticMeshComponents;
+			CurrentOutlinedActor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+
+			if (StaticMeshComponents.Num() > 0)
+			{
+				for (auto Comp : StaticMeshComponents)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (2)"))
+					Comp->SetRenderCustomDepth(false);
+				}
+			}
 		}
 	}
 }

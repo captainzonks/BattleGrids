@@ -14,8 +14,10 @@
 class ABGBoard;
 class ABGDoor;
 class ABGPlayerState;
+class ABGSplineStructure;
 class ABGStructure;
 class ABGTile;
+class ABGToken;
 
 /**
  * 
@@ -54,6 +56,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	bool GetGameMasterPermissions() const;
 
+	// Renders an outline around an Actor beneath the mouse cursor using Custom Render Depth and a Post-Process Material
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void OutlineObject();
 
@@ -308,16 +311,16 @@ protected:
 	EBGObjectType GrabbedObject{EBGObjectType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	class ABGToken* GrabbedToken;
+	ABGToken* GrabbedToken{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	class ABGSplineStructure* GrabbedStructure;
+	ABGSplineStructure* GrabbedStructure{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	class ABGBoard* GrabbedBoard;
+	ABGBoard* GrabbedBoard{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	UStaticMeshComponent* CurrentOutlinedTarget{};
+	AActor* CurrentOutlinedActor{};
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	TArray<FName> TokenNames;
