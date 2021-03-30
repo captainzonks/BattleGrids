@@ -64,13 +64,6 @@ protected:
 	/// Token Functions
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void HandleTokenSelection();
-
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void SetTokenCollisionAndPhysics(ABGToken* TokenToModify, bool const bPhysicsOn, bool const bGravityOn,
-	                                 ECollisionEnabled::Type const CollisionType);
-
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void MoveTokenToLocation(bool const bHolding);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
@@ -189,10 +182,6 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void SetTokenCollisionAndPhysics_Server(ABGToken* TokenToModify, bool const bPhysicsOn, bool const bGravityOn,
-	                                        ECollisionEnabled::Type const CollisionType);
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	void MoveTokenToLocation_Server(ABGToken* TokenToMove, FVector const& Location,
@@ -335,7 +324,7 @@ protected:
 	int NearestIndexToClick{-1};
 
 	UPROPERTY()
-	AActor* LastTargetedActor{};
+	AActor* LastClickedActor{};
 
 	UPROPERTY()
 	FHitResult LastHitResult{};

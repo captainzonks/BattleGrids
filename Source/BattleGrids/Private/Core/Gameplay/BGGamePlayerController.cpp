@@ -18,15 +18,18 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	OutlineObject();
+
 	switch (GrabbedObject)
 	{
 	case EBGObjectType::None:
-		OutlineObject();
+		// OutlineObject();
 		break;
 	case EBGObjectType::Token:
-		HandleTokenSelection();
+		// HandleTokenSelection();
 		break;
 	case EBGObjectType::Structure:
+		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, LastHitResult);
 		HandleSplineStructureSelection();
 		break;
 	case EBGObjectType::Board:
@@ -42,7 +45,7 @@ void ABGGamePlayerController::SetupInputComponent()
 
 	// Handle Select (Default: Left Click w/ Mouse)
 	InputComponent->BindAction("Select", IE_Pressed, this, &ABGGamePlayerController::SelectObject);
-	InputComponent->BindAction("Select", IE_Released, this, &ABGGamePlayerController::ReleaseObject);
+	// InputComponent->BindAction("Select", IE_Released, this, &ABGGamePlayerController::ReleaseObject);
 
 	// Token Movement Handling
 	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
@@ -83,41 +86,66 @@ void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Impleme
 
 void ABGGamePlayerController::SelectObject()
 {
-	FHitResult HitResult;
-	GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult);
+	GetHitResultUnderCursorByChannel(
+		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGObjectType::None
+			                                 ? ECC_GameTraceChannel6
+			                                 : ECC_GameTraceChannel2), true,
+		LastHitResult);
 
-	if (HitResult.bBlockingHit && HitResult.GetActor()->IsValidLowLevel())
+	switch (GrabbedObject)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("LineTrace Hit Actor: %s"), *HitResult.GetActor()->GetName())
-
-		if ((GrabbedToken = Cast<ABGToken>(HitResult.GetActor()))->IsValidLowLevel())
+	case EBGObjectType::None:
+		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
 		{
-			GrabbedObject = EBGObjectType::Token;
-			return;
-		}
+			LastClickedActor = LastHitResult.GetActor();
+			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
 
-		if ((GrabbedStructure = Cast<ABGSplineStructure>(HitResult.GetActor()))->IsValidLowLevel())
-		{
-			GrabbedObject = EBGObjectType::Structure;
-			return;
-		}
+			if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
+			{
+				GrabbedObject = EBGObjectType::Token;
+				return;
+			}
 
-		if ((GrabbedBoard = Cast<ABGBoard>(HitResult.GetActor()))->IsValidLowLevel())
-		{
-			GrabbedObject = EBGObjectType::Board;
+			if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
+			{
+				GrabbedObject = EBGObjectType::Structure;
+				return;
+			}
+
+			if ((GrabbedBoard = Cast<ABGBoard>(LastClickedActor))->IsValidLowLevel())
+			{
+				GrabbedObject = EBGObjectType::Board;
+			}
 		}
+		break;
+	case EBGObjectType::Token:
+		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel() && LastHitResult.GetActor()->IsA(
+			ABGTile::StaticClass()))
+		{
+			LastClickedActor = LastHitResult.GetActor();
+			MoveTokenToLocation(false);
+			ReleaseObject();
+		}
+		break;
+	case EBGObjectType::Structure:
+		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel() && LastHitResult.GetActor()->IsA(
+			ABGTile::StaticClass()))
+		{
+			LastClickedActor = LastHitResult.GetActor();
+			HandleSplineStructureSelection();
+			ReleaseObject();
+		}
+		break;
+	case EBGObjectType::Board:
+		HandleBoardSelection();
+		break;
+	default: ;
 	}
 }
 
 void ABGGamePlayerController::ReleaseObject()
 {
 	GrabbedObject = EBGObjectType::None;
-
-	if (GrabbedToken)
-	{
-		MoveTokenToLocation(false);
-		SetTokenCollisionAndPhysics(GrabbedToken, true, true, ECollisionEnabled::Type::QueryAndPhysics);
-	}
 
 	if (GrabbedStructure)
 	{
@@ -128,65 +156,16 @@ void ABGGamePlayerController::ReleaseObject()
 	GrabbedToken = nullptr;
 	GrabbedStructure = nullptr;
 	GrabbedBoard = nullptr;
-	LastTargetedActor = nullptr;
+	LastClickedActor = nullptr;
 	LastHitResult.Reset();
 	NearestIndexToClick = -1;
 }
 
-void ABGGamePlayerController::HandleTokenSelection()
-{
-	if (GrabbedToken && ControlMode == EBGControlMode::Move && !GrabbedToken->GetIsTokenLocked())
-	{
-		if (!GetGameMasterPermissions() && !GrabbedToken->PlayerHasPermissions(GetPlayerState<ABGPlayerState>()))
-			return;
-
-		SetTokenCollisionAndPhysics(GrabbedToken, true, false, ECollisionEnabled::Type::PhysicsOnly);
-
-		LastHitResult.Reset();
-		LastTargetedActor = nullptr;
-		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, LastHitResult))
-		{
-			if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
-
-				if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Cursor Hit A Tile"))
-					if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
-						return;
-				}
-
-				LastTargetedActor = LastHitResult.GetActor();
-				MoveTokenToLocation(true);
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("NO HIT RESULT"))
-		}
-	}
-}
-
-void ABGGamePlayerController::SetTokenCollisionAndPhysics(ABGToken* TokenToModify, bool const bPhysicsOn,
-                                                          bool const bGravityOn,
-                                                          ECollisionEnabled::Type const CollisionType)
-{
-	if (TokenToModify)
-	{
-		if (!HasAuthority())
-		{
-			TokenToModify->SetTokenPhysicsAndCollision(bPhysicsOn, bGravityOn, CollisionType);
-		}
-		SetTokenCollisionAndPhysics_Server(TokenToModify, bPhysicsOn, bGravityOn, CollisionType);
-	}
-}
-
 void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 {
-	if (GrabbedToken && LastTargetedActor)
+	if (GrabbedToken && LastClickedActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastTargetedActor = %s"), *LastTargetedActor->GetName())
+		UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastClickedActor = %s"), *LastClickedActor->GetName())
 
 		FRotator const Rotation = FRotator(0.f, GrabbedToken->GetActorRotation().Yaw, 0.f);
 
@@ -195,7 +174,7 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 
 		FVector Location;
 
-		if (Cast<ABGSplineStructure>(LastTargetedActor))
+		if (Cast<ABGSplineStructure>(LastClickedActor))
 		{
 			// Don't move tokens on Bases
 			if (LastHitResult.GetComponent()->GetName().Contains("Base"))
@@ -211,27 +190,32 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 			FVector ActorOrigin{};
 			FVector ActorBoxExtent{};
 
-			LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+			LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
 
 			Location.X = ActorOrigin.X;
 			Location.Y = ActorOrigin.Y;
 			Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
 		}
 
-		// Move the token locally if we are a client
-		if (!HasAuthority())
-		{
-			GrabbedToken->SetActorLocation(Location, true, nullptr, ETeleportType::ResetPhysics);
-			GrabbedToken->SetActorRotation(Rotation, ETeleportType::ResetPhysics);
-		}
 
-		// Make a server call to ask the GameMode to move the token
 		MoveTokenToLocation_Server(GrabbedToken, Location, Rotation);
+
+		// if (HasAuthority())
+		// {
+		// 	GrabbedToken->MoveToken(Location);
+		// 	GrabbedToken->SetActorRotation(Rotation, ETeleportType::ResetPhysics);
+		// }
+		//
+		// if (!HasAuthority())
+		// {
+		// 	// Make a server call to ask the GameMode to move the token
+		// }
 	}
 }
 
 void ABGGamePlayerController::HandleSplineStructureSelection()
 {
+	// TODO: Prevent accessing this function if we aren't GameMaster or if the Structure is locked
 	if (!GetGameMasterPermissions() || GrabbedStructure->GetLocked())
 		return;
 
@@ -282,22 +266,19 @@ void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStr
 
 void ABGGamePlayerController::ModifySplineStructureLength()
 {
-	if (GrabbedStructure)
+	if (GrabbedStructure && LastHitResult.GetActor()->IsValidLowLevel())
 	{
-		FVector WorldPosition;
-		FVector WorldDirection;
+		UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
-		DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+		if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()) && !Cast<ABGTile>(LastHitResult.GetActor())->
+		                                                              GetStaticMeshComponent()->GetVisibleFlag())
+		{
+			return;
+		}
 
-		auto GridSnappedIntersection = FMath::LinePlaneIntersection(WorldPosition,
-		                                                            WorldDirection * 2000.f + WorldPosition,
-		                                                            GrabbedStructure->GetActorLocation(),
-		                                                            FVector(0.f, 0.f, 1.f)).GridSnap(100.f);
-
+		// Snap the Target Location to grid, and match the Z axis to the current SplineStructure Z value
+		auto GridSnappedIntersection = LastHitResult.GetActor()->GetActorLocation().GridSnap(100.f);
 		GridSnappedIntersection.Z = GrabbedStructure->GetActorLocation().Z;
-
-		UE_LOG(LogTemp, Warning, TEXT("Number of Instance Components: %i"),
-		       GrabbedStructure->GetInstancedStaticMeshComponentByString("WallInstance")->GetInstanceCount())
 
 		if (NearestIndexToClick < 0)
 		{
@@ -313,10 +294,9 @@ void ABGGamePlayerController::ModifySplineStructureLength()
 			}
 		}
 
-
 		if (!HasAuthority())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
+			// UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
 			GrabbedStructure->SetLocationOfSplinePoint(NearestIndexToClick, GridSnappedIntersection);
 			GrabbedStructure->UpdateSplineStructureMesh();
 		}
@@ -393,7 +373,7 @@ void ABGGamePlayerController::MoveSplineStructure()
 		UE_LOG(LogTemp, Warning, TEXT("Moving Structure"))
 
 		LastHitResult.Reset();
-		LastTargetedActor = nullptr;
+		LastClickedActor = nullptr;
 		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel4), true,
 		                                     LastHitResult))
 		{
@@ -404,16 +384,16 @@ void ABGGamePlayerController::MoveSplineStructure()
 				if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
 					return;
 
-				LastTargetedActor = LastHitResult.GetActor();
+				LastClickedActor = LastHitResult.GetActor();
 
 				FVector ActorOrigin{};
 				FVector ActorBoxExtent{};
 
-				LastTargetedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+				LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
 
-				Location.X = LastTargetedActor->GetActorLocation().X;
-				Location.Y = LastTargetedActor->GetActorLocation().Y;
-				Location.Z = LastTargetedActor->GetActorLocation().Z + ActorOrigin.Z + ActorBoxExtent.Z;
+				Location.X = LastClickedActor->GetActorLocation().X;
+				Location.Y = LastClickedActor->GetActorLocation().Y;
+				Location.Z = LastClickedActor->GetActorLocation().Z + ActorOrigin.Z + ActorBoxExtent.Z;
 			}
 			else
 			{
@@ -823,17 +803,6 @@ void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken
 	}
 }
 
-void ABGGamePlayerController::SetTokenCollisionAndPhysics_Server_Implementation(ABGToken* TokenToModify,
-	bool const bPhysicsOn, bool const bGravityOn,
-	ECollisionEnabled::Type const CollisionType)
-{
-	if (HasAuthority() && TokenToModify)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Changing Token Physics and Collision (server)"))
-		ABGGameplayGameModeBase::SetTokenPhysicsAndCollision(TokenToModify, bPhysicsOn, bGravityOn, CollisionType);
-	}
-}
-
 void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
 	ABGSplineStructure* StructureToModify, int const& PointIndex,
 	FVector const& NewLocation)
@@ -990,7 +959,7 @@ void ABGGamePlayerController::OutlineObject()
 				{
 					for (auto Comp : StaticMeshComponents)
 					{
-						UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (1)"))
+						// UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (1)"))
 						Comp->SetRenderCustomDepth(false);
 					}
 				}
@@ -1010,7 +979,7 @@ void ABGGamePlayerController::OutlineObject()
 			{
 				for (auto Comp : StaticMeshComponents)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : True"))
+					// UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : True"))
 					Comp->SetRenderCustomDepth(true);
 				}
 			}
@@ -1029,7 +998,7 @@ void ABGGamePlayerController::OutlineObject()
 			{
 				for (auto Comp : StaticMeshComponents)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (2)"))
+					// UE_LOG(LogTemp, Warning, TEXT("Setting Render Custom Depth : False (2)"))
 					Comp->SetRenderCustomDepth(false);
 				}
 			}

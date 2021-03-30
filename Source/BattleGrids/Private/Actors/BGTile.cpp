@@ -26,7 +26,9 @@ void ABGTile::ToggleTileVisibility_Implementation(bool const bHide)
 	StaticMeshComponent->SetCollisionEnabled(bHide
 		                                         ? ECollisionEnabled::Type::QueryOnly
 		                                         : ECollisionEnabled::Type::QueryAndPhysics);
-	StaticMeshComponent->SetCollisionResponseToChannel(ECC_Visibility, ECR_Ignore);
+	StaticMeshComponent->SetCanEverAffectNavigation(bHide ? false : true);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECC_Visibility, bHide ? ECR_Ignore : ECR_Block);
+	StaticMeshComponent->SetCollisionResponseToChannel(ECC_Pawn, bHide ? ECR_Ignore : ECR_Block);
 }
 
 // Called when the game starts or when spawned

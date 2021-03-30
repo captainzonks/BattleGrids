@@ -2,3 +2,12 @@
 
 
 #include "Core/BGGameInstance.h"
+
+#include "OnlineSubsystem.h"
+
+void UBGGameInstance::Init()
+{
+	Super::Init();
+
+	
+}

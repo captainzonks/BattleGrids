@@ -2,31 +2,32 @@
 
 #include "Actors/BGToken.h"
 
+#include "AIController.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DemoNetDriver.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ABGToken::ABGToken()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Base Scene Component"));
-	RootComponent = CapsuleComponent;
-	CapsuleComponent->SetSimulatePhysics(true);
-	CapsuleComponent->SetCollisionProfileName("TokenCapsule");
-	CapsuleComponent->SetCapsuleHalfHeight(50.f);
-	CapsuleComponent->SetCapsuleRadius(50.f);
-	CapsuleComponent->bIgnoreRadialForce = true;
-	CapsuleComponent->bIgnoreRadialImpulse = true;
-	CapsuleComponent->SetLinearDamping(2.f);
-	CapsuleComponent->SetAngularDamping(2.f);
+	// AI Controller is NECESSARY in order for AddMovementInput() to work!!!
+	AutoPossessAI = EAutoPossessAI::Spawned;
+
+	auto Capsule = GetCapsuleComponent();
+
+	// Capsule->SetIsReplicated(true);
+	Capsule->bDynamicObstacle = true;
+	Capsule->InitCapsuleSize(20.f, 60.f);
+	Capsule->SetCollisionProfileName("TokenCapsule");
 
 	TokenBaseStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Base Mesh"));
-	TokenBaseStaticMeshComponent->SetupAttachment(CapsuleComponent);
-	TokenBaseStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -55.f));
-	TokenBaseStaticMeshComponent->SetCollisionProfileName("Base");
+	TokenBaseStaticMeshComponent->SetupAttachment(GetCapsuleComponent());
+	TokenBaseStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -60.f));
+	TokenBaseStaticMeshComponent->SetCollisionProfileName("Token");
 	TokenBaseStaticMeshComponent->SetIsReplicated(true);
 
 	TokenModelStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Model Mesh"));
@@ -80,20 +81,10 @@ bool ABGToken::GetIsTokenLocked() const
 	return false;
 }
 
-void ABGToken::SetTokenPhysicsAndCollision_Implementation(bool const bPhysicsOn, bool const bGravityOn,
-                                                          ECollisionEnabled::Type const CollisionType)
-{
-	CapsuleComponent->SetSimulatePhysics(bPhysicsOn);
-	CapsuleComponent->SetEnableGravity(bGravityOn);
-
-	TokenBaseStaticMeshComponent->SetCollisionEnabled(CollisionType);
-	TokenModelStaticMeshComponent->SetCollisionEnabled(CollisionType);
-}
-
-bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerState)
+bool ABGToken::PlayerHasPermissions(ABGPlayerState const* PlayerStateToCheck)
 {
 	for (auto It : PlayerPermissions)
-		if (It == PlayerState)
+		if (It == PlayerStateToCheck)
 			return true;
 
 	return false;
@@ -125,11 +116,22 @@ void ABGToken::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CharacterAIController = Cast<AAIController>(GetController());
+	if (CharacterAIController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PawnAIController Successfully Initialized"))
+	}
+
 	SetReplicatingMovement(true);
 	TokenModelStaticMeshComponent->SetSimulatePhysics(false);
 	TokenModelStaticMeshComponent->AttachToComponent(TokenBaseStaticMeshComponent,
 	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
 	                                                 TEXT("ModelRoot"));
+}
+
+void ABGToken::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 }
 
 void ABGToken::FellOutOfWorld(const UDamageType& dmgType)
