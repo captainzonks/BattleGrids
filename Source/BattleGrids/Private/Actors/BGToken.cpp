@@ -57,26 +57,13 @@ void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 
 void ABGToken::ToggleLockTokenInPlace_Implementation(bool bLock)
 {
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockXTranslation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockYTranslation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockZTranslation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockXRotation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockYRotation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->bLockZRotation = bLock;
-	TokenBaseStaticMeshComponent->GetBodyInstance()->SetDOFLock(EDOFMode::SixDOF);
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockXTranslation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockYTranslation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockZTranslation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockXRotation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockYRotation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->bLockZRotation = bLock;
-	TokenModelStaticMeshComponent->GetBodyInstance()->SetDOFLock(EDOFMode::SixDOF);
+	bLock ? GetCharacterMovement()->DisableMovement() :
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 }
 
 bool ABGToken::GetIsTokenLocked() const
 {
-	auto const Body = TokenModelStaticMeshComponent->GetBodyInstance();
-	if (Body->bLockXTranslation && Body->bLockYTranslation && Body->bLockZTranslation)
+	if (GetCharacterMovement()->MovementMode == MOVE_None)
 		return true;
 	return false;
 }
