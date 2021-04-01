@@ -9,7 +9,7 @@ public class BattleGrids : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new[]
-			{"Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG", "OnlineSubsystem"});
+			{"Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG", "OnlineSubsystem", "OnlineSubsystemSteam"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 

@@ -13,6 +13,7 @@
 class FOnlineSessionSearch;
 class UBGSaveGame;
 class UBGMainMenu;
+class UBGLobbyWidget;
 class UBGInGameMenu;
 class UUserWidget;
 
@@ -28,16 +29,16 @@ public:
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
-	void LoadMenu();
+	void LoadMenuWidget();
 	
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
 	void InGameLoadMenu();
 
-	UFUNCTION(Exec, BlueprintCallable, Category = "BGGameInstance|Functions")
-	virtual void Host() override;
+	UFUNCTION(Exec, Category = "BGGameInstance|Functions")
+	virtual void Host(FString ServerName) override;
 
-	UFUNCTION(Exec, BlueprintCallable, Category = "BGGameInstance|Functions")
-	virtual void Join(FString const& Address) override;
+	UFUNCTION(Exec, Category = "BGGameInstance|Functions")
+	virtual void Join(uint32 Index) override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
 	virtual void LoadMainMenu() override;
@@ -53,12 +54,13 @@ protected:
 	void OnCreateSessionComplete(FName const SessionName, bool bSuccess) const;
 	void OnDestroySessionComplete(FName const SessionName, bool bSuccess);
 	void OnFindSessionsComplete(bool bSuccess);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	UBGSaveGame* SaveGame;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
-	TSubclassOf<UUserWidget> MenuClass;	
+	TSubclassOf<UUserWidget> MainMenuClass;	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	TSubclassOf<UUserWidget> InGameMenuClass;
@@ -72,4 +74,6 @@ protected:
 	IOnlineSessionPtr SessionInterface;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	FString DesiredServerName;
 };
