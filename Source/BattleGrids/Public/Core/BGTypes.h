@@ -5,6 +5,17 @@
 #include "Engine/DataTable.h"
 #include "BGTypes.generated.h"
 
+USTRUCT(BlueprintType)
+struct FBGServerData
+{
+	GENERATED_BODY()
+
+	FString Name;
+	uint16 CurrentPlayers;
+	uint16 MaxPlayers;
+	FString HostUsername;
+};
+
 UENUM(BlueprintType)
 enum class EBGObjectType : uint8
 {

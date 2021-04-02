@@ -8,9 +8,12 @@
 #include "Blueprint/UserWidget.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Core/BGTypes.h"
+#include "GameFramework/GameStateBase.h"
+#include "UI/BGLobbyMenu.h"
 
-const static FName SESSION_NAME = TEXT("Game");
-const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
+const static FName SESSION_NAME = TEXT("BattleGrids Session");
+const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
 
 void UBGGameInstance::Init()
 {
@@ -34,6 +37,11 @@ void UBGGameInstance::Init()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found no subsystem"))
 	}
+
+	if (GEngine)
+	{
+		GEngine->OnNetworkFailure().AddUObject(this, &UBGGameInstance::OnNetworkFailure);
+	}
 }
 
 void UBGGameInstance::LoadMenuWidget()
@@ -48,7 +56,19 @@ void UBGGameInstance::LoadMenuWidget()
 	Menu->SetMenuInterface(this);
 }
 
-void UBGGameInstance::InGameLoadMenu()
+void UBGGameInstance::LoadLobbyWidget()
+{
+	if (!ensure(LobbyMenuClass)) return;
+
+	Lobby = CreateWidget<UBGLobbyMenu>(this, LobbyMenuClass);
+	if (!ensure(Lobby)) return;
+
+	Lobby->Setup();
+
+	Lobby->SetMenuInterface(this);
+}
+
+void UBGGameInstance::InGameLoadMenuWidget()
 {
 	if (!ensure(InGameMenuClass)) return;
 
@@ -60,12 +80,11 @@ void UBGGameInstance::InGameLoadMenu()
 	InGameMenu->SetMenuInterface(this);
 }
 
-void UBGGameInstance::Host(FString ServerName)
+void UBGGameInstance::Host(FString const& ServerName)
 {
-	DesiredServerName = ServerName;
-
 	if (SessionInterface.IsValid())
 	{
+		InitialServerData.Name = ServerName;
 		auto const ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
 		if (ExistingSession)
 		{
@@ -78,7 +97,7 @@ void UBGGameInstance::Host(FString ServerName)
 	}
 }
 
-void UBGGameInstance::Join(uint32 Index)
+void UBGGameInstance::Join(uint32 const& Index, FBGServerData const& InServerData)
 {
 	if (!SessionInterface.IsValid()) return;
 	if (!SessionSearch.IsValid()) return;
@@ -88,6 +107,8 @@ void UBGGameInstance::Join(uint32 Index)
 		Menu->Teardown();
 	}
 
+	InitialServerData = InServerData;
+	
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
 }
 
@@ -104,7 +125,6 @@ void UBGGameInstance::RefreshServerList()
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (SessionSearch.IsValid())
 	{
-		// SessionSearch->bIsLanQuery = true;
 		SessionSearch->MaxSearchResults = 100;
 		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		UE_LOG(LogTemp, Warning, TEXT("Starting Find Session"))
@@ -128,7 +148,7 @@ void UBGGameInstance::CreateSession() const
 		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
-		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, DesiredServerName,
+		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, InitialServerData.Name,
 		                    EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
@@ -151,12 +171,12 @@ void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuc
 	auto Engine = GetEngine();
 	if (!ensure(Engine)) return;
 
-	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, (TEXT("Hosting %s"), InitialServerData.Name));
 
 	auto World = GetWorld();
 	if (!ensure(World)) return;
-
-	World->ServerTravel("/Game/BattleGrids/Levels/Lobby?listen");
+	
+	World->ServerTravel("/Game/BattleGrids/Levels/DefaultGameMap?listen");
 }
 
 void UBGGameInstance::OnDestroySessionComplete(FName const SessionName, bool bSuccess)
@@ -178,11 +198,11 @@ void UBGGameInstance::OnFindSessionsComplete(bool bSuccess)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Find Session"))
 
-		TArray<FServerData> ServerNames;
+		TArray<FBGServerData> ServerNames;
 		for (FOnlineSessionSearchResult const& Result : SessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *Result.GetSessionIdStr())
-			FServerData Data;
+			FBGServerData Data;
 			Data.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
 			Data.CurrentPlayers = Data.MaxPlayers - Result.Session.NumOpenPublicConnections;
 			Data.HostUsername = Result.Session.OwningUserName;
@@ -222,4 +242,10 @@ void UBGGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCom
 	if (!ensure(PlayerController)) return;
 
 	PlayerController->ClientTravel(Address, TRAVEL_Absolute);
+}
+
+void UBGGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType,
+	const FString& ErrorString)
+{
+	LoadMainMenu();
 }

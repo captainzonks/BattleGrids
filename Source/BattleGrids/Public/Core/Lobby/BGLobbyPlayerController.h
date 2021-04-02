@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Core/BGPlayerController.h"
+#include "Core/BGTypes.h"
+
+
 #include "BGLobbyPlayerController.generated.h"
 
-class UBGLobbyWidget;
+class UBGLobbyMenu;
 
 /**
  * 
@@ -17,14 +20,17 @@ class BATTLEGRIDS_API ABGLobbyPlayerController : public ABGPlayerController
 	GENERATED_BODY()
 
 public:
-
-	void Setup();
+	UFUNCTION()
+	void UpdateServerData(FBGServerData const& InServerData);
+	
+	UFUNCTION(Client, Reliable)
+	void UpdateLobbyInformation();
 
 protected:
+	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGLobbyPlayerController|Config")
-	TSubclassOf<UUserWidget> LobbyWidgetClass;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGLobbyPlayerController|Config")
-	UBGLobbyWidget* LobbyWidget;
+	UPROPERTY(Replicated)
+	FBGServerData ServerData;
 };
