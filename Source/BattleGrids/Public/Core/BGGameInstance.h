@@ -107,5 +107,7 @@ protected:
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
+	FBGPlayerInfo PlayerInfo;
+
 	FBGServerData ServerData;
 };

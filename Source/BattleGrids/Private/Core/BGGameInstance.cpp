@@ -9,7 +9,6 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Core/BGTypes.h"
-#include "Core/Lobby/BGLobbyGameStateBase.h"
 #include "UI/BGLoadingScreen.h"
 #include "UI/BGLobbyMenu.h"
 
@@ -49,7 +48,10 @@ void UBGGameInstance::LoadMainMenuWidget()
 {
 	if (!ensure(MainMenuClass)) return;
 
-	Menu = CreateWidget<UBGMainMenu>(this, MainMenuClass);
+	if (!Menu)
+	{
+		Menu = CreateWidget<UBGMainMenu>(this, MainMenuClass);
+	}
 	if (!ensure(Menu)) return;
 
 	Menu->Setup();

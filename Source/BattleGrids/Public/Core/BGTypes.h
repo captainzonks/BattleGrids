@@ -111,11 +111,6 @@ struct FBGPlayerInfo
 {
 	GENERATED_BODY()
 
-	friend bool operator==(FBGPlayerInfo const& l, FBGPlayerInfo const& r)
-	{
-		return l.PlayerName.IdenticalTo(r.PlayerName);
-	}
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText PlayerName {FText::FromString("DefaultPlayerName")};
 

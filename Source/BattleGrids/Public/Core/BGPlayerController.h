@@ -7,6 +7,8 @@
 #include "GameFramework/PlayerController.h"
 #include "BGPlayerController.generated.h"
 
+class UBGGameInstance;
+
 /**
  * Parent Player Controller class for BattleGrids
  */
@@ -21,4 +23,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	uint8 bLoading : 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGPlayerController|Config")
+	UBGGameInstance* GameInstance;
 };
