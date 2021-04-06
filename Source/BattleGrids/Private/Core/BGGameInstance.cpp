@@ -9,7 +9,8 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Core/BGTypes.h"
-#include "GameFramework/GameStateBase.h"
+#include "Core/Lobby/BGLobbyGameStateBase.h"
+#include "UI/BGLoadingScreen.h"
 #include "UI/BGLobbyMenu.h"
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
@@ -44,7 +45,7 @@ void UBGGameInstance::Init()
 	}
 }
 
-void UBGGameInstance::LoadMenuWidget()
+void UBGGameInstance::LoadMainMenuWidget()
 {
 	if (!ensure(MainMenuClass)) return;
 
@@ -58,9 +59,14 @@ void UBGGameInstance::LoadMenuWidget()
 
 void UBGGameInstance::LoadLobbyWidget()
 {
+	ShowLoadingScreen();
+	
 	if (!ensure(LobbyMenuClass)) return;
 
-	Lobby = CreateWidget<UBGLobbyMenu>(this, LobbyMenuClass);
+	if (!Lobby)
+	{
+		Lobby = CreateWidget<UBGLobbyMenu>(this, LobbyMenuClass);
+	}
 	if (!ensure(Lobby)) return;
 
 	Lobby->Setup();
@@ -72,7 +78,10 @@ void UBGGameInstance::InGameLoadMenuWidget()
 {
 	if (!ensure(InGameMenuClass)) return;
 
-	InGameMenu = CreateWidget<UBGInGameMenu>(this, InGameMenuClass);
+	if (!InGameMenu)
+	{
+		InGameMenu = CreateWidget<UBGInGameMenu>(this, InGameMenuClass);
+	}
 	if (!ensure(InGameMenu)) return;
 
 	InGameMenu->Setup();
@@ -80,11 +89,33 @@ void UBGGameInstance::InGameLoadMenuWidget()
 	InGameMenu->SetMenuInterface(this);
 }
 
+void UBGGameInstance::ShowLoadingScreen()
+{	
+	if (!ensure(LoadingScreenClass)) return;
+
+	if (!LoadingScreen)
+	{
+		LoadingScreen = CreateWidget<UBGLoadingScreen>(this, LoadingScreenClass);\
+	}
+	if (!ensure(LoadingScreen)) return;
+
+	LoadingScreen->AddToViewport(100);
+}
+
+void UBGGameInstance::HideLoadingScreen()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Hiding loading screen"))
+	if (LoadingScreen && LoadingScreen->IsInViewport())
+	{
+		LoadingScreen->RemoveFromViewport();
+	}
+}
+
 void UBGGameInstance::Host(FString const& ServerName)
 {
 	if (SessionInterface.IsValid())
 	{
-		InitialServerData.Name = ServerName;
+		ServerData.Name = ServerName;
 		auto const ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
 		if (ExistingSession)
 		{
@@ -107,8 +138,8 @@ void UBGGameInstance::Join(uint32 const& Index, FBGServerData const& InServerDat
 		Menu->Teardown();
 	}
 
-	InitialServerData = InServerData;
-	
+	ServerData = InServerData;
+
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
 }
 
@@ -132,6 +163,14 @@ void UBGGameInstance::RefreshServerList()
 	}
 }
 
+void UBGGameInstance::RefreshConnectedPlayersList(TArray<FBGPlayerInfo> const& InPlayerInfo)
+{
+	if (Lobby)
+	{
+		Lobby->SetPlayerList(InPlayerInfo);
+	}
+}
+
 void UBGGameInstance::CreateSession() const
 {
 	if (SessionInterface.IsValid())
@@ -148,14 +187,14 @@ void UBGGameInstance::CreateSession() const
 		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
-		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, InitialServerData.Name,
+		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerData.Name,
 		                    EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
 }
 
-void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuccess) const
+void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuccess)
 {
 	if (!bSuccess)
 	{
@@ -171,12 +210,14 @@ void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuc
 	auto Engine = GetEngine();
 	if (!ensure(Engine)) return;
 
-	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, (TEXT("Hosting %s"), InitialServerData.Name));
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, (TEXT("Hosting %s"), ServerData.Name));
 
 	auto World = GetWorld();
 	if (!ensure(World)) return;
-	
-	World->ServerTravel("/Game/BattleGrids/Levels/DefaultGameMap?listen");
+
+	ShowLoadingScreen();
+
+	World->ServerTravel("/Game/BattleGrids/Levels/Lobby?listen");
 }
 
 void UBGGameInstance::OnDestroySessionComplete(FName const SessionName, bool bSuccess)
@@ -204,7 +245,9 @@ void UBGGameInstance::OnFindSessionsComplete(bool bSuccess)
 			UE_LOG(LogTemp, Warning, TEXT("Found session names: %s"), *Result.GetSessionIdStr())
 			FBGServerData Data;
 			Data.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
-			Data.CurrentPlayers = Data.MaxPlayers - Result.Session.NumOpenPublicConnections;
+			Data.CurrentPlayers = Data.MaxPlayers - Result.Session.NumOpenPublicConnections - Result.Session.
+				NumOpenPrivateConnections;
+			UE_LOG(LogTemp, Warning, TEXT("Open public connections: %d"), Result.Session.NumOpenPublicConnections)
 			Data.HostUsername = Result.Session.OwningUserName;
 			FString ServerName;
 			if (Result.Session.SessionSettings.Get(SERVER_NAME_SETTINGS_KEY, ServerName))
@@ -241,11 +284,13 @@ void UBGGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCom
 	auto PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController)) return;
 
+	ShowLoadingScreen();
+
 	PlayerController->ClientTravel(Address, TRAVEL_Absolute);
 }
 
 void UBGGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType,
-	const FString& ErrorString)
+                                       const FString& ErrorString)
 {
 	LoadMainMenu();
 }

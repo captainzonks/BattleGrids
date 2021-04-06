@@ -10,9 +10,16 @@ struct FBGServerData
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Name;
-	uint16 CurrentPlayers;
-	uint16 MaxPlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentPlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxPlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString HostUsername;
 };
 
@@ -104,8 +111,13 @@ struct FBGPlayerInfo
 {
 	GENERATED_BODY()
 
+	friend bool operator==(FBGPlayerInfo const& l, FBGPlayerInfo const& r)
+	{
+		return l.PlayerName.IdenticalTo(r.PlayerName);
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText PlayerName;
+	FText PlayerName {FText::FromString("DefaultPlayerName")};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bGameMasterPermissions : 1;

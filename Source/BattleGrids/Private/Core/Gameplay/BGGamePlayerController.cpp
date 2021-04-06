@@ -9,10 +9,24 @@
 #include "Actors/BGToken.h"
 #include "Actors/Structures/BGDoor.h"
 #include "Components/SplineComponent.h"
+#include "Core/BGGameInstance.h"
+#include "Core/BGGameStateBase.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
 #include "Engine/DemoNetDriver.h"
 #include "Kismet/GameplayStatics.h"
+
+void ABGGamePlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	while (!GetPlayerState<ABGPlayerState>() && !GetWorld()->GetGameState<ABGGameStateBase>())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Waiting for PlayerState and GameState"))
+	}
+
+	GetGameInstance<UBGGameInstance>()->HideLoadingScreen();
+}
 
 void ABGGamePlayerController::Tick(float DeltaSeconds)
 {

@@ -5,35 +5,24 @@
 
 #include "Core/BGGameInstance.h"
 #include "Core/BGPlayerState.h"
+#include "Core/Lobby/BGLobbyGameStateBase.h"
 #include "Net/UnrealNetwork.h"
 #include "UI/BGLobbyMenu.h"
-
-void ABGLobbyPlayerController::UpdateLobbyInformation_Implementation()
-{
-	auto const GameInstance = Cast<UBGGameInstance>(GetGameInstance());
-	if (GameInstance && GameInstance->GetLobby())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Current Connected Players: %d"), ServerData.CurrentPlayers)
-		GameInstance->GetLobby()->UpdateLobbyInfo(ServerData);
-	}
-}
-
-void ABGLobbyPlayerController::UpdateServerData(FBGServerData const& InServerData)
-{
-	ServerData = InServerData;
-
-	UpdateLobbyInformation();
-}
 
 void ABGLobbyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto const GameInstance = Cast<UBGGameInstance>(GetGameInstance());
-	if (GameInstance)
+	while (!LobbyGameState)
+	{
+		LobbyGameState = GetWorld()->GetGameState<ABGLobbyGameStateBase>();
+	}
+
+    GameInstance = Cast<UBGGameInstance>(GetGameInstance());
+	if (GameInstance && LobbyGameState)
 	{
 		GameInstance->LoadLobbyWidget();
-		ServerData = GameInstance->GetInitialServerData();
+		GameInstance->HideLoadingScreen();
 	}
 }
 
@@ -41,5 +30,4 @@ void ABGLobbyPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABGLobbyPlayerController, ServerData)
 }

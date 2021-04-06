@@ -18,4 +18,7 @@ class BATTLEGRIDS_API ABGPlayerController : public APlayerController
 public:
 
 	ABGPlayerController();
+
+protected:
+	virtual void BeginPlay() override;
 };

@@ -17,6 +17,7 @@ class UBGSaveGame;
 class UBGMainMenu;
 class UBGLobbyMenu;
 class UBGInGameMenu;
+class UBGLoadingScreen;
 class UUserWidget;
 
 /**
@@ -31,13 +32,19 @@ public:
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
-	void LoadMenuWidget();
+	void LoadMainMenuWidget();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
 	void LoadLobbyWidget();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
 	void InGameLoadMenuWidget();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	void ShowLoadingScreen();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	void HideLoadingScreen();
 
 	UFUNCTION(Exec, Category = "BGGameInstance|Functions")
 	virtual void Host(FString const& ServerName) override;
@@ -51,16 +58,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
 	virtual void RefreshServerList() override;
 
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	virtual void RefreshConnectedPlayersList(TArray<FBGPlayerInfo> const& InPlayerInfo) override;
+
 	void CreateSession() const;
 
 	UBGLobbyMenu* GetLobby() const { return Lobby; }
 
-	FBGServerData GetInitialServerData() const { return InitialServerData; }
+	FBGServerData GetInitialServerData() const { return ServerData; }
 
 protected:
 
 	// Delegate Functions, called by the SessionInterface
-	void OnCreateSessionComplete(FName const SessionName, bool bSuccess) const;
+	void OnCreateSessionComplete(FName const SessionName, bool bSuccess);
 	void OnDestroySessionComplete(FName const SessionName, bool bSuccess);
 	void OnFindSessionsComplete(bool bSuccess);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
@@ -78,6 +88,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	TSubclassOf<UUserWidget> InGameMenuClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	TSubclassOf<UUserWidget> LoadingScreenClass;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
 	UBGMainMenu* Menu;
 
@@ -87,9 +100,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
 	UBGInGameMenu* InGameMenu;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
+	UBGLoadingScreen* LoadingScreen;
+
 	IOnlineSessionPtr SessionInterface;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
-	FBGServerData InitialServerData;
+	FBGServerData ServerData;
 };
