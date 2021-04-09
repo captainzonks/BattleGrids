@@ -1,23 +1,23 @@
-"../../../Engine/Content/Functions/Engine_MaterialFunctions01/Opacity/CameraDepthFade.uasset" 0
-"../../../Engine/Content/EngineMaterials/T_Default_Material_Grid_N.uasset" 1
-"../../../Engine/Content/EngineMaterials/T_Default_Material_Grid_M.uasset" 2
+"../../../Engine/Content/EngineMaterials/T_Default_Material_Grid_N.uasset" 0
+"../../../Engine/Content/EngineMaterials/T_Default_Material_Grid_M.uasset" 1
+"../../../Engine/Content/Functions/Engine_MaterialFunctions01/Opacity/CameraDepthFade.uasset" 2
 "../../../Engine/Content/EngineMaterials/WorldGridMaterial.uasset" 3
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_1cm_sphere.uasset" 4
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Cube.uasset" 5
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/Skeleton_Simple.uasset" 6
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_MacroVariation.uasset" 7
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/icy-night-8x.uasset" 7
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Poured_N.uasset" 8
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Poured_D.uasset" 9
 "../../../Engine/Content/EngineMaterials/Good64x64TilingNoiseHighFreq.uasset" 10
 "../../../Engine/Content/EngineDebugMaterials/HeatmapGradient.uasset" 11
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MPC_ParameterCollection.uasset" 12
-"../../../Engine/Content/Functions/Engine_MaterialFunctions01/ImageAdjustment/CheapContrast_RGB.uasset" 13
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Math/AddComponents.uasset" 14
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Texturing/ScreenAlignedPixelToPixelUVs.uasset" 15
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/BreakOutFloat3Components.uasset" 16
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/DitherTemporalAA.uasset" 17
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MasterMaterials/M_Master_Mask.uasset" 18
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/icy-night-8x.uasset" 19
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_MacroVariation.uasset" 13
+"../../../Engine/Content/Functions/Engine_MaterialFunctions01/ImageAdjustment/CheapContrast_RGB.uasset" 14
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Math/AddComponents.uasset" 15
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Texturing/ScreenAlignedPixelToPixelUVs.uasset" 16
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/BreakOutFloat3Components.uasset" 17
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/DitherTemporalAA.uasset" 18
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MasterMaterials/M_Master_Mask.uasset" 19
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_LowPolyColor.uasset" 20
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Melee_SkeletalMesh_01.uasset" 21
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_DefaultPawn.uasset" 22
@@ -47,13 +47,13 @@
 "../../../../Projects/BattleGrids 4.26/Content/Mannequin/Character/Mesh/UE4_Mannequin_Skeleton.uasset" 46
 "../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonJump_End.uasset" 47
 "../../../Engine/Content/EditorBlueprintResources/StandardMacros.uasset" 48
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonWalk.uasset" 49
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonRun.uasset" 50
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonIdle.uasset" 51
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPerson_IdleRun_2D.uasset" 52
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPerson_Jump.uasset" 53
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonJump_Start.uasset" 54
-"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonJump_Loop.uasset" 55
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonJump_Loop.uasset" 49
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonJump_Start.uasset" 50
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPerson_Jump.uasset" 51
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonIdle.uasset" 52
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonRun.uasset" 53
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPersonWalk.uasset" 54
+"../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPerson_IdleRun_2D.uasset" 55
 "../../../../Projects/BattleGrids 4.26/Content/Mannequin/Animations/ThirdPerson_AnimBP.uasset" 56
 "../../../../Projects/BattleGrids 4.26/Content/Mannequin/Character/Mesh/SK_Mannequin_PhysicsAsset.uasset" 57
 "../../../../Projects/BattleGrids 4.26/Content/Mannequin/Character/Textures/T_UE4Logo_N.uasset" 58
@@ -133,9 +133,9 @@
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_MaterialSphere_Plain.uasset" 132
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_MaterialSphere.uasset" 133
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_MatPreviewMesh_02.uasset" 134
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Basalt_D.uasset" 135
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_RockMesh_N.uasset" 136
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_RockMesh_M.uasset" 137
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_RockMesh_N.uasset" 135
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_RockMesh_M.uasset" 136
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Basalt_D.uasset" 137
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Detail_Rocky_N.uasset" 138
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Rock.uasset" 139
 "../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Rock.uasset" 140
@@ -303,9 +303,9 @@
 "../../../Engine/Content/Tutorial/SubEditors/MaterialEditorTutorial.uasset" 302
 "../../../Engine/Content/Tutorial/SubEditors/StaticMeshEditorTutorial.uasset" 303
 "../../../Engine/Content/Tutorial/SubEditors/TutorialAssets/TutorialMaterial.uasset" 304
-"../../../Engine/Content/VREditor/LaserPointer/VR_LaserPower_01.uasset" 305
-"../../../Engine/Content/VREditor/TransformGizmo/TransformGizmoMaterial.uasset" 306
-"../../../Engine/Content/VREditor/TransformGizmo/TranslucentTransformGizmoMaterial.uasset" 307
+"../../../Engine/Content/VREditor/TransformGizmo/TranslucentTransformGizmoMaterial.uasset" 305
+"../../../Engine/Content/VREditor/LaserPointer/VR_LaserPower_01.uasset" 306
+"../../../Engine/Content/VREditor/TransformGizmo/TransformGizmoMaterial.uasset" 307
 "../../../Engine/Content/VREditor/TransformGizmo/BoundingBoxCorner.uasset" 308
 "../../../Engine/Content/VREditor/TransformGizmo/BoundingBoxEdge.uasset" 309
 "../../../Engine/Content/VREditor/TransformGizmo/PlaneTranslationHandle.uasset" 310
@@ -319,13 +319,13 @@
 "../../Plugins/2D/Paper2D/Content/DefaultSpriteMaterial.uasset" 318
 "../../Plugins/2D/Paper2D/Content/MaskedUnlitSpriteMaterial.uasset" 319
 "../../Plugins/2D/Paper2D/Content/OpaqueUnlitSpriteMaterial.uasset" 320
-"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/UnpackInteger3.uasset" 321
-"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/UnpackDirection.uasset" 322
-"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/game_wind_noise.uasset" 323
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/SafeNormalize.uasset" 324
-"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeWindMotion.uasset" 325
-"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeBranchMotion.uasset" 326
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/ObjectLocalBounds.uasset" 327
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/ObjectLocalBounds.uasset" 321
+"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/UnpackInteger3.uasset" 322
+"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/UnpackDirection.uasset" 323
+"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/game_wind_noise.uasset" 324
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/SafeNormalize.uasset" 325
+"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeWindMotion.uasset" 326
+"../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeBranchMotion.uasset" 327
 "../../../Engine/Content/Functions/Engine_MaterialFunctions02/UVs/BoundingBoxBased_0-1_UVW.uasset" 328
 "../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeWind.uasset" 329
 "../../Plugins/Editor/SpeedTreeImporter/Content/SpeedTree9/SpeedTreeBillboard.uasset" 330
@@ -341,284 +341,285 @@
 "../../Plugins/Runtime/Oculus/OculusVR/Content/Materials/OculusMR_ChromaKey.uasset" 340
 "../../Plugins/Runtime/Oculus/OculusVR/Content/Materials/OculusMR_OpaqueColoredMaterial.uasset" 341
 "../../Plugins/Runtime/Oculus/OculusVR/Content/Materials/PokeAHoleMaterial.uasset" 342
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/SplitComponents.uasset" 343
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_ConvolveTexture.uasset" 344
-"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/VectorLength.uasset" 345
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_SampleSceneTextureNeighbourUVs.uasset" 346
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_ExtractDepth.uasset" 347
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/PP_Outliner_M.uasset" 348
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/PP_Outliner_Inst.uasset" 349
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" 350
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BPI_GameInstance.uasset" 351
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_SaveGame.uasset" 352
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_FindGameMenu.uasset" 353
-"../../../Engine/Content/EngineFonts/Faces/RobotoRegular.uasset" 354
-"../../../Engine/Content/EngineFonts/Faces/RobotoLight.uasset" 355
-"../../../Engine/Content/EngineFonts/Faces/RobotoItalic.uasset" 356
-"../../../Engine/Content/EngineFonts/Faces/RobotoBoldItalic.uasset" 357
-"../../../Engine/Content/EngineFonts/Faces/RobotoBold.uasset" 358
-"../../../Engine/Content/EngineFonts/Faces/DroidSansFallback.uasset" 359
-"../../../Engine/Content/EngineFonts/Roboto.uasset" 360
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_HostGameMenu.uasset" 361
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/T_Wood_Background.uasset" 362
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_ServerRow.uasset" 363
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_PlayerState.uasset" 364
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Menu/BP_Menu_PlayerController.uasset" 365
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_OptionsMenu.uasset" 366
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" 367
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_ErrorWindow.uasset" 368
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_LoadingScreen.uasset" 369
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" 370
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Ranged_Token_01.uasset" 371
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Spell_Token_01.uasset" 372
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_LowPolyColor_Mask.uasset" 373
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Wall_01.uasset" 374
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_DoorFrame_01.uasset" 375
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Corner_01.uasset" 376
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Board_Tile_01.uasset" 377
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Base_Square_01.uasset" 378
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Data/DT_StaticMeshBank.uasset" 379
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Walnut_D.uasset" 380
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Walnut_N.uasset" 381
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Walnut.uasset" 382
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Wood_Walnut.uasset" 383
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Sandstone.uasset" 384
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Gold_N.uasset" 385
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Perlin_Noise_M.uasset" 386
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Marble_Polished_D.uasset" 387
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Marble_Polished.uasset" 388
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Rock_Marble_Polished.uasset" 389
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Concrete_Mask.uasset" 390
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Concrete.uasset" 391
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Gold_D.uasset" 392
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Gold.uasset" 393
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Metal_Gold.uasset" 394
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Data/DT_MaterialInstanceBank.uasset" 395
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_WallVision.uasset" 396
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_PlayerHUD.uasset" 397
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Tile.uasset" 398
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenThumbnail.uasset" 399
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" 400
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureThumbnail.uasset" 401
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_GameStateBase.uasset" 402
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu_PlayerButton.uasset" 403
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" 404
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" 405
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Door_01.uasset" 406
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/Structures/BP_Door.uasset" 407
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" 408
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_GameMasterHUD.uasset" 409
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_Sphere.uasset" 410
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Aluminum_D.uasset" 411
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Burnished_Steel.uasset" 412
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Pawn.uasset" 413
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_PlayerController.uasset" 414
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_GameModeBase.uasset" 415
-"../../../Engine/Content/BasicShapes/Sphere.uasset" 416
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Board.uasset" 417
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/DefaultGameMap.umap" 418
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_GreyBall.uasset" 419
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/Color_checker.uasset" 420
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ColorGrid.uasset" 421
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ClearCoatBlack.uasset" 422
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ClearCoat.uasset" 423
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ChromeBall.uasset" 424
-"../../../Engine/Content/EditorMeshes/ColorCalibrator/SM_ColorCalibrator.uasset" 425
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Advanced_Lighting_BuiltData.uasset" 426
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" 427
-"../../../Engine/Content/MapTemplates/Sky/DaylightAmbientCubemap.uasset" 428
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_Master.uasset" 429
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_HDRI.uasset" 430
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Arrows.uasset" 431
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/SM_Arrows.uasset" 432
-"../../../Engine/Content/EditorMaterials/Thumbnails/SkySphereMaterial.uasset" 433
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/Skybox.uasset" 434
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_Black.uasset" 435
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/SunlightColorLUT.uasset" 436
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/FogBrightnessLUT.uasset" 437
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/BP_LightStudio.uasset" 438
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/SM_AssetPlatform.uasset" 439
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Advanced_Lighting.umap" 440
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Starter_Background_Cue.uasset" 441
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Floor_400x400.uasset" 442
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_TableRound_N.uasset" 443
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_TableRound_M.uasset" 444
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_TableRound.uasset" 445
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_TableRound.uasset" 446
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Statue_N.uasset" 447
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Statue_M.uasset" 448
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Statue.uasset" 449
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_StatueGlass.uasset" 450
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Statue.uasset" 451
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Chair.uasset" 452
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Copper_D.uasset" 453
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Copper.uasset" 454
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset" 455
-"../../../Engine/Content/EngineSky/T_Sky_Stars.uasset" 456
-"../../../Engine/Content/EngineSky/T_Sky_Clouds_M.uasset" 457
-"../../../Engine/Content/EngineSky/T_Sky_Blue.uasset" 458
-"../../../Engine/Content/EngineSky/M_Sky_Panning_Clouds2.uasset" 459
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Minimal_Default_BuiltData.uasset" 460
-"../../../Engine/Content/EngineSky/SM_SkySphere.uasset" 461
-"../../../Engine/Content/EngineSky/C_Sky_Zenith_Color.uasset" 462
-"../../../Engine/Content/EngineSky/C_Sky_Horizon_Color.uasset" 463
-"../../../Engine/Content/EngineSky/C_Sky_Cloud_Color.uasset" 464
-"../../../Engine/Content/EngineSky/BP_Sky_Sphere.uasset" 465
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Minimal_Default.umap" 466
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Lamp_N.uasset" 467
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Lamp_M.uasset" 468
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Lamp.uasset" 469
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Lamp_Wall.uasset" 470
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_WallSconce.uasset" 471
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Steam_Lit.uasset" 472
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Steam01_Cue.uasset" 473
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Steam.uasset" 474
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Spark_Core.uasset" 475
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Spark.uasset" 476
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Radial_Gradient.uasset" 477
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Sparks.uasset" 478
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Fire_Sparks01_Cue.uasset" 479
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Sparks.uasset" 480
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Smoke.uasset" 481
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Smoke01_Cue.uasset" 482
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Smoke.uasset" 483
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Water_N.uasset" 484
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Heat_Distortion.uasset" 485
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Fire_Tiled_D.uasset" 486
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Fire_SubUV.uasset" 487
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Fire_SubUV.uasset" 488
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Fire.uasset" 489
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Fire01_Cue.uasset" 490
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Fire.uasset" 491
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Lamp_Ceiling.uasset" 492
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" 493
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Starter_Music_Cue.uasset" 494
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Collapse_Cue.uasset" 495
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_Window_400x300.uasset" 496
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_Door_400x300.uasset" 497
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_400x200.uasset" 498
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_QuadPyramid.uasset" 499
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_Cube.uasset" 500
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Frame_N.uasset" 501
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Frame_M.uasset" 502
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Frame.uasset" 503
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_WindowFrame.uasset" 504
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_PillarFrame300.uasset" 505
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_PillarFrame.uasset" 506
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_GlassWindow.uasset" 507
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_DoorFrame.uasset" 508
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_CornerFrame.uasset" 509
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/MaterialSphere.uasset" 510
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Dust_Particle_D.uasset" 511
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Dust_Particle.uasset" 512
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Ambient_Dust.uasset" 513
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Pine_N.uasset" 514
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Pine_D.uasset" 515
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Pine.uasset" 516
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Oak.uasset" 517
-"../../../Engine/Content/Functions/Engine_MaterialFunctions01/Opacity/AlphaOffset.uasset" 518
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_N.uasset" 519
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_M.uasset" 520
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_D.uasset" 521
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Floor_Walnut_Worn.uasset" 522
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Floor_Walnut_Polished.uasset" 523
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Water_M.uasset" 524
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Water_Ocean.uasset" 525
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Water_Lake.uasset" 526
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Panel_N.uasset" 527
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Panel_M.uasset" 528
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Steel_D.uasset" 529
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Panel.uasset" 530
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Hex_Tile_N.uasset" 531
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Hex_Tile_M.uasset" 532
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Hex_Tile_Pulse.uasset" 533
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Hex_Tile.uasset" 534
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Dot_N.uasset" 535
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Dot_M.uasset" 536
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Single_Tile_N.uasset" 537
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Checker_Noise_M.uasset" 538
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Checker_Dot.uasset" 539
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Slate_N.uasset" 540
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Slate_D.uasset" 541
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Slate.uasset" 542
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Sandstone.uasset" 543
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Basalt_N.uasset" 544
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Basalt.uasset" 545
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Steel_N.uasset" 546
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Steel.uasset" 547
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Rust_D.uasset" 548
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Rust_N.uasset" 549
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Rust.uasset" 550
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Chrome.uasset" 551
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Moss_N.uasset" 552
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_ground_Moss_D.uasset" 553
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Moss.uasset" 554
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Gravel_N.uasset" 555
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Gravel_D.uasset" 556
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Gravel.uasset" 557
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Grass_N.uasset" 558
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Grass_D.uasset" 559
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Grass.uasset" 560
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_Variation_M.uasset" 561
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_N.uasset" 562
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_M.uasset" 563
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_D.uasset" 564
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Tiles.uasset" 565
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Panels_N.uasset" 566
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Panels_D.uasset" 567
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Panels.uasset" 568
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Grime_D.uasset" 569
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Grime.uasset" 570
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_N.uasset" 571
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_M.uasset" 572
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_D.uasset" 573
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Smooth_Granite_D.uasset" 574
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Gradinet_01.uasset" 575
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Smooth.uasset" 576
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Rough_N.uasset" 577
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Rough_D.uasset" 578
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Rough.uasset" 579
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_N.uasset" 580
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_M.uasset" 581
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_D.uasset" 582
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Pebble.uasset" 583
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ceramic_Tile_N.uasset" 584
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ceramic_Tile_M.uasset" 585
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ceramic_Tile_Checker.uasset" 586
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_N.uasset" 587
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_M.uasset" 588
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_D.uasset" 589
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Hewn_Stone.uasset" 590
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Cut_Stone_N.uasset" 591
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Cut_Stone_D.uasset" 592
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Cut_Stone.uasset" 593
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Old_N.uasset" 594
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Old_D.uasset" 595
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_Old.uasset" 596
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_N.uasset" 597
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_M.uasset" 598
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_D.uasset" 599
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_New.uasset" 600
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_N.uasset" 601
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_M.uasset" 602
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_D.uasset" 603
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_Beveled.uasset" 604
-"../../../Engine/Content/Functions/Engine_MaterialFunctions03/Procedurals/ComputeFilterWidth.uasset" 605
-"../../../Engine/Content/EngineMaterials/AntiAliasedTextMaterialTranslucent.uasset" 606
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/StarterMap_BuiltData.uasset" 607
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Poured.uasset" 608
-"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/StarterMap.umap" 609
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_Settings_PlayerButton.uasset" 610
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_SettingsWindow.uasset" 611
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_ConnectedPlayer.uasset" 612
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_ColorSelectWindow.uasset" 613
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_ChatWindow.uasset" 614
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_LobbyMenu.uasset" 615
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_PlayerController.uasset" 616
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_GameStateBase.uasset" 617
-"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_GameModeBase.uasset" 618
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_GreyBall.uasset" 343
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/Color_checker.uasset" 344
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ColorGrid.uasset" 345
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ClearCoatBlack.uasset" 346
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ClearCoat.uasset" 347
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/M_ChromeBall.uasset" 348
+"../../../Engine/Content/EditorMeshes/ColorCalibrator/SM_ColorCalibrator.uasset" 349
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Advanced_Lighting_BuiltData.uasset" 350
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" 351
+"../../../Engine/Content/MapTemplates/Sky/DaylightAmbientCubemap.uasset" 352
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_Master.uasset" 353
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_HDRI.uasset" 354
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Arrows.uasset" 355
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/SM_Arrows.uasset" 356
+"../../../Engine/Content/EditorMaterials/Thumbnails/SkySphereMaterial.uasset" 357
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/Skybox.uasset" 358
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/M_LightStage_Skybox_Black.uasset" 359
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/SunlightColorLUT.uasset" 360
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Assets/FogBrightnessLUT.uasset" 361
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/BP_LightStudio.uasset" 362
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/SM_AssetPlatform.uasset" 363
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Advanced_Lighting.umap" 364
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_TableRound_N.uasset" 365
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_TableRound_M.uasset" 366
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_TableRound.uasset" 367
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_TableRound.uasset" 368
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Statue_N.uasset" 369
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Statue_M.uasset" 370
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Statue.uasset" 371
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_StatueGlass.uasset" 372
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Statue.uasset" 373
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Chair.uasset" 374
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Copper_D.uasset" 375
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Gold_N.uasset" 376
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Copper.uasset" 377
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Brushed_Nickel.uasset" 378
+"../../../Engine/Content/EngineSky/T_Sky_Stars.uasset" 379
+"../../../Engine/Content/EngineSky/T_Sky_Clouds_M.uasset" 380
+"../../../Engine/Content/EngineSky/T_Sky_Blue.uasset" 381
+"../../../Engine/Content/EngineSky/M_Sky_Panning_Clouds2.uasset" 382
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Minimal_Default_BuiltData.uasset" 383
+"../../../Engine/Content/EngineSky/SM_SkySphere.uasset" 384
+"../../../Engine/Content/EngineSky/C_Sky_Zenith_Color.uasset" 385
+"../../../Engine/Content/EngineSky/C_Sky_Horizon_Color.uasset" 386
+"../../../Engine/Content/EngineSky/C_Sky_Cloud_Color.uasset" 387
+"../../../Engine/Content/EngineSky/BP_Sky_Sphere.uasset" 388
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Starter_Background_Cue.uasset" 389
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Floor_400x400.uasset" 390
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Aluminum_D.uasset" 391
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Burnished_Steel.uasset" 392
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/Minimal_Default.umap" 393
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_QuadPyramid.uasset" 394
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_Cube.uasset" 395
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Frame_N.uasset" 396
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Frame_M.uasset" 397
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Frame.uasset" 398
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_WindowFrame.uasset" 399
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_PillarFrame300.uasset" 400
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_PillarFrame.uasset" 401
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_GlassWindow.uasset" 402
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_DoorFrame.uasset" 403
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_CornerFrame.uasset" 404
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/MaterialSphere.uasset" 405
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Dust_Particle_D.uasset" 406
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Dust_Particle.uasset" 407
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Ambient_Dust.uasset" 408
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Pine_N.uasset" 409
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Pine_D.uasset" 410
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Perlin_Noise_M.uasset" 411
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Pine.uasset" 412
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Oak.uasset" 413
+"../../../Engine/Content/Functions/Engine_MaterialFunctions01/Opacity/AlphaOffset.uasset" 414
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_N.uasset" 415
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_M.uasset" 416
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Floor_Walnut_D.uasset" 417
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Floor_Walnut_Worn.uasset" 418
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Floor_Walnut_Polished.uasset" 419
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Water_M.uasset" 420
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Water_N.uasset" 421
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Water_Ocean.uasset" 422
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Water_Lake.uasset" 423
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Panel_N.uasset" 424
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Panel_M.uasset" 425
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Steel_D.uasset" 426
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Panel.uasset" 427
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Hex_Tile_N.uasset" 428
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Hex_Tile_M.uasset" 429
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Hex_Tile_Pulse.uasset" 430
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Hex_Tile.uasset" 431
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Dot_N.uasset" 432
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Tech_Dot_M.uasset" 433
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Single_Tile_N.uasset" 434
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Checker_Noise_M.uasset" 435
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Tech_Checker_Dot.uasset" 436
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Slate_N.uasset" 437
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Slate_D.uasset" 438
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Slate.uasset" 439
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Sandstone.uasset" 440
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Basalt_N.uasset" 441
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Basalt.uasset" 442
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Steel_N.uasset" 443
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Steel.uasset" 444
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Rust_D.uasset" 445
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Rust_N.uasset" 446
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Rust.uasset" 447
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Chrome.uasset" 448
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Moss_N.uasset" 449
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_ground_Moss_D.uasset" 450
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Moss.uasset" 451
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Gravel_N.uasset" 452
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Gravel_D.uasset" 453
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Gravel.uasset" 454
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Grass_N.uasset" 455
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ground_Grass_D.uasset" 456
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ground_Grass.uasset" 457
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_Variation_M.uasset" 458
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_N.uasset" 459
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_M.uasset" 460
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Tiles_D.uasset" 461
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Tiles.uasset" 462
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Panels_N.uasset" 463
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Panels_D.uasset" 464
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Panels.uasset" 465
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Concrete_Grime_D.uasset" 466
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Grime.uasset" 467
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_N.uasset" 468
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_M.uasset" 469
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Smooth_D.uasset" 470
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Smooth_Granite_D.uasset" 471
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Gradinet_01.uasset" 472
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Smooth.uasset" 473
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Rough_N.uasset" 474
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Rough_D.uasset" 475
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Rough.uasset" 476
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_N.uasset" 477
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_M.uasset" 478
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_CobbleStone_Pebble_D.uasset" 479
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_CobbleStone_Pebble.uasset" 480
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ceramic_Tile_N.uasset" 481
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Ceramic_Tile_M.uasset" 482
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Rock_Marble_Polished_D.uasset" 483
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Ceramic_Tile_Checker.uasset" 484
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_N.uasset" 485
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_M.uasset" 486
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Hewn_Stone_D.uasset" 487
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Hewn_Stone.uasset" 488
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Cut_Stone_N.uasset" 489
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Cut_Stone_D.uasset" 490
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Cut_Stone.uasset" 491
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Old_N.uasset" 492
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Old_D.uasset" 493
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_Old.uasset" 494
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_N.uasset" 495
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_M.uasset" 496
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_New_D.uasset" 497
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_New.uasset" 498
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_N.uasset" 499
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_M.uasset" 500
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Brick_Clay_Beveled_D.uasset" 501
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Brick_Clay_Beveled.uasset" 502
+"../../../Engine/Content/Functions/Engine_MaterialFunctions03/Procedurals/ComputeFilterWidth.uasset" 503
+"../../../Engine/Content/EngineMaterials/AntiAliasedTextMaterialTranslucent.uasset" 504
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/StarterMap_BuiltData.uasset" 505
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Concrete_Poured.uasset" 506
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Lamp_N.uasset" 507
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Lamp_M.uasset" 508
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/Materials/M_Lamp.uasset" 509
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Lamp_Wall.uasset" 510
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_WallSconce.uasset" 511
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Steam_Lit.uasset" 512
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Steam01_Cue.uasset" 513
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Steam.uasset" 514
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Spark_Core.uasset" 515
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Spark.uasset" 516
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Radial_Gradient.uasset" 517
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Sparks.uasset" 518
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Fire_Sparks01_Cue.uasset" 519
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Sparks.uasset" 520
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Smoke.uasset" 521
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Smoke01_Cue.uasset" 522
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Smoke.uasset" 523
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Heat_Distortion.uasset" 524
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Fire_Tiled_D.uasset" 525
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Fire_SubUV.uasset" 526
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/Materials/M_Fire_SubUV.uasset" 527
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Particles/P_Fire.uasset" 528
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Fire01_Cue.uasset" 529
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_Effect_Fire.uasset" 530
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Props/SM_Lamp_Ceiling.uasset" 531
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" 532
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Starter_Music_Cue.uasset" 533
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Audio/Collapse_Cue.uasset" 534
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_Window_400x300.uasset" 535
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_Door_400x300.uasset" 536
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Architecture/Wall_400x200.uasset" 537
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Metal_Gold_D.uasset" 538
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Metal_Gold.uasset" 539
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Shapes/Shape_Sphere.uasset" 540
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Rock_Marble_Polished.uasset" 541
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Walnut_D.uasset" 542
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Textures/T_Wood_Walnut_N.uasset" 543
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Materials/M_Wood_Walnut.uasset" 544
+"../../../../Projects/BattleGrids 4.26/Content/StarterContent/Maps/StarterMap.umap" 545
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" 546
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Board_Tile_01.uasset" 547
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Tile.uasset" 548
+"../../../Engine/Content/BasicShapes/Sphere.uasset" 549
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Board.uasset" 550
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_SaveGame.uasset" 551
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_PlayerState.uasset" 552
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_LoadingScreen.uasset" 553
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_ServerRow.uasset" 554
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BPI_GameInstance.uasset" 555
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Menu/BP_Menu_PlayerController.uasset" 556
+"../../../Engine/Content/EngineFonts/Faces/RobotoRegular.uasset" 557
+"../../../Engine/Content/EngineFonts/Faces/RobotoLight.uasset" 558
+"../../../Engine/Content/EngineFonts/Faces/RobotoItalic.uasset" 559
+"../../../Engine/Content/EngineFonts/Faces/RobotoBoldItalic.uasset" 560
+"../../../Engine/Content/EngineFonts/Faces/RobotoBold.uasset" 561
+"../../../Engine/Content/EngineFonts/Faces/DroidSansFallback.uasset" 562
+"../../../Engine/Content/EngineFonts/Roboto.uasset" 563
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_OptionsMenu.uasset" 564
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/T_Wood_Background.uasset" 565
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" 566
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_ConnectedPlayer.uasset" 567
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_ChatWindow.uasset" 568
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_GameStateBase.uasset" 569
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_GameModeBase.uasset" 570
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_Settings_PlayerButton.uasset" 571
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_SettingsWindow.uasset" 572
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Lobby/BP_Lobby_PlayerController.uasset" 573
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_ColorSelectWindow.uasset" 574
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Lobby/WBP_LobbyMenu.uasset" 575
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/WBP_ErrorWindow.uasset" 576
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_HostGameMenu.uasset" 577
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/MainMenu/WBP_FindGameMenu.uasset" 578
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" 579
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_GameStateBase.uasset" 580
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Metal_Gold.uasset" 581
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Pawn.uasset" 582
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_WallVision.uasset" 583
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_PlayerHUD.uasset" 584
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_DoorFrame_01.uasset" 585
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Door_01.uasset" 586
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/Structures/BP_Door.uasset" 587
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" 588
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" 589
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu_PlayerButton.uasset" 590
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" 591
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" 592
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureThumbnail.uasset" 593
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_TokenThumbnail.uasset" 594
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/UI/Gameplay/WBP_GameMasterHUD.uasset" 595
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_PlayerController.uasset" 596
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_LowPolyColor_Mask.uasset" 597
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Sandstone.uasset" 598
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Wood_Walnut.uasset" 599
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Rock_Marble_Polished.uasset" 600
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Concrete_Mask.uasset" 601
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/MI_Concrete.uasset" 602
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Data/DT_MaterialInstanceBank.uasset" 603
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Base_Square_01.uasset" 604
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Corner_01.uasset" 605
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Ranged_Token_01.uasset" 606
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Spell_Token_01.uasset" 607
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Art/SM_Simple_Wall_01.uasset" 608
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Data/DT_StaticMeshBank.uasset" 609
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Gameplay/BP_Gameplay_GameModeBase.uasset" 610
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/SplitComponents.uasset" 611
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_ConvolveTexture.uasset" 612
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_SampleSceneTextureNeighbourUVs.uasset" 613
+"../../../Engine/Content/Functions/Engine_MaterialFunctions02/Utility/VectorLength.uasset" 614
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/MF_ExtractDepth.uasset" 615
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/PP_Outliner_M.uasset" 616
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Materials/Outline/PP_Outliner_Inst.uasset" 617
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/DefaultGameMap.umap" 618
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/Lobby.umap" 619
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Blueprints/Menu/BP_Menu_GameModeBase.uasset" 620
 "../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/MainMenu.umap" 621
-"../../../Engine/Content/Maps/Entry_BuiltData.uasset" 622
-"../../../Engine/Content/Maps/Entry.umap" 623
+"../../../../Projects/BattleGrids 4.26/Content/BattleGrids/Levels/Transition.umap" 622
+"../../../Engine/Content/Maps/Entry_BuiltData.uasset" 623
+"../../../Engine/Content/Maps/Entry.umap" 624

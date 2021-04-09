@@ -111,17 +111,34 @@ struct FBGPlayerInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText PlayerName {FText::FromString("DefaultPlayerName")};
+	FBGPlayerInfo(): bGameMasterPermissions(0), bReady(0)
+	{
+	}
+
+	explicit FBGPlayerInfo(FText const& InName, int const& InPlayerID)
+		: PlayerName(InName), PlayerID(InPlayerID), bGameMasterPermissions(0), bReady(0)
+	{
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 bGameMasterPermissions : 1;
+	FText PlayerName{FText::FromString("DefaultPlayerName")};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int PlayerID{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FLinearColor PlayerColor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 bGameMasterPermissions : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 bReady : 1;
+
+	bool operator==(FBGPlayerInfo const& Right) const
+	{
+		return PlayerID == Right.PlayerID;
+	}
 };
 
 USTRUCT(BlueprintType)

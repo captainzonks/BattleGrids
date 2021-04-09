@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "GameFramework/PlayerController.h"
 #include "BGPlayerController.generated.h"
 
+struct FBGPlayerInfo;
 class UBGGameInstance;
 
 /**
@@ -19,15 +19,22 @@ class BATTLEGRIDS_API ABGPlayerController : public APlayerController
 
 public:
 
-	ABGPlayerController();
+	UFUNCTION(BlueprintCallable, Category = "BGPlayerController|Functions")
+	void ToggleLoadingState(bool const bIsLoading);
+
+	UFUNCTION(Server, Reliable, Category = "BGPlayerController|Functions|Network")
+	void ServerToggleLoadingState(bool const bIsLoading);
+
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "BGLobbyPlayerController|UI")
+	void UpdateUI(TArray<FBGPlayerInfo> const& InPlayerInfoArray);
 
 protected:
+	ABGPlayerController();
+
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UPROPERTY(Replicated)
 	uint8 bLoading : 1;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGPlayerController|Config")
-	UBGGameInstance* GameInstance;
 };

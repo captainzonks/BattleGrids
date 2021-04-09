@@ -3,10 +3,10 @@
 
 #include "Actors/BGPawn.h"
 
-#include "Core/Gameplay/BGGamePlayerController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Core/Gameplay/BGGamePlayerController.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/KismetMaterialLibrary.h"
@@ -83,7 +83,7 @@ void ABGPawn::Tick(float DeltaTime)
 	if (ParameterCollection)
 	{
 		UKismetMaterialLibrary::SetVectorParameterValue(this, ParameterCollection, VectorParameterName,
-                                                SphereMask->GetComponentLocation());
+		                                                SphereMask->GetComponentLocation());
 
 		UKismetMaterialLibrary::SetScalarParameterValue(this, ParameterCollection, ScalarParameterName, MaskRadius);
 	}
@@ -120,7 +120,6 @@ void ABGPawn::MoveRight(float Value)
 void ABGPawn::LookUp(float Value)
 {
 	if (Value != 0.f)
-		// StaticMeshComponent->AddRelativeRotation(FRotator(-1.f * Value, 0.f, 0.f));
 		SetActorRelativeRotation(GetActorRotation() + FRotator(-1.f * Value, 0.f, 0.f));
 	UpdateTransform(GetActorTransform());
 }
@@ -128,12 +127,14 @@ void ABGPawn::LookUp(float Value)
 void ABGPawn::Turn(float Value)
 {
 	if (Value != 0.f)
-		// StaticMeshComponent->AddRelativeRotation(FRotator(0.f, Value, 0.f));
 		SetActorRelativeRotation(GetActorRotation() + FRotator(0.f, Value, 0.f));
 	UpdateTransform(GetActorTransform());
 }
 
-void ABGPawn::UpdateTransform(FTransform NewTransform)
+void ABGPawn::UpdateTransform(FTransform const& NewTransform) const
 {
-	Cast<ABGGamePlayerController>(Controller)->UpdateTransformOnServer(NewTransform);
+	if (auto const BGGamePlayerController = Cast<ABGGamePlayerController>(Controller))
+	{
+		BGGamePlayerController->UpdateTransformOnServer(NewTransform);
+	}
 }

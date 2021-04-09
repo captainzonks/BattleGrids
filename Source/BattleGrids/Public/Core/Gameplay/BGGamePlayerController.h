@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-
-#include "BGGameplayGameModeBase.h"
 #include "Core/BGPlayerController.h"
 #include "Core/BGTypes.h"
 
@@ -28,12 +26,22 @@ class BATTLEGRIDS_API ABGGamePlayerController : public ABGPlayerController
 	GENERATED_BODY()
 
 public:
+
+	ABGGamePlayerController();
+
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|ActorMovement")
-	void UpdateTransformOnServer(FTransform NewTransform);
+	void UpdateTransformOnServer(FTransform const& NewTransform);
+
+	// UFUNCTION(BlueprintCallable, Category = "BGPlayerController|Functions")
+	// void ToggleLoadingState(bool const bIsLoading);
+	//
+	// UFUNCTION(Server, Reliable, Category = "BGPlayerController|Network")
+	// void ServerToggleLoadingState(bool const bIsLoading);
 
 protected:
+
 	virtual void BeginPlay() override;
-	
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void SetupInputComponent() override;
@@ -291,6 +299,11 @@ protected:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
 	void GrowBoard_Server(ABGBoard* BoardToGrow);
 
+	////////////////////////
+	/// Callback Functions
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|UI")
+	void ShowInGamePlayerListMenu();
 
 	///////////////////////
 	/// Variables

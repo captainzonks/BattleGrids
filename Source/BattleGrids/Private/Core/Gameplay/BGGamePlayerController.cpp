@@ -4,28 +4,34 @@
 
 #include "Actors/BGBoard.h"
 #include "Actors/BGSplineStructure.h"
-#include "Actors/BGStructure.h"
 #include "Actors/BGTile.h"
 #include "Actors/BGToken.h"
 #include "Actors/Structures/BGDoor.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGGameInstance.h"
-#include "Core/BGGameStateBase.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
-#include "Engine/DemoNetDriver.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
+#include "UI/BGInGamePlayerList.h"
+
+ABGGamePlayerController::ABGGamePlayerController()
+{
+	bReplicates = true;
+}
+
+void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform const& NewTransform)
+{
+	auto const MyPawn = GetPawn();
+	if (MyPawn)
+	{
+		GetPawn()->SetActorTransform(NewTransform);
+	}
+}
 
 void ABGGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	while (!GetPlayerState<ABGPlayerState>() && !GetWorld()->GetGameState<ABGGameStateBase>())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Waiting for PlayerState and GameState"))
-	}
-
-	GetGameInstance<UBGGameInstance>()->HideLoadingScreen();
 }
 
 void ABGGamePlayerController::Tick(float DeltaSeconds)
@@ -43,7 +49,8 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 		// HandleTokenSelection();
 		break;
 	case EBGObjectType::Structure:
-		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, LastHitResult);
+		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true,
+		                                 LastHitResult);
 		HandleSplineStructureSelection();
 		break;
 	case EBGObjectType::Board:
@@ -59,10 +66,12 @@ void ABGGamePlayerController::SetupInputComponent()
 
 	// Handle Select (Default: Left Click w/ Mouse)
 	InputComponent->BindAction("Select", IE_Pressed, this, &ABGGamePlayerController::SelectObject);
-	// InputComponent->BindAction("Select", IE_Released, this, &ABGGamePlayerController::ReleaseObject);
 
 	// Token Movement Handling
 	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
+
+	// In Game UI
+	InputComponent->BindAction("PlayerList", IE_Pressed, this, &ABGGamePlayerController::ShowInGamePlayerListMenu);
 }
 
 void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -280,7 +289,10 @@ void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStr
 
 void ABGGamePlayerController::ModifySplineStructureLength()
 {
-	if (GrabbedStructure && LastHitResult.GetActor()->IsValidLowLevel())
+	if (GrabbedStructure && LastHitResult
+	                        .
+	                        GetActor()->IsValidLowLevel()
+	)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
@@ -617,6 +629,23 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 	}
 }
 
+void ABGGamePlayerController::ShowInGamePlayerListMenu()
+{
+	auto const GameInstance = GetGameInstance<UBGGameInstance>();
+	if (!ensure(GameInstance)) return;
+
+	auto InGamePlayList = GameInstance->GetInGamePlayerList();
+	if (InGamePlayList && InGamePlayList->IsInViewport())
+	{
+		InGamePlayList->RemoveFromViewport();
+	}
+	else
+	{
+		GameInstance->LoadInGamePlayerListWidget();
+		SetInputMode(FInputModeGameAndUI());
+	}
+}
+
 void ABGGamePlayerController::ToggleDoorOpenClose_Server_Implementation(ABGDoor* DoorToToggle)
 {
 	if (HasAuthority() && DoorToToggle)
@@ -948,8 +977,8 @@ void ABGGamePlayerController::ToggleTileVisibility_Server_Implementation(ABGTile
 
 bool ABGGamePlayerController::GetGameMasterPermissions() const
 {
-	if (auto const PS = GetPlayerState<ABGPlayerState>())
-		if (PS->GetPlayerInfo().bGameMasterPermissions)
+	if (auto const BGPlayerState = GetPlayerState<ABGPlayerState>())
+		if (BGPlayerState->GetPlayerInfo().bGameMasterPermissions)
 			return true;
 	return false;
 }
@@ -964,7 +993,10 @@ void ABGGamePlayerController::OutlineObject()
 			TArray<UStaticMeshComponent*> StaticMeshComponents;
 
 			// Do we have a previous CurrentOutlinedActor, and is it not equal to the newly hit Actor?
-			if (CurrentOutlinedActor && CurrentOutlinedActor != HitResult.GetActor())
+			if (CurrentOutlinedActor && CurrentOutlinedActor
+				!=
+				HitResult.GetActor()
+			)
 			{
 				// Turn off the RenderCustomDepth on all Static Mesh Components of the previous CurrentOutlinedActor
 				CurrentOutlinedActor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
@@ -1020,10 +1052,6 @@ void ABGGamePlayerController::OutlineObject()
 	}
 }
 
-void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform NewTransform)
-{
-	GetPawn()->SetActorTransform(NewTransform);
-}
 
 void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision_Server_Implementation(
 	ABGSplineStructure* StructureToModify,

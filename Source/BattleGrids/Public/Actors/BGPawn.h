@@ -22,7 +22,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(Category = "ABGPawn|Movement")
-	void UpdateTransform(FTransform NewTransform);
+	void UpdateTransform(FTransform const& NewTransform) const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,16 +64,16 @@ protected:
 	class UFloatingPawnMovement* FloatingPawnMovement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
-	float MaskRadius {200.f};
+	float MaskRadius{200.f};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
 	class UMaterialParameterCollection* ParameterCollection;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
-	FName VectorParameterName {"PrimeLocation"};
+	FName VectorParameterName{"PrimeLocation"};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
-	FName ScalarParameterName {"Radius"};
+	FName ScalarParameterName{"Radius"};
 
 	uint8 bIsRightMouseButtonDown : 1;
 };

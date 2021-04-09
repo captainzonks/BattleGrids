@@ -1,35 +1,48 @@
 // © 2021 Matthew Barham. All Rights Reserved.
 
-
 #include "Core/BGPlayerController.h"
-#include "Core/BGGameInstance.h"
 
-#include "Engine/DemoNetDriver.h"
+#include "Core/BGGameInstance.h"
+#include "Net/UnrealNetwork.h"
+
+void ABGPlayerController::UpdateUI_Implementation(TArray<FBGPlayerInfo> const& InPlayerInfoArray)
+{
+	auto GameInstance = GetGameInstance<UBGGameInstance>();
+	if (GameInstance)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerController: Updating UI, length: %d"), InPlayerInfoArray.Num())
+		GameInstance->RefreshPlayerLists(InPlayerInfoArray);
+	}
+}
 
 ABGPlayerController::ABGPlayerController()
 {
-	bReplicates = true;
 	bLoading = true;
 }
 
 void ABGPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GameInstance = GetGameInstance<UBGGameInstance>();
 }
 
-void ABGPlayerController::Tick(float DeltaSeconds)
+void ABGPlayerController::ServerToggleLoadingState_Implementation(bool const bIsLoading)
 {
-	Super::Tick(DeltaSeconds);
-	
-	if (bLoading && GameInstance)
+	bLoading = bIsLoading;
+}
+
+void ABGPlayerController::ToggleLoadingState(bool const bIsLoading)
+{
+	if (GetNetMode() == NM_Client)
 	{
-		GameInstance->ShowLoadingScreen();
-		if (GetWorld()->GetGameState() && PlayerState)
-		{
-			GameInstance->HideLoadingScreen();
-			bLoading = false;
-		}
+		bLoading = bIsLoading;
 	}
+
+	ServerToggleLoadingState(bIsLoading);
+}
+
+void ABGPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGPlayerController, bLoading)
 }

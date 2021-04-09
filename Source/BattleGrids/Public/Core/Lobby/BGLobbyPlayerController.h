@@ -13,7 +13,7 @@ class UBGGameInstance;
 class ABGLobbyGameStateBase;
 
 /**
- * 
+ * Player Controller for Lobby
  */
 UCLASS()
 class BATTLEGRIDS_API ABGLobbyPlayerController : public ABGPlayerController
@@ -21,15 +21,10 @@ class BATTLEGRIDS_API ABGLobbyPlayerController : public ABGPlayerController
 	GENERATED_BODY()
 
 public:
+	ABGLobbyPlayerController();
 
-	void SetLobbyNeedsUpdating(bool const bInValue);
-
-	// Network Functions
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGLobbyPlayerController|Network")
-	void ServerRefreshLobbyPlayerList();
-
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGLobbyPlayerController|Network")
-	void MulticastUpdateConnectedPlayersLobby(TArray<FBGPlayerInfo> const& InConnectedPlayersInfo);
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "BGLobbyPlayerController|UI")
+	void SetupLobbyUI();
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,10 +32,4 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGLobbyPlayerController|Config")
-	ABGLobbyGameStateBase* LobbyGameState;
-
-	UPROPERTY(Replicated)
-	uint8 bLobbyNeedsUpdating : 1;
 };

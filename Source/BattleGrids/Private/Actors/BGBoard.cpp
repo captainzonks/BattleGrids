@@ -179,4 +179,5 @@ void ABGBoard::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	DOREPLIFETIME(ABGBoard, BoardTiles)
 	DOREPLIFETIME(ABGBoard, BoardSize)
 	DOREPLIFETIME(ABGBoard, TileToSpawnReference)
+	DOREPLIFETIME(ABGBoard, ZedLevel)
 }

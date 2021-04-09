@@ -9,6 +9,8 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Core/BGTypes.h"
+#include "UI/BGGameHUD.h"
+#include "UI/BGInGamePlayerList.h"
 #include "UI/BGLoadingScreen.h"
 #include "UI/BGLobbyMenu.h"
 
@@ -61,8 +63,6 @@ void UBGGameInstance::LoadMainMenuWidget()
 
 void UBGGameInstance::LoadLobbyWidget()
 {
-	ShowLoadingScreen();
-	
 	if (!ensure(LobbyMenuClass)) return;
 
 	if (!Lobby)
@@ -74,6 +74,36 @@ void UBGGameInstance::LoadLobbyWidget()
 	Lobby->Setup();
 
 	Lobby->SetMenuInterface(this);
+}
+
+void UBGGameInstance::LoadGameHUDWidget()
+{
+	if (!ensure(GameHUDClass)) return;
+
+	if (!GameHUD)
+	{
+		GameHUD = CreateWidget<UBGGameHUD>(this, GameHUDClass);
+	}
+	if (!ensure(GameHUD)) return;
+
+	GameHUD->Setup();
+
+	GameHUD->SetMenuInterface(this);
+}
+
+void UBGGameInstance::LoadInGamePlayerListWidget()
+{
+	if (!ensure(InGamePlayerListClass)) return;
+
+	if (!InGamePlayerList)
+	{
+		InGamePlayerList = CreateWidget<UBGInGamePlayerList>(this, InGamePlayerListClass);
+	}
+	if (!ensure(InGamePlayerList)) return;
+
+	InGamePlayerList->Setup();
+
+	InGamePlayerList->SetMenuInterface(this);
 }
 
 void UBGGameInstance::InGameLoadMenuWidget()
@@ -92,12 +122,12 @@ void UBGGameInstance::InGameLoadMenuWidget()
 }
 
 void UBGGameInstance::ShowLoadingScreen()
-{	
+{
 	if (!ensure(LoadingScreenClass)) return;
 
 	if (!LoadingScreen)
 	{
-		LoadingScreen = CreateWidget<UBGLoadingScreen>(this, LoadingScreenClass);\
+		LoadingScreen = CreateWidget<UBGLoadingScreen>(this, LoadingScreenClass);
 	}
 	if (!ensure(LoadingScreen)) return;
 
@@ -118,6 +148,8 @@ void UBGGameInstance::Host(FString const& ServerName)
 	if (SessionInterface.IsValid())
 	{
 		ServerData.Name = ServerName;
+		ServerData.MaxPlayers = 5;
+		
 		auto const ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
 		if (ExistingSession)
 		{
@@ -135,10 +167,8 @@ void UBGGameInstance::Join(uint32 const& Index, FBGServerData const& InServerDat
 	if (!SessionInterface.IsValid()) return;
 	if (!SessionSearch.IsValid()) return;
 
-	if (Menu)
-	{
-		Menu->Teardown();
-	}
+	if (!ensure(Menu)) return;
+	Menu->Teardown();
 
 	ServerData = InServerData;
 
@@ -165,8 +195,15 @@ void UBGGameInstance::RefreshServerList()
 	}
 }
 
-void UBGGameInstance::RefreshConnectedPlayersList(TArray<FBGPlayerInfo> const& InPlayerInfo)
+void UBGGameInstance::RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Refreshing Player Lists, Length : %d"), InPlayerInfo.Num())
+	
+	if (InGamePlayerList)
+	{
+		InGamePlayerList->SetPlayerList(InPlayerInfo);
+	}
+
 	if (Lobby)
 	{
 		Lobby->SetPlayerList(InPlayerInfo);
@@ -186,6 +223,7 @@ void UBGGameInstance::CreateSession() const
 		{
 			SessionSettings.bIsLANMatch = false;
 		}
+		// Max Players set to 5 by default; this should be adjustable by the host, however
 		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
@@ -204,10 +242,8 @@ void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuc
 		return;
 	}
 
-	if (Menu)
-	{
-		Menu->Teardown();
-	}
+	if (!ensure(Menu)) return;
+	Menu->Teardown();
 
 	auto Engine = GetEngine();
 	if (!ensure(Engine)) return;
