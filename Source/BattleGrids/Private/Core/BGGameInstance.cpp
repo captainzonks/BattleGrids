@@ -89,6 +89,8 @@ void UBGGameInstance::LoadGameHUDWidget()
 	GameHUD->Setup();
 
 	GameHUD->SetMenuInterface(this);
+
+	LoadInGamePlayerListWidget();
 }
 
 void UBGGameInstance::LoadInGamePlayerListWidget()

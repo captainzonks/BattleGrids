@@ -652,14 +652,17 @@ void ABGGamePlayerController::ShowInGamePlayerListMenu()
 	if (!ensure(GameInstance)) return;
 
 	auto InGamePlayList = GameInstance->GetInGamePlayerList();
+	if (!InGamePlayList)
+	{
+		GameInstance->LoadInGamePlayerListWidget();
+	}
 	if (InGamePlayList && InGamePlayList->IsInViewport())
 	{
-		InGamePlayList->RemoveFromViewport();
+		InGamePlayList->SetVisibility(ESlateVisibility::Hidden);
 	}
 	else
 	{
-		GameInstance->LoadInGamePlayerListWidget();
-		SetInputMode(FInputModeGameAndUI());
+		InGamePlayList->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
