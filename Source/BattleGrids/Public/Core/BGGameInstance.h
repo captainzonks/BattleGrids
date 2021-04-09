@@ -58,19 +58,22 @@ public:
 	/////////////////////
 	/// Menu Interface Implementations
 
-	UFUNCTION(Exec, Category = "BGGameInstance|Functions")
+	UFUNCTION(BlueprintCallable, Exec, Category = "BGGameInstance|Menu Interface")
 	virtual void Host(FString const& ServerName) override;
 
-	UFUNCTION(Exec, Category = "BGGameInstance|Functions")
-	virtual void Join(uint32 const& Index, FBGServerData const& InServerData) override;
+	UFUNCTION(BlueprintCallable, Exec, Category = "BGGameInstance|Menu Interface")
+	virtual void Join(int const& Index, FBGServerData const& InServerData) override;
 
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void StartGame() override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void LoadMainMenu() override;
 
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void RefreshServerList() override;
 
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Functions")
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo) override;
 
 	///////////////////////

@@ -14,10 +14,25 @@
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "UI/BGInGamePlayerList.h"
+#include "UI/BGLobbyMenu.h"
 
 ABGGamePlayerController::ABGGamePlayerController()
 {
 	bReplicates = true;
+}
+
+void ABGGamePlayerController::SetupGameUI_Implementation()
+{
+	auto GameInstance = GetGameInstance<UBGGameInstance>();
+	if (GameInstance)
+	{
+		if (GameInstance->GetLobby())
+		{
+			GameInstance->GetLobby()->Teardown();
+		}
+		GameInstance->LoadGameHUDWidget();
+		GameInstance->HideLoadingScreen();
+	}
 }
 
 void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform const& NewTransform)
@@ -32,6 +47,8 @@ void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform 
 void ABGGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetupGameUI();
 }
 
 void ABGGamePlayerController::Tick(float DeltaSeconds)

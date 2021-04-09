@@ -162,7 +162,7 @@ void UBGGameInstance::Host(FString const& ServerName)
 	}
 }
 
-void UBGGameInstance::Join(uint32 const& Index, FBGServerData const& InServerData)
+void UBGGameInstance::Join(int const& Index, FBGServerData const& InServerData)
 {
 	if (!SessionInterface.IsValid()) return;
 	if (!SessionSearch.IsValid()) return;
@@ -173,6 +173,24 @@ void UBGGameInstance::Join(uint32 const& Index, FBGServerData const& InServerDat
 	ServerData = InServerData;
 
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
+}
+
+void UBGGameInstance::StartGame()
+{
+	if (!ensure(Lobby)) return;
+	Lobby->Teardown();
+
+	auto Engine = GetEngine();
+	if (!ensure(Engine)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Starting Game"));
+
+	auto World = GetWorld();
+	if (!ensure(World)) return;
+
+	ShowLoadingScreen();
+
+	World->ServerTravel("/Game/BattleGrids/Levels/DefaultGameMap?listen");
 }
 
 void UBGGameInstance::LoadMainMenu()

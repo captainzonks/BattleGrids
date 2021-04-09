@@ -29,6 +29,9 @@ public:
 
 	ABGGamePlayerController();
 
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "BGGamePlayerController|UI")
+	void SetupGameUI();
+
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|ActorMovement")
 	void UpdateTransformOnServer(FTransform const& NewTransform);
 
