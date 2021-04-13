@@ -2,6 +2,8 @@
 
 #include "Core/BGGameModeBase.h"
 
+
+#include "Core/BGGameInstance.h"
 #include "Core/BGPlayerState.h"
 #include "Core/BGPlayerController.h"
 #include "Core/Lobby/BGLobbyGameStateBase.h"
@@ -49,6 +51,23 @@ void ABGGameModeBase::UpdatePlayerInfoInArray(FBGPlayerInfo const& InPlayerInfo)
 	SetUpdateTimer();
 }
 
+void ABGGameModeBase::SendUpdatedPlayerInfoToPlayer(int const& Index, FBGPlayerInfo const& InPlayerInfo)
+{
+	auto const World = GetWorld();
+	if (World)
+	{
+		auto const CastGameState = World->GetGameState<ABGGameStateBase>();
+		if (CastGameState)
+		{
+			auto CastPlayerState = Cast<ABGPlayerState>(CastGameState->PlayerArray[Index]);
+			if (CastPlayerState)
+			{
+				CastPlayerState->ClientSetPlayerInfo(InPlayerInfo);
+			}
+		}
+	}
+}
+
 void ABGGameModeBase::AddPlayerInfoToArray(FBGPlayerInfo const& InPlayerInfo)
 {
 	ConnectedPlayersInfo.AddUnique(InPlayerInfo);
@@ -62,6 +81,7 @@ void ABGGameModeBase::SetUpdateTimer()
 	{
 		World->GetTimerManager().ClearAllTimersForObject(this);
 		World->GetTimerManager().SetTimer(UpdateTimer, this, &ABGGameModeBase::UpdateConnectedPlayersUI, 1.5f, false);
+		OnServerThinking.Broadcast(true);
 	}
 }
 
@@ -82,11 +102,11 @@ void ABGGameModeBase::UpdateConnectedPlayersUI()
 		{
 			if (auto PlayerController = Cast<ABGPlayerController>(Iterator->Get()))
 			{
-				PlayerController->UpdateUI(ConnectedPlayersInfo);
+				PlayerController->ClientUpdateUI(ConnectedPlayersInfo);
 			}
 		}
-
+		OnServerThinking.Broadcast(false);
 		World->GetTimerManager().ClearAllTimersForObject(this);
-		World->GetTimerManager().SetTimer(UpdateTimer, this, &ABGGameModeBase::UpdateConnectedPlayersUI, 10.f, true);
+		World->GetTimerManager().SetTimer(UpdateTimer, this, &ABGGameModeBase::SetUpdateTimer, UpdateInterval, true);
 	}
 }

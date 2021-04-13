@@ -10,6 +10,7 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "BGGameInstance.generated.h"
 
+class UBGThinkingPopup;
 class FOnlineSessionSearch;
 class UBGGameHUD;
 class UBGSaveGame;
@@ -19,6 +20,8 @@ class UBGInGamePlayerList;
 class UBGInGameMenu;
 class UBGLoadingScreen;
 class UUserWidget;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSaveGame, FBGPlayerInfo const&, NewPlayerInfo);
 
 /**
  * 
@@ -49,11 +52,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|UI")
 	void InGameLoadMenuWidget();
 
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|UI")
-	void ShowLoadingScreen();
-
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|UI")
-	void HideLoadingScreen();
 
 	/////////////////////
 	/// Menu Interface Implementations
@@ -76,10 +74,28 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo) override;
 
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void ToggleLoadingScreen(bool const bLoading) override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void ToggleThinkingPopup(bool const bThinking) override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void Save(FBGPlayerInfo const& InPlayerInfo) override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo) override;
+
 	///////////////////////
 	/// Functions
 
 	void CreateSession() const;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
+	void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo);
+	
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
+	bool LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo);
 
 	//////////////////////
 	/// UI Getters
@@ -94,7 +110,25 @@ public:
 	FBGServerData GetServerData() const { return ServerData; }
 	void SetServerData(FBGServerData const& InServerData) { ServerData = InServerData; }
 
+	bool DoesSaveGameExist() const
+	{
+		if (SaveGame) return true;
+		return false;
+	}
+
+	/////////////////
+	/// Delegates
+
+	UPROPERTY(BlueprintAssignable, Category = "BGGameInstance|Delegates")
+	FSaveGame OnSaveGame;
+
+
 protected:
+
+	void ShowLoadingScreen();
+	void HideLoadingScreen();
+	void ShowThinkingPopup();
+	void HideThinkingPopup();
 
 	//////////////////////
 	/// Delegate Functions, called by the SessionInterface
@@ -130,6 +164,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	TSubclassOf<UUserWidget> LoadingScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	TSubclassOf<UUserWidget> ThinkingPopupClass;
+
 	///////////////////
 	/// UI Pointers
 
@@ -151,6 +188,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
 	UBGLoadingScreen* LoadingScreen;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
+	UBGThinkingPopup* ThinkingPopup;
+
 	//////////////////
 	/// Variables
 
@@ -160,4 +200,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	FBGServerData ServerData;
+
+	FString DefaultSaveSlotName{"PlayerSave"};
 };

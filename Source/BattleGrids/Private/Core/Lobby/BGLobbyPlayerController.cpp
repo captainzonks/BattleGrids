@@ -34,8 +34,8 @@ void ABGLobbyPlayerController::SetupLobbyUI_Implementation()
 	auto GameInstance = GetGameInstance<UBGGameInstance>();
 	if (GameInstance)
 	{
-		GameInstance->ShowLoadingScreen();
+		GameInstance->ToggleLoadingScreen(true);
 		GameInstance->LoadLobbyWidget();
-		GameInstance->HideLoadingScreen();
+		GameInstance->ToggleLoadingScreen(false);
 	}
 }

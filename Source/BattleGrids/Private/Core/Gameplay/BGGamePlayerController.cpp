@@ -31,7 +31,7 @@ void ABGGamePlayerController::SetupGameUI_Implementation()
 			GameInstance->GetLobby()->Teardown();
 		}
 		GameInstance->LoadGameHUDWidget();
-		GameInstance->HideLoadingScreen();
+		GameInstance->ToggleLoadingScreen(false);
 	}
 }
 

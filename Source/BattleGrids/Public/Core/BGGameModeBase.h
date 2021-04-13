@@ -8,6 +8,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "BGGameModeBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FServerThinking, bool, bIsThinking);
 
 /**
  * Primary Game Mode Base class for gameplay
@@ -26,10 +27,16 @@ public:
 	void UpdatePlayerInfoInArray(FBGPlayerInfo const& InPlayerInfo);
 
 	UFUNCTION(BlueprintCallable, Category = "ABGGameModeBase|Functions")
+	void SendUpdatedPlayerInfoToPlayer(int const& Index, FBGPlayerInfo const& InPlayerInfo);
+
+	UFUNCTION(BlueprintCallable, Category = "ABGGameModeBase|Functions")
 	void RemovePlayerInfoFromArray(FBGPlayerInfo const& InPlayerInfo);
 
+	UPROPERTY(BlueprintAssignable, Category = "BGGameModeBase|Delegates")
+	FServerThinking OnServerThinking;
+
 protected:
-	
+
 	virtual void BeginPlay() override;
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
@@ -41,10 +48,15 @@ protected:
 	void SetUpdateTimer();
 
 	UFUNCTION()
-    void UpdateConnectedPlayersUI();
+	void UpdateConnectedPlayersUI();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameModeBase|Config")
 	TArray<FBGPlayerInfo> ConnectedPlayersInfo;
 
 	FTimerHandle UpdateTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameModeBase|Config")
+	float UpdateInterval{25.f};
+
+
 };

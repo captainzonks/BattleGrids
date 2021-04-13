@@ -8,11 +8,15 @@
 #include "Blueprint/UserWidget.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Core/BGGameModeBase.h"
+#include "Core/BGSaveGame.h"
 #include "Core/BGTypes.h"
+#include "Kismet/GameplayStatics.h"
 #include "UI/BGGameHUD.h"
 #include "UI/BGInGamePlayerList.h"
 #include "UI/BGLoadingScreen.h"
 #include "UI/BGLobbyMenu.h"
+#include "UI/BGThinkingPopup.h"
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
@@ -44,6 +48,11 @@ void UBGGameInstance::Init()
 	{
 		GEngine->OnNetworkFailure().AddUObject(this, &UBGGameInstance::OnNetworkFailure);
 	}
+
+	if (UGameplayStatics::DoesSaveGameExist(DefaultSaveSlotName, 0))
+	{
+		SaveGame = Cast<UBGSaveGame>(UGameplayStatics::LoadGameFromSlot(DefaultSaveSlotName, 0));
+	}
 }
 
 void UBGGameInstance::LoadMainMenuWidget()
@@ -59,6 +68,11 @@ void UBGGameInstance::LoadMainMenuWidget()
 	Menu->Setup();
 
 	Menu->SetMenuInterface(this);
+
+	if (!SaveGame)
+	{
+		Menu->SetActiveWidget(2);
+	}
 }
 
 void UBGGameInstance::LoadLobbyWidget()
@@ -133,15 +147,39 @@ void UBGGameInstance::ShowLoadingScreen()
 	}
 	if (!ensure(LoadingScreen)) return;
 
+	UE_LOG(LogTemp, Warning, TEXT("Showing Loading Screen"))
 	LoadingScreen->AddToViewport(100);
 }
 
 void UBGGameInstance::HideLoadingScreen()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hiding loading screen"))
+	UE_LOG(LogTemp, Warning, TEXT("Hiding Loading Screen"))
 	if (LoadingScreen && LoadingScreen->IsInViewport())
 	{
 		LoadingScreen->RemoveFromViewport();
+	}
+}
+
+void UBGGameInstance::ShowThinkingPopup()
+{
+	if (!ensure(ThinkingPopupClass)) return;
+
+	if (!ThinkingPopup)
+	{
+		ThinkingPopup = CreateWidget<UBGThinkingPopup>(this, ThinkingPopupClass);
+	}
+	if (!ensure(ThinkingPopup)) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("Showing Thinking Popup"))
+	ThinkingPopup->AddToViewport(100);
+}
+
+void UBGGameInstance::HideThinkingPopup()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Hiding Thinking Popup"))
+	if (ThinkingPopup && ThinkingPopup->IsInViewport())
+	{
+		ThinkingPopup->RemoveFromViewport();
 	}
 }
 
@@ -151,7 +189,7 @@ void UBGGameInstance::Host(FString const& ServerName)
 	{
 		ServerData.Name = ServerName;
 		ServerData.MaxPlayers = 5;
-		
+
 		auto const ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
 		if (ExistingSession)
 		{
@@ -205,6 +243,7 @@ void UBGGameInstance::LoadMainMenu()
 
 void UBGGameInstance::RefreshServerList()
 {
+	ToggleThinkingPopup(true);
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (SessionSearch.IsValid())
 	{
@@ -218,7 +257,7 @@ void UBGGameInstance::RefreshServerList()
 void UBGGameInstance::RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Refreshing Player Lists, Length : %d"), InPlayerInfo.Num())
-	
+
 	if (InGamePlayerList)
 	{
 		InGamePlayerList->SetPlayerList(InPlayerInfo);
@@ -227,6 +266,42 @@ void UBGGameInstance::RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerIn
 	if (Lobby)
 	{
 		Lobby->SetPlayerList(InPlayerInfo);
+	}
+}
+
+void UBGGameInstance::ToggleLoadingScreen(bool const bLoading)
+{
+	auto const World = GetWorld();
+	if (World && !World->bIsTearingDown)
+	{
+		bLoading ? ShowLoadingScreen() : HideLoadingScreen();
+	}
+}
+
+void UBGGameInstance::ToggleThinkingPopup(bool const bThinking)
+{
+	auto const World = GetWorld();
+	if (World && !World->bIsTearingDown)
+	{
+		bThinking ? ShowThinkingPopup() : HideThinkingPopup();
+	}
+}
+
+void UBGGameInstance::Save(FBGPlayerInfo const& InPlayerInfo)
+{
+	SavePlayerInfo(InPlayerInfo);
+}
+
+void UBGGameInstance::UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo)
+{
+	auto const World = GetWorld();
+	if (World)
+	{
+		auto CastGameMode = World->GetAuthGameMode<ABGGameModeBase>();
+		if (CastGameMode)
+		{
+			CastGameMode->SendUpdatedPlayerInfoToPlayer(Index, InPlayerInfo);
+		}
 	}
 }
 
@@ -254,6 +329,31 @@ void UBGGameInstance::CreateSession() const
 	}
 }
 
+void UBGGameInstance::SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo)
+{
+	if (!SaveGame->IsValidLowLevel())
+	{
+		SaveGame = Cast<UBGSaveGame>(UGameplayStatics::CreateSaveGameObject(UBGSaveGame::StaticClass()));
+		if (!ensure(SaveGame)) return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Saving Player Info"))
+	SaveGame->SavePlayerInfo(InPlayerInfo);
+	OnSaveGame.Broadcast(InPlayerInfo);
+	UGameplayStatics::SaveGameToSlot(SaveGame, DefaultSaveSlotName, 0);
+}
+
+bool UBGGameInstance::LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo)
+{
+	SaveGame = Cast<UBGSaveGame>(UGameplayStatics::LoadGameFromSlot(DefaultSaveSlotName, 0));
+	if (SaveGame->IsValidLowLevel())
+	{
+		OutPlayerInfo = SaveGame->GetPlayerInfo();
+		return true;
+	}
+	return false;
+}
+
 void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuccess)
 {
 	if (!bSuccess)
@@ -273,7 +373,7 @@ void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuc
 	auto World = GetWorld();
 	if (!ensure(World)) return;
 
-	ShowLoadingScreen();
+	ToggleLoadingScreen(true);
 
 	World->ServerTravel("/Game/BattleGrids/Levels/Lobby?listen");
 }
@@ -320,6 +420,7 @@ void UBGGameInstance::OnFindSessionsComplete(bool bSuccess)
 		}
 
 		Menu->SetServerList(ServerNames);
+		ToggleThinkingPopup(false);
 	}
 }
 
@@ -342,7 +443,7 @@ void UBGGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCom
 	auto PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController)) return;
 
-	ShowLoadingScreen();
+	ToggleLoadingScreen(true);
 
 	PlayerController->ClientTravel(Address, TRAVEL_Absolute);
 }
