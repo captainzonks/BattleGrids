@@ -67,6 +67,9 @@ protected:
 	void ReleaseObject();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
+	void ToggleContextMenu();
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	bool GetGameMasterPermissions() const;
 
 	// Renders an outline around an Actor beneath the mouse cursor using Custom Render Depth and a Post-Process Material

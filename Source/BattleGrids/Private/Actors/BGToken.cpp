@@ -4,8 +4,10 @@
 
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "UI/BGContextMenu.h"
 
 // Sets default values
 ABGToken::ABGToken()
@@ -25,7 +27,7 @@ ABGToken::ABGToken()
 	Capsule->SetCollisionProfileName("TokenCapsule");
 
 	TokenBaseStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Base Mesh"));
-	TokenBaseStaticMeshComponent->SetupAttachment(GetCapsuleComponent());
+	TokenBaseStaticMeshComponent->SetupAttachment(Capsule);
 	TokenBaseStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -60.f));
 	TokenBaseStaticMeshComponent->SetCollisionProfileName("Token");
 	TokenBaseStaticMeshComponent->SetIsReplicated(true);
@@ -33,7 +35,75 @@ ABGToken::ABGToken()
 	TokenModelStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Model Mesh"));
 	TokenModelStaticMeshComponent->SetCollisionProfileName("Token");
 	TokenModelStaticMeshComponent->SetIsReplicated(true);
+
+	ContextMenuWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Context Menu Widget"));
+	ContextMenuWidgetComponent->SetupAttachment(Capsule);
+	ContextMenuWidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	ContextMenuWidgetComponent->SetPivot(FVector2D(0.f, 0.f));
+	ContextMenuWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+	ContextMenuWidgetComponent->SetDrawAtDesiredSize(true);
+	ContextMenuWidgetComponent->SetVisibility(false);
 }
+
+// Called when the game starts or when spawned
+void ABGToken::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CharacterAIController = Cast<AAIController>(GetController());
+	if (CharacterAIController)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PawnAIController Successfully Initialized"))
+	}
+
+	SetReplicatingMovement(true);
+	TokenModelStaticMeshComponent->SetSimulatePhysics(false);
+	TokenModelStaticMeshComponent->AttachToComponent(TokenBaseStaticMeshComponent,
+	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
+	                                                 TEXT("ModelRoot"));
+
+	Cast<UBGContextMenu>(ContextMenuWidgetComponent->GetWidget())->SetParent(this);
+}
+
+void ABGToken::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
+void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGToken, PlayerPermissions)
+}
+
+void ABGToken::SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const
+{
+	ContextMenuWidgetComponent->SetWidgetClass(InClass);
+}
+
+void ABGToken::ToggleContextMenu()
+{
+	if (ContextMenuWidgetComponent && ContextMenuWidgetComponent->GetWidget())
+	{
+		ContextMenuWidgetComponent->SetWorldLocation(GetContextMenu()->GetHitResult().ImpactPoint);
+		ContextMenuWidgetComponent->ToggleVisibility();
+	}
+}
+
+void ABGToken::CloseContextMenu()
+{
+	if (ContextMenuWidgetComponent)
+	{
+		ContextMenuWidgetComponent->SetVisibility(false);
+	}
+}
+
+UBGContextMenu* ABGToken::GetContextMenu()
+{
+	return Cast<UBGContextMenu>(ContextMenuWidgetComponent->GetWidget());
+}
+
 
 void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh,
                                                         UMaterialInstance* MaterialInstance,
@@ -48,17 +118,10 @@ void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh,
 	}
 }
 
-void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABGToken, PlayerPermissions)
-}
-
-void ABGToken::ToggleLockTokenInPlace_Implementation(bool bLock)
+void ABGToken::ToggleLockTokenInPlace_Implementation(bool const bLock)
 {
-	bLock ? GetCharacterMovement()->DisableMovement() :
-		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	bLock ? GetCharacterMovement()->DisableMovement() : GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 }
 
 bool ABGToken::GetIsTokenLocked() const
@@ -96,29 +159,6 @@ bool ABGToken::RemovePlayerFromPermissionsArray(ABGPlayerState* PlayerStateToRem
 		}
 	}
 	return false;
-}
-
-// Called when the game starts or when spawned
-void ABGToken::BeginPlay()
-{
-	Super::BeginPlay();
-
-	CharacterAIController = Cast<AAIController>(GetController());
-	if (CharacterAIController)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PawnAIController Successfully Initialized"))
-	}
-
-	SetReplicatingMovement(true);
-	TokenModelStaticMeshComponent->SetSimulatePhysics(false);
-	TokenModelStaticMeshComponent->AttachToComponent(TokenBaseStaticMeshComponent,
-	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
-	                                                 TEXT("ModelRoot"));
-}
-
-void ABGToken::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
 }
 
 void ABGToken::FellOutOfWorld(const UDamageType& dmgType)

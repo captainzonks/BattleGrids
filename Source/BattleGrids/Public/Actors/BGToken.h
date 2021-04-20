@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+
+#include "Components/WidgetComponent.h"
+#include "Core/BGActorInterface.h"
 #include "GameFramework/Character.h"
 
 #include "BGToken.generated.h"
@@ -13,9 +17,11 @@ class UCapsuleComponent;
 class UCharacterMovementComponent;
 class UStaticMeshComponent;
 class UStaticMesh;
+class UWidgetComponent;
+class UBGContextMenu;
 
 UCLASS()
-class BATTLEGRIDS_API ABGToken : public ACharacter
+class BATTLEGRIDS_API ABGToken : public ACharacter, public IBGActorInterface
 {
 	GENERATED_BODY()
 
@@ -32,7 +38,7 @@ public:
 
 	// Multicast, toggles whether or not the token position and rotation is locked.
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BGToken|Functions")
-	void ToggleLockTokenInPlace(bool bLock);
+	void ToggleLockTokenInPlace(bool const bLock);
 
 	// Returns the locked state of the token.
 	UFUNCTION(BlueprintCallable, Category = "BGToken|Functions")
@@ -58,6 +64,18 @@ public:
 
 	TArray<ABGPlayerState*> GetPlayerPermissions() const { return PlayerPermissions; }
 
+	//////////////////////
+	/// Setters
+
+	void SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const;
+
+	//////////////////////
+	/// Interface Implementation
+
+	virtual void ToggleContextMenu() override;
+	virtual void CloseContextMenu() override;
+	virtual UBGContextMenu* GetContextMenu() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -71,6 +89,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* TokenModelStaticMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UWidgetComponent* ContextMenuWidgetComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BGToken|Config")
 	FText TokenName;

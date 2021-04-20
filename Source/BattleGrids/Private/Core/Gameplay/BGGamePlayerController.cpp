@@ -21,29 +21,6 @@ ABGGamePlayerController::ABGGamePlayerController()
 	bReplicates = true;
 }
 
-void ABGGamePlayerController::SetupGameUI_Implementation()
-{
-	auto GameInstance = GetGameInstance<UBGGameInstance>();
-	if (GameInstance)
-	{
-		if (GameInstance->GetLobby())
-		{
-			GameInstance->GetLobby()->Teardown();
-		}
-		GameInstance->LoadGameHUDWidget();
-		GameInstance->ToggleLoadingScreen(false);
-	}
-}
-
-void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform const& NewTransform)
-{
-	auto const MyPawn = GetPawn();
-	if (MyPawn)
-	{
-		GetPawn()->SetActorTransform(NewTransform);
-	}
-}
-
 void ABGGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -83,6 +60,7 @@ void ABGGamePlayerController::SetupInputComponent()
 
 	// Handle Select (Default: Left Click w/ Mouse)
 	InputComponent->BindAction("Select", IE_Pressed, this, &ABGGamePlayerController::SelectObject);
+	InputComponent->BindAction("Context", IE_Pressed, this, &ABGGamePlayerController::ToggleContextMenu);
 
 	// Token Movement Handling
 	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
@@ -100,6 +78,30 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	DOREPLIFETIME(ABGGamePlayerController, TokenNames)
 	DOREPLIFETIME(ABGGamePlayerController, StructureNames)
 }
+
+void ABGGamePlayerController::SetupGameUI_Implementation()
+{
+	auto GameInstance = GetGameInstance<UBGGameInstance>();
+	if (GameInstance)
+	{
+		if (GameInstance->GetLobby())
+		{
+			GameInstance->GetLobby()->Teardown();
+		}
+		GameInstance->LoadGameHUDWidget();
+		GameInstance->ToggleLoadingScreen(false);
+	}
+}
+
+void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform const& NewTransform)
+{
+	auto const MyPawn = GetPawn();
+	if (MyPawn)
+	{
+		GetPawn()->SetActorTransform(NewTransform);
+	}
+}
+
 
 void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGObjectType const& ObjectType)
 {
@@ -126,11 +128,15 @@ void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Impleme
 
 void ABGGamePlayerController::SelectObject()
 {
+	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
+	{
+		Cast<IBGActorInterface>(LastHitResult.GetActor())->CloseContextMenu();
+	}
+
 	GetHitResultUnderCursorByChannel(
 		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGObjectType::None
 			                                 ? ECC_GameTraceChannel6
-			                                 : ECC_GameTraceChannel2), true,
-		LastHitResult);
+			                                 : ECC_GameTraceChannel2), true, LastHitResult);
 
 	switch (GrabbedObject)
 	{
@@ -199,6 +205,30 @@ void ABGGamePlayerController::ReleaseObject()
 	LastClickedActor = nullptr;
 	LastHitResult.Reset();
 	NearestIndexToClick = -1;
+}
+
+void ABGGamePlayerController::ToggleContextMenu()
+{
+	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
+	{
+		Cast<IBGActorInterface>(LastHitResult.GetActor())->CloseContextMenu();
+	}
+
+	ReleaseObject();
+
+	if (GetHitResultUnderCursorByChannel(
+		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, LastHitResult))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *LastHitResult.GetActor()->GetName())
+		
+		if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
+		{
+			auto CastInterface = Cast<IBGActorInterface>(LastHitResult.GetActor());
+			CastInterface->GetContextMenu()->SetHitResult(LastHitResult);
+			CastInterface->GetContextMenu()->Update();
+			CastInterface->ToggleContextMenu();
+		}
+	}
 }
 
 void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
@@ -325,7 +355,7 @@ void ABGGamePlayerController::ModifySplineStructureLength()
 
 		if (NearestIndexToClick < 0)
 		{
-			if (GrabbedStructure->GetInstancedStaticMeshComponentByString("WallInstance")->GetInstanceCount() < 2)
+			if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
 			{
 				NearestIndexToClick = 1;
 			}

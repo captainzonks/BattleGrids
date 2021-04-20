@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Components/MenuAnchor.h"
 #include "Core/BGGameModeBase.h"
 #include "Core/BGSaveGame.h"
 #include "Core/BGTypes.h"
