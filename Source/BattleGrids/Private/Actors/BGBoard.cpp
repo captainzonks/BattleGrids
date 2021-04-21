@@ -3,8 +3,8 @@
 
 #include "Actors/BGBoard.h"
 
-
 #include "Actors/BGTile.h"
+#include "Core/Gameplay/BGGameplayGameModeBase.h"
 #include "Engine/DemoNetDriver.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -44,6 +44,14 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 				// Prepare a Tile to spawn using the blueprint reference
 				ABGTile* TileToSpawn = GetWorld()->SpawnActorDeferred<ABGTile>(TileToSpawnReference, SpawnTransform);
 				TileToSpawn->SetBoardReference(this);
+
+				// Setup context menu requirements
+				auto TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				if (TileContextMenuClass.GetDefaultObject())
+				{
+					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+				}
+				
 				TileToSpawn->SetTileInfo(FBGTileInfo(InnerIndex, OuterIndex, 0));
 
 				// Spawn the new Tile and add it to the board's array
@@ -112,6 +120,13 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				TileToSpawn->SetTileInfo(FBGTileInfo(Tile->GetTileInfo().X + 1, Tile->GetTileInfo().Y,
 				                                     Tile->GetTileInfo().Z));
 				TileToSpawn->SetBoardReference(this);
+				
+				// Setup context menu requirements
+				auto TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				if (TileContextMenuClass.GetDefaultObject())
+				{
+					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+				}
 
 				// Spawn the new Tile and add it to the board's array
 				if (auto SpawnedTile = Cast<ABGTile>(UGameplayStatics::FinishSpawningActor(TileToSpawn, SpawnTransform))
@@ -148,6 +163,13 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				TileToSpawn->SetTileInfo(FBGTileInfo(Tile->GetTileInfo().X, Tile->GetTileInfo().Y + 1,
 				                                     Tile->GetTileInfo().Z));
 				TileToSpawn->SetBoardReference(this);
+
+				// Setup context menu requirements
+				auto TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				if (TileContextMenuClass.GetDefaultObject())
+				{
+					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+				}
 
 				// Spawn the new Tile and add it to the board's array
 				if (auto SpawnedTile = Cast<ABGTile>(UGameplayStatics::FinishSpawningActor(TileToSpawn, SpawnTransform))

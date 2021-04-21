@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// © 2021 Matthew Barham. All Rights Reserved.
 
 #pragma once
 
@@ -20,6 +20,9 @@ class UStaticMesh;
 class UWidgetComponent;
 class UBGContextMenu;
 
+/**
+* BattleGrids Token class to be used for miniatures and models on the gameboard
+*/
 UCLASS()
 class BATTLEGRIDS_API ABGToken : public ACharacter, public IBGActorInterface
 {
