@@ -52,7 +52,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|UI")
 	void InGameLoadMenuWidget();
 
-
 	/////////////////////
 	/// Menu Interface Implementations
 

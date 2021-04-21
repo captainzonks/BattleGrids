@@ -73,8 +73,8 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABGGamePlayerController, ControlMode)
-	DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
+	// DOREPLIFETIME(ABGGamePlayerController, ControlMode)
+	// DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
 	DOREPLIFETIME(ABGGamePlayerController, TokenNames)
 	DOREPLIFETIME(ABGGamePlayerController, StructureNames)
 }
@@ -144,22 +144,27 @@ void ABGGamePlayerController::SelectObject()
 		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
 		{
 			LastClickedActor = LastHitResult.GetActor();
-			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
 
 			if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
 				GrabbedObject = EBGObjectType::Token;
 				return;
 			}
 
 			if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
 				GrabbedObject = EBGObjectType::Structure;
 				return;
 			}
 
 			if ((GrabbedBoard = Cast<ABGBoard>(LastClickedActor))->IsValidLowLevel())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
 				GrabbedObject = EBGObjectType::Board;
 			}
 		}
@@ -207,7 +212,7 @@ void ABGGamePlayerController::ReleaseObject()
 	NearestIndexToClick = -1;
 }
 
-void ABGGamePlayerController::ToggleContextMenu()
+void ABGGamePlayerController::ToggleContextMenu_Implementation()
 {
 	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
 	{
@@ -220,13 +225,35 @@ void ABGGamePlayerController::ToggleContextMenu()
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, LastHitResult))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *LastHitResult.GetActor()->GetName())
-		
+
 		if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
 		{
 			auto CastInterface = Cast<IBGActorInterface>(LastHitResult.GetActor());
-			CastInterface->GetContextMenu()->SetHitResult(LastHitResult);
-			CastInterface->GetContextMenu()->Update();
-			CastInterface->ToggleContextMenu();
+			if (CastInterface)
+			{
+				auto ContextMenu = CastInterface->GetContextMenu();
+				if (!ContextMenu)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("No Context Menu"))
+					return;
+				}
+				ContextMenu->SetHitResult(LastHitResult);
+				ContextMenu->Update();
+				CastInterface->ToggleContextMenu();
+
+				if (CastInterface->GetContextMenu()->GetIsVisible())
+				{
+					FInputModeUIOnly const InputMode;
+					SetInputMode(InputMode);
+				}
+				else
+				{
+					FInputModeGameAndUI const InputMode;
+					SetInputMode(InputMode);
+				}
+				return;
+			}
+			UE_LOG(LogTemp, Warning, TEXT("No Actor Interface for Context Menu Retrieval"))
 		}
 	}
 }
@@ -286,8 +313,8 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 void ABGGamePlayerController::HandleSplineStructureSelection()
 {
 	// TODO: Prevent accessing this function if we aren't GameMaster or if the Structure is locked
-	if (!GetGameMasterPermissions() || GrabbedStructure->GetLocked())
-		return;
+	// if (!GetGameMasterPermissions() || GrabbedStructure->GetLocked())
+	// 	return;
 
 	switch (ControlMode)
 	{
@@ -336,10 +363,7 @@ void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStr
 
 void ABGGamePlayerController::ModifySplineStructureLength()
 {
-	if (GrabbedStructure && LastHitResult
-	                        .
-	                        GetActor()->IsValidLowLevel()
-	)
+	if (GrabbedStructure && LastHitResult.GetActor()->IsValidLowLevel())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 

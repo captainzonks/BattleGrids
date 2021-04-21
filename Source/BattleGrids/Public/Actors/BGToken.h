@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-
 #include "Components/WidgetComponent.h"
 #include "Core/BGActorInterface.h"
 #include "GameFramework/Character.h"
@@ -70,7 +69,8 @@ public:
 	//////////////////////
 	/// Setters
 
-	void SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const;
+	UFUNCTION(Server, Reliable)
+	void SetWidgetComponentClass(TSubclassOf<UUserWidget> InClass);
 
 	//////////////////////
 	/// Interface Implementation
@@ -87,6 +87,15 @@ protected:
 
 	virtual void FellOutOfWorld(const UDamageType& dmgType) override;
 
+	void UpdateContextMenuWidget();
+
+	//////////////////////
+	/// Replication Functions
+
+	// Called when the ContextMenuClass variable replicates
+	UFUNCTION()
+    void OnRep_ContextMenuClass();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* TokenBaseStaticMeshComponent;
 
@@ -95,6 +104,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UWidgetComponent* ContextMenuWidgetComponent;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ContextMenuClass, EditAnywhere, BlueprintReadWrite,
+		meta = (ExposeOnSpawn = "true"),
+		Category = "BGToken|Config")
+	TSubclassOf<UUserWidget> ContextMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BGToken|Config")
 	FText TokenName;

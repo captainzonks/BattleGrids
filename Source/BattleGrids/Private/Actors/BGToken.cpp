@@ -7,6 +7,7 @@
 #include "Components/WidgetComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UI/BGContextMenu.h"
 
 // Sets default values
@@ -62,7 +63,11 @@ void ABGToken::BeginPlay()
 	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
 	                                                 TEXT("ModelRoot"));
 
-	Cast<UBGContextMenu>(ContextMenuWidgetComponent->GetWidget())->SetParent(this);
+	// run this on the Server immediately, but wait for OnRep_ContextMenuClass() for Clients
+	if (UKismetSystemLibrary::IsServer(this))
+	{
+		UpdateContextMenuWidget();
+	}
 }
 
 void ABGToken::Tick(float DeltaSeconds)
@@ -75,11 +80,35 @@ void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABGToken, PlayerPermissions)
+	DOREPLIFETIME(ABGToken, ContextMenuClass)
 }
 
-void ABGToken::SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const
+void ABGToken::UpdateContextMenuWidget()
 {
+	// If client, Set the Widget Class
+	if (!UKismetSystemLibrary::IsServer(this) && ContextMenuClass.GetDefaultObject())
+	{
+		ContextMenuWidgetComponent->SetWidgetClass(ContextMenuClass);
+	}
+
+	// Set Parent variable on the ContextMenu
+	auto ContextMenu = GetContextMenu();
+	if (ContextMenu)
+	{
+		ContextMenu->SetParent(this);
+	}
+}
+
+void ABGToken::SetWidgetComponentClass_Implementation(TSubclassOf<UUserWidget> InClass)
+{
+	ContextMenuClass.operator=(InClass);
 	ContextMenuWidgetComponent->SetWidgetClass(InClass);
+	UpdateContextMenuWidget();
+}
+
+void ABGToken::OnRep_ContextMenuClass()
+{
+	UpdateContextMenuWidget();
 }
 
 void ABGToken::ToggleContextMenu()
@@ -117,7 +146,6 @@ void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh,
 		TokenModelStaticMeshComponent->SetMaterial(0, MaterialInstance);
 	}
 }
-
 
 void ABGToken::ToggleLockTokenInPlace_Implementation(bool const bLock)
 {

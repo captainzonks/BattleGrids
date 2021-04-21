@@ -66,7 +66,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void ReleaseObject();
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
+	UFUNCTION(Client, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void ToggleContextMenu();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
@@ -314,10 +314,10 @@ protected:
 	///////////////////////
 	/// Variables
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGControlMode ControlMode{EBGControlMode::Move};
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGObjectType GrabbedObject{EBGObjectType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
@@ -338,15 +338,12 @@ protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	TArray<FName> StructureNames;
 
-	//////////////////////////////////////////
-	/// Variables (Not Exposed to Blueprints)
-
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	int NearestIndexToClick{-1};
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	AActor* LastClickedActor{};
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	FHitResult LastHitResult{};
 };

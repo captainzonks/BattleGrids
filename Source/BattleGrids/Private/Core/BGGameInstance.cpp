@@ -2,22 +2,22 @@
 
 
 #include "Core/BGGameInstance.h"
+#include "Core/BGGameModeBase.h"
+#include "Core/BGSaveGame.h"
+#include "Core/BGTypes.h"
+#include "UI/BGGameHUD.h"
+#include "UI/BGInGamePlayerList.h"
+#include "UI/BGLoadingScreen.h"
+#include "UI/BGLobbyMenu.h"
+#include "UI/BGThinkingPopup.h"
 #include "UI/BGMainMenu.h"
 #include "UI/BGInGameMenu.h"
 
 #include "Blueprint/UserWidget.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
-#include "Components/MenuAnchor.h"
-#include "Core/BGGameModeBase.h"
-#include "Core/BGSaveGame.h"
-#include "Core/BGTypes.h"
 #include "Kismet/GameplayStatics.h"
-#include "UI/BGGameHUD.h"
-#include "UI/BGInGamePlayerList.h"
-#include "UI/BGLoadingScreen.h"
-#include "UI/BGLobbyMenu.h"
-#include "UI/BGThinkingPopup.h"
+
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
@@ -172,7 +172,10 @@ void UBGGameInstance::ShowThinkingPopup()
 	if (!ensure(ThinkingPopup)) return;
 
 	UE_LOG(LogTemp, Warning, TEXT("Showing Thinking Popup"))
-	ThinkingPopup->AddToViewport(100);
+	if (!ThinkingPopup->IsInViewport())
+	{
+		ThinkingPopup->AddToViewport(100);
+	}
 }
 
 void UBGGameInstance::HideThinkingPopup()

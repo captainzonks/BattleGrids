@@ -9,8 +9,10 @@
 #include "GameFramework/Actor.h"
 #include "BGTile.generated.h"
 
-
+class UStaticMeshComponent;
 class UWidgetComponent;
+class ABGBoard;
+
 /**
 * BattleGrids Tile class for tiles that make up the board
 */
@@ -49,22 +51,37 @@ public:
 
 	void SetBoardReference(class ABGBoard* NewBoard) { BoardReference = NewBoard; }
 
-	void SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const;
+	UFUNCTION(Server, Reliable)
+	void SetWidgetComponentClass(TSubclassOf<UUserWidget> InClass);
 
+
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	void UpdateContextMenuWidget();
+
+	///////////////////
+	/// Replication Functions
+
+	UFUNCTION()
+    void OnRep_ContextMenuClass();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	class UStaticMeshComponent* StaticMeshComponent;
+	UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UWidgetComponent* ContextMenuWidgetComponent;
 
+	UPROPERTY(ReplicatedUsing = OnRep_ContextMenuClass, EditAnywhere, BlueprintReadWrite,
+		meta = (ExposeOnSpawn = "true"), Category = "BGTile|Config")
+	TSubclassOf<UUserWidget> ContextMenuClass;
+
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"), Category = "Config")
-	class ABGBoard* BoardReference;
+	ABGBoard* BoardReference;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"), Category = "Config")
 	FBGTileInfo TileInfo;

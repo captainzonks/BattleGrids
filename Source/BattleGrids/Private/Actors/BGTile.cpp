@@ -5,6 +5,7 @@
 #include "Components/WidgetComponent.h"
 #include "Engine/DemoNetDriver.h"
 #include "Engine/EngineTypes.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UI/BGContextMenu.h"
 
 // Sets default values
@@ -28,17 +29,16 @@ ABGTile::ABGTile()
 	ContextMenuWidgetComponent->SetVisibility(false);
 }
 
-void ABGTile::SetWidgetComponentClass(TSubclassOf<UUserWidget> const& InClass) const
-{
-	ContextMenuWidgetComponent->SetWidgetClass(InClass);
-}
-
 // Called when the game starts or when spawned
 void ABGTile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Cast<UBGContextMenu>(ContextMenuWidgetComponent->GetWidget())->SetParent(this);
+	// run this on the Server immediately, but wait for OnRep_ContextMenuClass() for Clients
+	if (UKismetSystemLibrary::IsServer(this))
+	{
+		UpdateContextMenuWidget();
+	}
 }
 
 void ABGTile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -47,6 +47,35 @@ void ABGTile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 
 	DOREPLIFETIME(ABGTile, BoardReference)
 	DOREPLIFETIME(ABGTile, TileInfo)
+	DOREPLIFETIME(ABGTile, ContextMenuClass)
+}
+
+void ABGTile::OnRep_ContextMenuClass()
+{
+	UpdateContextMenuWidget();
+}
+
+void ABGTile::UpdateContextMenuWidget()
+{
+	// if Client, set the Widget Class
+	if (!UKismetSystemLibrary::IsServer(this) && ContextMenuClass.GetDefaultObject())
+	{
+		ContextMenuWidgetComponent->SetWidgetClass(ContextMenuClass);
+	}
+
+	// Set Parent variable on the ContextMenu
+	auto ContextMenu = GetContextMenu();
+	if (ContextMenu)
+	{
+		ContextMenu->SetParent(this);
+	}
+}
+
+void ABGTile::SetWidgetComponentClass_Implementation(TSubclassOf<UUserWidget> InClass)
+{
+	ContextMenuClass.operator=(InClass);
+	ContextMenuWidgetComponent->SetWidgetClass(InClass);
+	UpdateContextMenuWidget();
 }
 
 void ABGTile::ToggleContextMenu()
