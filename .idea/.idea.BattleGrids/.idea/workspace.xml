@@ -62,34 +62,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="tile context menu implemented">
+    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="implemented context menus for all clickable actors (Structure still having Parent variable issues)">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GameplayGameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GameplayGameModeBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/Structures/BP_Door.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/Structures/BP_Door.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Structures/BGDoor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Structures/BGDoor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGSplineStructure.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGSplineStructure.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGToken.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGToken.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,23 +129,23 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGActorInterface.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGContextMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Structures/BGDoor.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
       <option value="$PROJECT_DIR$/Config/DefaultEngine.ini" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGToken.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGSplineStructure.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -34006,7 +33989,7 @@
       <workItem from="1618930964628" duration="3711000" />
       <workItem from="1618936692880" duration="6316000" />
       <workItem from="1618943661291" duration="11952000" />
-      <workItem from="1619018937971" duration="18549000" />
+      <workItem from="1619018937971" duration="21697000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1612998116416</created>
@@ -34337,7 +34320,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619021865749</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="implemented context menus for all clickable actors (Structure still having Parent variable issues)">
+      <created>1619037995637</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1619037995637</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -34370,7 +34360,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Added &quot;X-Ray&quot; vision to player pawn to be able to see through walls based on proximity (using material collection parameters and sphere masks)" />
     <MESSAGE value="Added toggle and adjustable slider to GameMasterUI for WallVision" />
     <MESSAGE value="Moved WallVision into its own widget so it can be placed in both GameMasterHUD as well as PlayerHUD" />
     <MESSAGE value="Solved the &quot;Grab Token Through Invisible Wall&quot; issue by adding Box Collision to each spawned Instance of the SplineStructure, and adding a dynamic call to Begin and End Overlap which toggles Visibility Collision On and Off." />
@@ -34395,7 +34384,8 @@
     <MESSAGE value="Improved user interface to have a &quot;Thinking&quot; GUI popup to visually confirm the server is doing something (searching for server list, refreshing, etc.). Added some more functionality to the Lobby, and also reworked the Save/Load functions for PlayerInfo." />
     <MESSAGE value="fixed garbage collection issue with instanced meshes on the spline structure by switching to tags instead of object name for finding the instances we want; began to refactor all the context menus" />
     <MESSAGE value="tile context menu implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="tile context menu implemented" />
+    <MESSAGE value="implemented context menus for all clickable actors (Structure still having Parent variable issues)" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented context menus for all clickable actors (Structure still having Parent variable issues)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

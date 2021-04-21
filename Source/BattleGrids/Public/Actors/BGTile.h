@@ -54,8 +54,6 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SetWidgetComponentClass(TSubclassOf<UUserWidget> InClass);
 
-
-	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

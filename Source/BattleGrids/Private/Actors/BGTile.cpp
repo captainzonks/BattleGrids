@@ -61,6 +61,7 @@ void ABGTile::UpdateContextMenuWidget()
 	if (!UKismetSystemLibrary::IsServer(this) && ContextMenuClass.GetDefaultObject())
 	{
 		ContextMenuWidgetComponent->SetWidgetClass(ContextMenuClass);
+		ContextMenuWidgetComponent->InitWidget();
 	}
 
 	// Set Parent variable on the ContextMenu
@@ -75,6 +76,7 @@ void ABGTile::SetWidgetComponentClass_Implementation(TSubclassOf<UUserWidget> In
 {
 	ContextMenuClass.operator=(InClass);
 	ContextMenuWidgetComponent->SetWidgetClass(InClass);
+	ContextMenuWidgetComponent->InitWidget();
 	UpdateContextMenuWidget();
 }
 
