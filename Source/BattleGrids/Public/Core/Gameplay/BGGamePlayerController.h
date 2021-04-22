@@ -111,13 +111,10 @@ protected:
 	                                    FName const& BaseStaticMeshName,
 	                                    FName const& BaseMaterialInstanceName);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void SetSplineStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify, bool const bGravityOn,
-	                                           ECollisionEnabled::Type const CollisionType);
-
 	// Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void ModifySplineStructureLength();
+
 
 	// Adds a new spline point to a spline by finding the nearest index to the mouse's location and inserts it
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
@@ -160,6 +157,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy);
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
+	float GetClosestKeyOnSplineAtMousePosition(ABGSplineStructure* SplineStructure, FVector& OutIntersection) const;
+
 	////////////////////////
 	/// Structure Functions
 
@@ -194,7 +194,9 @@ protected:
 	////////////////////////
 	/// NETWORK Functions
 
-	/// Tokens
+	/**
+	 * Network Token Functions
+	 */
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
@@ -218,7 +220,9 @@ protected:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	void DestroyToken_Server(ABGToken* TokenToDestroy);
 
-	/// Spline Structures
+	/**
+	 * Network Spline Structure Functions
+	 */
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
 	void SpawnSplineStructureAtLocation_Server(FVector const& Location, FName const& WallStaticMeshName,
@@ -227,11 +231,6 @@ protected:
 	                                           FName const& CornerMaskedMaterialInstanceName,
 	                                           FName const& BaseStaticMeshName,
 	                                           FName const& BaseMaterialInstanceName);
-
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void SetSplineStructurePhysicsAndCollision_Server(ABGSplineStructure* SplineStructureToModify,
-	                                                  bool const bGravityOn,
-	                                                  ECollisionEnabled::Type const CollisionType);
 
 	// Asks the GameMode to make a modification to the GrabbedStructure reference
 	UFUNCTION(Server, Unreliable, Category = "BGGamePlayerController|SplineStructure|Network")
@@ -277,7 +276,9 @@ protected:
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
 	void DestroySplineStructure_Server(ABGSplineStructure* SplineStructureToDestroy);
 
-	/// Structures
+	/**
+	 * Network Structure Functions
+	 */
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
 	void DestroyStructureActor_Server(ABGStructure* StructureToRemove);
@@ -288,7 +289,9 @@ protected:
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
 	void ToggleDoorOpenClose_Server(ABGDoor* DoorToToggle);
 
-	/// Boards
+	/**
+	 * Network Board & Tile Functions
+	 */
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
 	void SpawnNewBoard_Server(int const& Zed, int const& X, int const& Y);

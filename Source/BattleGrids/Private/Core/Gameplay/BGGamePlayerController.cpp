@@ -34,24 +34,24 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 
 	OutlineObject();
 
-	switch (GrabbedObject)
-	{
-	case EBGObjectType::None:
-		// OutlineObject();
-		break;
-	case EBGObjectType::Token:
-		// HandleTokenSelection();
-		break;
-	case EBGObjectType::Structure:
-		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true,
-		                                 LastHitResult);
-		HandleSplineStructureSelection();
-		break;
-	case EBGObjectType::Board:
-		HandleBoardSelection();
-		break;
-	default: ;
-	}
+	// switch (GrabbedObject)
+	// {
+	// case EBGObjectType::None:
+	// 	// OutlineObject();
+	// 	break;
+	// case EBGObjectType::Token:
+	// 	// HandleTokenSelection();
+	// 	break;
+	// case EBGObjectType::Structure:
+	// 	// GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true,
+	// 	//                                  LastHitResult);
+	// 	// HandleSplineStructureSelection();
+	// 	break;
+	// case EBGObjectType::Board:
+	// 	HandleBoardSelection();
+	// 	break;
+	// default: ;
+	// }
 }
 
 void ABGGamePlayerController::SetupInputComponent()
@@ -128,18 +128,25 @@ void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Impleme
 
 void ABGGamePlayerController::SelectObject()
 {
+	/** If a context menu is open, close it */
 	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
 	{
 		Cast<IBGActorInterface>(LastHitResult.GetActor())->CloseContextMenu();
 	}
 
+	/**
+	 * Refresh LastHitResult with a new trace under cursor
+	 * If we haven't loaded an object yet, search on the Grab trace channel
+	 * If we have loaded an object, execute on the Tile trace channel
+	 */
 	GetHitResultUnderCursorByChannel(
 		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGObjectType::None
-			                                 ? ECC_GameTraceChannel6
-			                                 : ECC_GameTraceChannel2), true, LastHitResult);
+			                                 ? ECC_GRAB
+			                                 : ECC_TILE), true, LastHitResult);
 
 	switch (GrabbedObject)
 	{
+		/** Load an object into our LeftClick if we don't have one yet */
 	case EBGObjectType::None:
 		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
 		{
@@ -158,6 +165,29 @@ void ABGGamePlayerController::SelectObject()
 				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
 
 				GrabbedObject = EBGObjectType::Structure;
+				
+				/** Add a new spline point if LeftAlt was held down */
+				if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
+				{
+					AddSplinePointToSplineStructure();
+				}
+
+				/** If we haven't stored a NearestIndexToClick yet, get one */
+				if (NearestIndexToClick < 0)
+				{
+					if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
+					{
+						NearestIndexToClick = 1;
+					}
+					else
+					{
+						FVector GridSnappedIntersection;
+						NearestIndexToClick = FMath::RoundToInt(
+							GetClosestKeyOnSplineAtMousePosition(
+								GrabbedStructure, GridSnappedIntersection));
+					}
+				}
+
 				return;
 			}
 
@@ -169,18 +199,21 @@ void ABGGamePlayerController::SelectObject()
 			}
 		}
 		break;
+
+		/** Handle executing specific functions if we already have an object loaded into our Left Click */
 	case EBGObjectType::Token:
-		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel() && LastHitResult.GetActor()->IsA(
-			ABGTile::StaticClass()))
+		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
+			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 		{
 			LastClickedActor = LastHitResult.GetActor();
+			// TODO: remove the Holding parameter, it's unused
 			MoveTokenToLocation(false);
 			ReleaseObject();
 		}
 		break;
 	case EBGObjectType::Structure:
-		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel() && LastHitResult.GetActor()->IsA(
-			ABGTile::StaticClass()))
+		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
+			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 		{
 			LastClickedActor = LastHitResult.GetActor();
 			HandleSplineStructureSelection();
@@ -197,13 +230,6 @@ void ABGGamePlayerController::SelectObject()
 void ABGGamePlayerController::ReleaseObject()
 {
 	GrabbedObject = EBGObjectType::None;
-
-	if (GrabbedStructure)
-	{
-		SetSplineStructurePhysicsAndCollision(GrabbedStructure, true,
-		                                      ECollisionEnabled::Type::QueryAndPhysics);
-	}
-
 	GrabbedToken = nullptr;
 	GrabbedStructure = nullptr;
 	GrabbedBoard = nullptr;
@@ -294,36 +320,19 @@ void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
 			Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
 		}
 
-
 		MoveTokenToLocation_Server(GrabbedToken, Location, Rotation);
-
-		// if (HasAuthority())
-		// {
-		// 	GrabbedToken->MoveToken(Location);
-		// 	GrabbedToken->SetActorRotation(Rotation, ETeleportType::ResetPhysics);
-		// }
-		//
-		// if (!HasAuthority())
-		// {
-		// 	// Make a server call to ask the GameMode to move the token
-		// }
 	}
 }
 
 void ABGGamePlayerController::HandleSplineStructureSelection()
 {
-	// TODO: Prevent accessing this function if we aren't GameMaster or if the Structure is locked
-	// if (!GetGameMasterPermissions() || GrabbedStructure->GetLocked())
-	// 	return;
+	// TODO: handle game master permissions
+	if (GrabbedStructure->GetLocked())
+		return;
 
 	switch (ControlMode)
 	{
 	case EBGControlMode::Build:
-		if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
-		{
-			AddSplinePointToSplineStructure();
-			break;
-		}
 		ModifySplineStructureLength();
 		break;
 	case EBGControlMode::Edit: break;
@@ -346,117 +355,100 @@ void ABGGamePlayerController::SpawnSplineStructureAtLocation(FVector const& Loca
 	                                      BaseMaterialInstanceName);
 }
 
-void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision(ABGSplineStructure* StructureToModify,
-                                                                    bool const bGravityOn,
-                                                                    ECollisionEnabled::Type const CollisionType)
-{
-	if (StructureToModify)
-	{
-		if (!HasAuthority())
-		{
-			StructureToModify->SetStructurePhysicsAndCollision(bGravityOn, CollisionType);
-		}
-
-		SetSplineStructurePhysicsAndCollision_Server(StructureToModify, bGravityOn, CollisionType);
-	}
-}
-
 void ABGGamePlayerController::ModifySplineStructureLength()
 {
 	if (GrabbedStructure && LastHitResult.GetActor()->IsValidLowLevel())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
-		if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()) && !Cast<ABGTile>(LastHitResult.GetActor())->
-		                                                              GetStaticMeshComponent()->GetVisibleFlag())
+		/** Check if the tile is visible */
+		if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass())
+			&& !Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
 		{
 			return;
 		}
 
-		// Snap the Target Location to grid, and match the Z axis to the current SplineStructure Z value
+		/** Snap the Target Location to grid, and match the Z axis to the current SplineStructure Z value */
 		auto GridSnappedIntersection = LastHitResult.GetActor()->GetActorLocation().GridSnap(100.f);
 		GridSnappedIntersection.Z = GrabbedStructure->GetActorLocation().Z;
 
-		if (NearestIndexToClick < 0)
-		{
-			if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
-			{
-				NearestIndexToClick = 1;
-			}
-			else
-			{
-				NearestIndexToClick = FMath::RoundToInt(
-					GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(
-						GridSnappedIntersection));
-			}
-		}
-
-		if (!HasAuthority())
-		{
-			// UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
-			GrabbedStructure->SetLocationOfSplinePoint(NearestIndexToClick, GridSnappedIntersection);
-			GrabbedStructure->UpdateSplineStructureMesh();
-		}
-
 		ModifyStructureLength_Server(GrabbedStructure, NearestIndexToClick, GridSnappedIntersection);
 	}
+}
+
+float ABGGamePlayerController::GetClosestKeyOnSplineAtMousePosition(ABGSplineStructure* SplineStructure, FVector& OutIntersection) const
+{
+	FVector WorldPosition;
+	FVector WorldDirection;
+	DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+
+	OutIntersection = FMath::LinePlaneIntersection(
+		WorldPosition,
+		WorldDirection * 2000.f + WorldPosition,
+		SplineStructure->GetActorLocation(),
+		FVector(0.f, 0.f, 1.f)).GridSnap(100.f);
+
+	/** On original Z-level */
+	OutIntersection.Z = SplineStructure->GetActorLocation().Z;
+
+	return SplineStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(OutIntersection);
 }
 
 void ABGGamePlayerController::AddSplinePointToSplineStructure()
 {
 	if (GrabbedStructure)
 	{
-		if (NearestIndexToClick == -1)
+		if (NearestIndexToClick < 0)
 		{
-			FVector WorldPosition;
-			FVector WorldDirection;
-			DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
-
-			// Get intersection of mouse position at XY plane from GrabbedStructure's origin
-			auto Intersection = FMath::LinePlaneIntersection(
-				WorldPosition,
-				WorldDirection * 2000.f + WorldPosition,
-				GrabbedStructure->GetActorLocation(),
-				FVector(0.f, 0.f, 1.f)).GridSnap(100.f);
-
-			Intersection.Z = GrabbedStructure->GetActorLocation().Z;
-
-			auto const ClosestKey = GrabbedStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(
-				Intersection);
+			FVector Intersection;
+			auto const ClosestKey = GetClosestKeyOnSplineAtMousePosition(GrabbedStructure, Intersection);
 
 			const auto TotalSplinePoints = GrabbedStructure->GetSplineComponent()->GetNumberOfSplinePoints();
 
-			double IntegralPart;
-
+			/** Split apart the Integral and Decimal of the ClosestKey */
+			double IntegralPart {};
 			double const DecimalPart = modf(ClosestKey, &IntegralPart);
 
-			// within 0.5f, plus or minus 0.15f
-			if (DecimalPart >= 0.35f && DecimalPart <= 0.65f)
-			{
-				NearestIndexToClick = ++IntegralPart;
-			}
-
-			else if (DecimalPart < 0.35f && IntegralPart == 0)
+			/**
+			* Situation of between 0 and 1 spline indices:
+			* if we clicked close to 0, set the nearest index to 0
+			* to create a new 0 spline point
+			*/
+			if (DecimalPart < 0.35f && IntegralPart == 0)
 			{
 				NearestIndexToClick = IntegralPart;
 			}
 
-			else if ((DecimalPart > 0.65f || DecimalPart == 0.f) && IntegralPart == TotalSplinePoints - 1)
+			/**
+			 * If our click was inside a wall section,
+			 * we want to get one greater than our integral
+			 * in order to shunt the last index up and put a new one
+			 * in the middle of the wall section
+			 */
+			else if (DecimalPart <= 0.85f)
+			{
+				NearestIndexToClick = ++IntegralPart;
+			}
+
+			/**
+			 * If we magically managed to click on the very end of the spline
+			 * and get the greatest spline index possible
+			 * OR
+			 * We click anywhere near the end of a wall section that is the greatest
+			 * spline index possible (2 less than total points)
+			 */
+			else if (DecimalPart == 0.f && IntegralPart == TotalSplinePoints - 1
+				|| DecimalPart > 0.85f && IntegralPart == TotalSplinePoints - 2)
 			{
 				NearestIndexToClick = TotalSplinePoints;
 			}
 
 			if (NearestIndexToClick >= 0)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
 				AddSplinePointToSplineStructure_Server(GrabbedStructure, Intersection, NearestIndexToClick);
 			}
 		}
-
-		// Delay necessary for Spline Points to be updated/shifted so that new index is grabbed for movement, and not old one
-		FTimerHandle SplinePointUpdateTimer;
-		GetWorldTimerManager().SetTimer(SplinePointUpdateTimer, this,
-		                                &ABGGamePlayerController::ModifySplineStructureLength,
-		                                0.2f, false);
 	}
 }
 
@@ -464,7 +456,6 @@ void ABGGamePlayerController::MoveSplineStructure()
 {
 	if (GrabbedStructure)
 	{
-		SetSplineStructurePhysicsAndCollision(GrabbedStructure, false, ECollisionEnabled::Type::PhysicsOnly);
 		FVector Location{};
 
 		UE_LOG(LogTemp, Warning, TEXT("Moving Structure"))
@@ -924,7 +915,7 @@ void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
 	ABGSplineStructure* StructureToModify, int const& PointIndex,
 	FVector const& NewLocation)
 {
-	if (HasAuthority() && StructureToModify)
+	if (StructureToModify)
 	{
 		ABGGameplayGameModeBase::ModifySplineStructureLength(StructureToModify, PointIndex, NewLocation);
 	}
@@ -1123,19 +1114,6 @@ void ABGGamePlayerController::OutlineObject()
 				}
 			}
 		}
-	}
-}
-
-
-void ABGGamePlayerController::SetSplineStructurePhysicsAndCollision_Server_Implementation(
-	ABGSplineStructure* StructureToModify,
-	bool const bGravityOn,
-	ECollisionEnabled::Type const CollisionType)
-{
-	if (StructureToModify)
-	{
-		ABGGameplayGameModeBase::SetSplineStructurePhysicsAndCollision(StructureToModify, bGravityOn,
-		                                                               CollisionType);
 	}
 }
 

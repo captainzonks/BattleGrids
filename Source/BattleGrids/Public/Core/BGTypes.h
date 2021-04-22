@@ -5,6 +5,19 @@
 #include "Engine/DataTable.h"
 #include "BGTypes.generated.h"
 
+/** Custom Collision macros */
+#define ECC_TOKEN ECC_GameTraceChannel1
+#define ECC_TILE ECC_GameTraceChannel2
+#define ECC_STRUCTURE ECC_GameTraceChannel3
+#define ECC_TOKEN_CAPSULE ECC_GameTraceChannel4
+#define ECC_BASE ECC_GameTraceChannel5
+#define ECC_RIGHT_CLICK ECC_GameTraceChannel6
+#define ECC_GRAB ECC_GameTraceChannel7
+#define ECC_STRUCTURES ECC_GameTraceChannel8
+#define ECC_TILES ECC_GameTraceChannel9
+#define ECC_TOKENS ECC_GameTraceChannel10
+#define ECC_BASES ECC_GameTraceChannel11
+
 USTRUCT(BlueprintType)
 struct FBGServerData
 {
