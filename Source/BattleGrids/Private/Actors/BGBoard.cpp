@@ -16,6 +16,24 @@ ABGBoard::ABGBoard()
 	bReplicates = true;
 }
 
+// Called when the game starts or when spawned
+void ABGBoard::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetReplicatingMovement(true);
+}
+
+void ABGBoard::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABGBoard, BoardTiles)
+	DOREPLIFETIME(ABGBoard, BoardSize)
+	DOREPLIFETIME(ABGBoard, TileToSpawnReference)
+	DOREPLIFETIME(ABGBoard, ZedLevel)
+}
+
 void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int const& X, int const& Y)
 {
 	// Do not execute if BoardTiles contains Tiles already
@@ -184,22 +202,4 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 
 		BoardSize.Y = Y;
 	}
-}
-
-// Called when the game starts or when spawned
-void ABGBoard::BeginPlay()
-{
-	Super::BeginPlay();
-
-	SetReplicatingMovement(true);
-}
-
-void ABGBoard::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ABGBoard, BoardTiles)
-	DOREPLIFETIME(ABGBoard, BoardSize)
-	DOREPLIFETIME(ABGBoard, TileToSpawnReference)
-	DOREPLIFETIME(ABGBoard, ZedLevel)
 }

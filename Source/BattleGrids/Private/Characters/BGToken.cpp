@@ -1,6 +1,6 @@
 // © 2021 Matthew Barham. All Rights Reserved.
 
-#include "Actors/BGToken.h"
+#include "Characters/BGToken.h"
 
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"

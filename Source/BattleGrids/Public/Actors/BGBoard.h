@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+
+#include "BGActor.h"
 #include "BGBoard.generated.h"
 
 class ABGTile;
 
 UCLASS()
-class BATTLEGRIDS_API ABGBoard : public AActor
+class BATTLEGRIDS_API ABGBoard : public ABGActor
 {
 	GENERATED_BODY()
 

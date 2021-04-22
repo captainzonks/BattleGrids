@@ -5,7 +5,7 @@
 #include "Actors/BGBoard.h"
 #include "Actors/BGSplineStructure.h"
 #include "Actors/BGTile.h"
-#include "Actors/BGToken.h"
+#include "Characters/BGToken.h"
 #include "Actors/Structures/BGDoor.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGGameInstance.h"
@@ -33,25 +33,6 @@ void ABGGamePlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	OutlineObject();
-
-	// switch (GrabbedObject)
-	// {
-	// case EBGObjectType::None:
-	// 	// OutlineObject();
-	// 	break;
-	// case EBGObjectType::Token:
-	// 	// HandleTokenSelection();
-	// 	break;
-	// case EBGObjectType::Structure:
-	// 	// GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true,
-	// 	//                                  LastHitResult);
-	// 	// HandleSplineStructureSelection();
-	// 	break;
-	// case EBGObjectType::Board:
-	// 	HandleBoardSelection();
-	// 	break;
-	// default: ;
-	// }
 }
 
 void ABGGamePlayerController::SetupInputComponent()
@@ -126,6 +107,60 @@ void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Impleme
 	}
 }
 
+void ABGGamePlayerController::LoadObjectType()
+{
+	if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
+	{
+		LastClickedActor = LastHitResult.GetActor();
+
+		if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
+			GrabbedObject = EBGObjectType::Token;
+			return;
+		}
+
+		if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
+			GrabbedObject = EBGObjectType::Structure;
+				
+			/** Add a new spline point if LeftAlt was held down */
+			if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
+			{
+				AddSplinePointToSplineStructure();
+			}
+
+			/** If we haven't stored a NearestIndexToClick yet, get one */
+			if (NearestIndexToClick < 0)
+			{
+				if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
+				{
+					NearestIndexToClick = 1;
+				}
+				else
+				{
+					FVector GridSnappedIntersection;
+					NearestIndexToClick = FMath::RoundToInt(
+						GetClosestKeyOnSplineAtMousePosition(
+							GrabbedStructure, GridSnappedIntersection));
+				}
+			}
+
+			return;
+		}
+
+		if ((GrabbedBoard = Cast<ABGBoard>(LastClickedActor))->IsValidLowLevel())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+
+			GrabbedObject = EBGObjectType::Board;
+		}
+	}
+}
+
 void ABGGamePlayerController::SelectObject()
 {
 	/** If a context menu is open, close it */
@@ -148,56 +183,7 @@ void ABGGamePlayerController::SelectObject()
 	{
 		/** Load an object into our LeftClick if we don't have one yet */
 	case EBGObjectType::None:
-		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
-		{
-			LastClickedActor = LastHitResult.GetActor();
-
-			if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
-
-				GrabbedObject = EBGObjectType::Token;
-				return;
-			}
-
-			if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
-
-				GrabbedObject = EBGObjectType::Structure;
-				
-				/** Add a new spline point if LeftAlt was held down */
-				if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
-				{
-					AddSplinePointToSplineStructure();
-				}
-
-				/** If we haven't stored a NearestIndexToClick yet, get one */
-				if (NearestIndexToClick < 0)
-				{
-					if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
-					{
-						NearestIndexToClick = 1;
-					}
-					else
-					{
-						FVector GridSnappedIntersection;
-						NearestIndexToClick = FMath::RoundToInt(
-							GetClosestKeyOnSplineAtMousePosition(
-								GrabbedStructure, GridSnappedIntersection));
-					}
-				}
-
-				return;
-			}
-
-			if ((GrabbedBoard = Cast<ABGBoard>(LastClickedActor))->IsValidLowLevel())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
-
-				GrabbedObject = EBGObjectType::Board;
-			}
-		}
+		LoadObjectType();
 		break;
 
 		/** Handle executing specific functions if we already have an object loaded into our Left Click */
