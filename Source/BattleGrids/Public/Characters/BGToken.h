@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "Components/WidgetComponent.h"
-#include "Core/BGActorInterface.h"
-#include "GameFramework/Character.h"
+#include "BGCharacter.h"
 
 #include "BGToken.generated.h"
 
@@ -23,7 +21,7 @@ class UBGContextMenu;
 * BattleGrids Token class to be used for miniatures and models on the gameboard
 */
 UCLASS()
-class BATTLEGRIDS_API ABGToken : public ACharacter, public IBGActorInterface
+class BATTLEGRIDS_API ABGToken : public ABGCharacter
 {
 	GENERATED_BODY()
 
@@ -66,19 +64,6 @@ public:
 
 	TArray<ABGPlayerState*> GetPlayerPermissions() const { return PlayerPermissions; }
 
-	//////////////////////
-	/// Setters
-
-	UFUNCTION(Server, Reliable)
-	void SetWidgetComponentClass(TSubclassOf<UUserWidget> InClass);
-
-	//////////////////////
-	/// Interface Implementation
-
-	virtual void ToggleContextMenu() override;
-	virtual void CloseContextMenu() override;
-	virtual UBGContextMenu* GetContextMenu() override;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -87,28 +72,11 @@ protected:
 
 	virtual void FellOutOfWorld(const UDamageType& dmgType) override;
 
-	void UpdateContextMenuWidget();
-
-	//////////////////////
-	/// Replication Functions
-
-	// Called when the ContextMenuClass variable replicates
-	UFUNCTION()
-    void OnRep_ContextMenuClass();
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* TokenBaseStaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* TokenModelStaticMeshComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UWidgetComponent* ContextMenuWidgetComponent;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ContextMenuClass, EditAnywhere, BlueprintReadWrite,
-		meta = (ExposeOnSpawn = "true"),
-		Category = "BGToken|Config")
-	TSubclassOf<UUserWidget> ContextMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "BGToken|Config")
 	FText TokenName;

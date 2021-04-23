@@ -57,6 +57,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameModeBase|Config")
 	float UpdateInterval{25.f};
-
-
 };

@@ -234,7 +234,7 @@ void ABGGamePlayerController::ToggleContextMenu_Implementation()
 	ReleaseObject();
 
 	if (GetHitResultUnderCursorByChannel(
-		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, LastHitResult))
+		UEngineTypes::ConvertToTraceType(ECC_RIGHT_CLICK), true, LastHitResult))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *LastHitResult.GetActor()->GetName())
 

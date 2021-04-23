@@ -36,14 +36,6 @@ ABGToken::ABGToken()
 	TokenModelStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Token Model Mesh"));
 	TokenModelStaticMeshComponent->SetCollisionProfileName("Token");
 	TokenModelStaticMeshComponent->SetIsReplicated(true);
-
-	ContextMenuWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("Context Menu Widget"));
-	ContextMenuWidgetComponent->SetupAttachment(Capsule);
-	ContextMenuWidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	ContextMenuWidgetComponent->SetPivot(FVector2D(0.f, 0.f));
-	ContextMenuWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-	ContextMenuWidgetComponent->SetDrawAtDesiredSize(true);
-	ContextMenuWidgetComponent->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
@@ -62,12 +54,6 @@ void ABGToken::BeginPlay()
 	TokenModelStaticMeshComponent->AttachToComponent(TokenBaseStaticMeshComponent,
 	                                                 FAttachmentTransformRules(EAttachmentRule::KeepRelative, true),
 	                                                 TEXT("ModelRoot"));
-
-	// run this on the Server immediately, but wait for OnRep_ContextMenuClass() for Clients
-	if (UKismetSystemLibrary::IsServer(this))
-	{
-		UpdateContextMenuWidget();
-	}
 }
 
 void ABGToken::Tick(float DeltaSeconds)
@@ -80,61 +66,7 @@ void ABGToken::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABGToken, PlayerPermissions)
-	DOREPLIFETIME(ABGToken, ContextMenuClass)
 }
-
-void ABGToken::UpdateContextMenuWidget()
-{
-	// If client, Set the Widget Class
-	if (!UKismetSystemLibrary::IsServer(this) && ContextMenuClass.GetDefaultObject())
-	{
-		ContextMenuWidgetComponent->SetWidgetClass(ContextMenuClass);
-		ContextMenuWidgetComponent->InitWidget();
-	}
-
-	// Set Parent variable on the ContextMenu
-	auto ContextMenu = GetContextMenu();
-	if (ContextMenu)
-	{
-		ContextMenu->SetParent(this);
-	}
-}
-
-void ABGToken::SetWidgetComponentClass_Implementation(TSubclassOf<UUserWidget> InClass)
-{
-	ContextMenuClass.operator=(InClass);
-	ContextMenuWidgetComponent->SetWidgetClass(InClass);
-	ContextMenuWidgetComponent->InitWidget();
-	UpdateContextMenuWidget();
-}
-
-void ABGToken::OnRep_ContextMenuClass()
-{
-	UpdateContextMenuWidget();
-}
-
-void ABGToken::ToggleContextMenu()
-{
-	if (ContextMenuWidgetComponent && ContextMenuWidgetComponent->GetWidget())
-	{
-		ContextMenuWidgetComponent->SetWorldLocation(GetContextMenu()->GetHitResult().ImpactPoint);
-		ContextMenuWidgetComponent->ToggleVisibility();
-	}
-}
-
-void ABGToken::CloseContextMenu()
-{
-	if (ContextMenuWidgetComponent)
-	{
-		ContextMenuWidgetComponent->SetVisibility(false);
-	}
-}
-
-UBGContextMenu* ABGToken::GetContextMenu()
-{
-	return Cast<UBGContextMenu>(ContextMenuWidgetComponent->GetWidget());
-}
-
 
 void ABGToken::InitializeMeshAndMaterial_Implementation(UStaticMesh* StaticMesh,
                                                         UMaterialInstance* MaterialInstance,

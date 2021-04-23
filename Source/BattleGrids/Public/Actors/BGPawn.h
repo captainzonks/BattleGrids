@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+
 #include "BGPawn.generated.h"
 
 UCLASS()
@@ -12,14 +12,14 @@ class BATTLEGRIDS_API ABGPawn : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	ABGPawn();
+	/** Default UObject constructor. */
+	ABGPawn(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	/** Allows a Pawn to set up custom input bindings. Called upon possession by a PlayerController, using the InputComponent created by CreatePlayerInputComponent(). */
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(Category = "ABGPawn|Movement")
 	void UpdateTransform(FTransform const& NewTransform) const;
