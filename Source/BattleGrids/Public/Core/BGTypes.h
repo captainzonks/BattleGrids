@@ -37,12 +37,12 @@ struct FBGServerData
 };
 
 UENUM(BlueprintType)
-enum class EBGObjectType : uint8
+enum class EBGActorType : uint8
 {
 	None UMETA(DisplayName = "None"),
 	Token UMETA(DisplayName = "Token"),
 	Structure UMETA(DisplayName = "Structure"),
-	Board UMETA(DisplayName = "Board")
+	Actor UMETA(DisplayName = "Actor")
 };
 
 UENUM(BlueprintType)
@@ -65,7 +65,7 @@ struct FBGStaticMeshBank : public FTableRowBase
 	class UStaticMesh* StaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EBGObjectType ObjectType;
+	EBGActorType ObjectType;
 };
 
 USTRUCT(BlueprintType)
@@ -175,3 +175,4 @@ struct FBGTileInfo
 	{
 	}
 };
+

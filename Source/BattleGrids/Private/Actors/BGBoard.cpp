@@ -50,9 +50,9 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 				// Prepare a fresh Transform
 				FVector SpawnLocation =
 					FVector(static_cast<float>(InnerIndex) - static_cast<float>(X) / 2.f,
-					         static_cast<float>(OuterIndex) - static_cast<float>(Y) / 2.f,
-					         0.f)
-						* SectorSize
+					        static_cast<float>(OuterIndex) - static_cast<float>(Y) / 2.f,
+					        0.f)
+					* SectorSize
 					* 1.f
 					+ CenteredLocation;
 
@@ -64,12 +64,13 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 				TileToSpawn->SetBoardReference(this);
 
 				// Setup context menu requirements
-				auto const TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				auto const TileContextMenuClass = GetWorld()->
+				                                  GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
 					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
 				}
-				
+
 				TileToSpawn->SetTileInfo(FBGTileInfo(InnerIndex, OuterIndex, 0));
 
 				// Spawn the new Tile and add it to the board's array
@@ -138,9 +139,10 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				TileToSpawn->SetTileInfo(FBGTileInfo(Tile->GetTileInfo().X + 1, Tile->GetTileInfo().Y,
 				                                     Tile->GetTileInfo().Z));
 				TileToSpawn->SetBoardReference(this);
-				
+
 				// Setup context menu requirements
-				auto const TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				auto const TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->
+				                                              GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
 					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
@@ -183,7 +185,8 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				TileToSpawn->SetBoardReference(this);
 
 				// Setup context menu requirements
-				auto const TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
+				auto const TileContextMenuClass = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>()->
+				                                              GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
 					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);

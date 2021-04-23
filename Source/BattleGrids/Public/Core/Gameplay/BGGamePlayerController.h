@@ -9,6 +9,7 @@
 
 #include "BGGamePlayerController.generated.h"
 
+class ABGActor;
 class ABGBoard;
 class ABGDoor;
 class ABGPlayerState;
@@ -26,7 +27,6 @@ class BATTLEGRIDS_API ABGGamePlayerController : public ABGPlayerController
 	GENERATED_BODY()
 
 public:
-
 	ABGGamePlayerController();
 
 	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "BGGamePlayerController|UI")
@@ -42,7 +42,6 @@ public:
 	// void ServerToggleLoadingState(bool const bIsLoading);
 
 protected:
-
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -52,13 +51,14 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Gameplay Data")
-	void GetRowNamesOfObjectTypeFromGameMode(EBGObjectType const& ObjectType);
+	void GetRowNamesOfObjectTypeFromGameMode(EBGActorType const& ObjectType);
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Gameplay Data")
-	void GetRowNamesOfObjectTypeFromGameMode_Server(EBGObjectType const& ObjectType);
+	void GetRowNamesOfObjectTypeFromGameMode_Server(EBGActorType const& ObjectType);
 
-	/////////////////////////
-	/// Control Functions
+	/**
+	 * Control Functions
+	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void SelectObject();
@@ -74,12 +74,16 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	bool GetGameMasterPermissions() const;
 
-	// Renders an outline around an Actor beneath the mouse cursor using Custom Render Depth and a Post-Process Material
+	/**
+	 * Renders an outline around an Actor beneath
+	 * the mouse cursor using Custom Render Depth and a Post-Process Material
+	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void OutlineObject();
 
-	////////////////////////
-	/// Token Functions
+	/**
+	 * Token Functions
+	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void MoveTokenToLocation(bool const bHolding);
@@ -99,8 +103,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void DestroyToken(ABGToken* TokenToDestroy);
 
-	////////////////////////
-	/// Spline Structure Functions
+	/**
+	 * Spline Structure Functions
+	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void HandleSplineStructureSelection();
@@ -113,12 +118,18 @@ protected:
 	                                    FName const& BaseStaticMeshName,
 	                                    FName const& BaseMaterialInstanceName);
 
-	// Modifies a spline by getting the nearest Spline Point and settings its location to the mouse's location, snapped to grid
+	/**
+	 * Modifies a spline by getting the nearest Spline Point
+	 * and settings its location to the mouse's location, snapped to grid
+	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void ModifySplineStructureLength();
 
 
-	// Adds a new spline point to a spline by finding the nearest index to the mouse's location and inserts it
+	/**
+	 * Adds a new spline point to a spline by
+	 * finding the nearest index to the mouse's location and inserts it
+	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void AddSplinePointToSplineStructure();
 
@@ -137,14 +148,18 @@ protected:
 	                                               TSubclassOf<ABGStructure> StructureClassToSpawn,
 	                                               FString const& OldInstanceName = "WallInstance");
 
-	// Removes an Instance at the Index provided on a Spline Structure
-	// By default, removes from the WallInstance
+	/**
+	 * Removes an Instance at the Index provided on a Spline Structure
+	 * By default, removes from the WallInstance
+	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void RemoveInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify, int const& Index,
 	                                            FString const& InstanceName = "WallInstance");
 
-	// Restores an Instance on a Spline Structure
-	// By default, restores on the WallInstance
+	/**
+	 * Restores an Instance on a Spline Structure
+	 * By default, restores on the WallInstance
+	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify, int const& Index,
 	                                             FTransform const& NewInstanceTransform,
@@ -162,8 +177,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	float GetClosestKeyOnSplineAtMousePosition(ABGSplineStructure* SplineStructure, FVector& OutIntersection) const;
 
-	////////////////////////
-	/// Structure Functions
+	/**
+	 * Structure Functions
+	 */
 
 	// Destroys a Structure Actor
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
@@ -175,14 +191,12 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ToggleDoorOpenClose(ABGDoor* DoorToToggle);
 
-	////////////////////////
-	/// Board Functions
+	/**
+	 * Board Functions
+	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void HandleBoardSelection();
-
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void MoveBoardToLocation(FVector const& Location);
+	void HandleActorSelection();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
 	void ToggleTileVisibility(ABGTile* TileToToggle);
@@ -192,6 +206,13 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
 	void GrowBoard(ABGBoard* BoardToGrow);
+
+	/**
+	 * BGActor Functions
+	 */
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void MoveActorToLocation(FVector const& Location);
 
 	////////////////////////
 	/// NETWORK Functions
@@ -299,9 +320,6 @@ protected:
 	void SpawnNewBoard_Server(int const& Zed, int const& X, int const& Y);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
-	void MoveBoardToLocation_Server(ABGBoard* BoardToMove, FVector const& NewLocation);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
 	void ToggleTileVisibility_Server(ABGTile* TileToToggle);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
@@ -309,6 +327,16 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
 	void GrowBoard_Server(ABGBoard* BoardToGrow);
+
+	/**
+	 * Network BGActor Functions
+	 */
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Actors|Network")
+	void MoveActorToLocation_Server(ABGActor* ActorToMove, FVector const& NewLocation);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Actors|Network")
+	void SpawnNewActor_Server(TSubclassOf<ABGActor> ActorToSpawn);
 
 	////////////////////////
 	/// Callback Functions
@@ -323,7 +351,7 @@ protected:
 	EBGControlMode ControlMode{EBGControlMode::Move};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	EBGObjectType GrabbedObject{EBGObjectType::None};
+	EBGActorType GrabbedObject{EBGActorType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	ABGToken* GrabbedToken{};
@@ -332,7 +360,7 @@ protected:
 	ABGSplineStructure* GrabbedStructure{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	ABGBoard* GrabbedBoard{};
+	ABGActor* GrabbedActor{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	AActor* CurrentOutlinedActor{};

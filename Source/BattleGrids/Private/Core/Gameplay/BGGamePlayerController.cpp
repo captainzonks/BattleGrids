@@ -84,48 +84,49 @@ void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform 
 }
 
 
-void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGObjectType const& ObjectType)
+void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGActorType const& ObjectType)
 {
 	GetRowNamesOfObjectTypeFromGameMode_Server(ObjectType);
 }
 
 void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Implementation(
-	EBGObjectType const& ObjectType)
+	EBGActorType const& ObjectType)
 {
 	switch (ObjectType)
 	{
-	case EBGObjectType::None: break;
-	case EBGObjectType::Token:
+	case EBGActorType::None: break;
+	case EBGActorType::Token:
 		TokenNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->GetRowNamesOfType(ObjectType);
 		break;
-	case EBGObjectType::Structure:
+	case EBGActorType::Structure:
 		StructureNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->
 			GetRowNamesOfType(ObjectType);
 		break;
-	case EBGObjectType::Board: break;
+	case EBGActorType::Actor: break;
 	default: ;
 	}
 }
 
 void ABGGamePlayerController::LoadObjectType()
 {
-	if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel())
+	if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
+		&& !LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 	{
 		LastClickedActor = LastHitResult.GetActor();
 
 		if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+			UE_LOG(LogTemp, Warning, TEXT("TOKEN: LastClickedActor: %s"), *LastClickedActor->GetName())
 
-			GrabbedObject = EBGObjectType::Token;
+			GrabbedObject = EBGActorType::Token;
 			return;
 		}
 
 		if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+			UE_LOG(LogTemp, Warning, TEXT("SPLINESTRUCTURE: LastClickedActor: %s"), *LastClickedActor->GetName())
 
-			GrabbedObject = EBGObjectType::Structure;
+			GrabbedObject = EBGActorType::Structure;
 				
 			/** Add a new spline point if LeftAlt was held down */
 			if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
@@ -152,13 +153,15 @@ void ABGGamePlayerController::LoadObjectType()
 			return;
 		}
 
-		if ((GrabbedBoard = Cast<ABGBoard>(LastClickedActor))->IsValidLowLevel())
+		if ((GrabbedActor = Cast<ABGActor>(LastClickedActor))->IsValidLowLevel())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("LastClickedActor: %s"), *LastClickedActor->GetName())
+			UE_LOG(LogTemp, Warning, TEXT("ACTOR: LastClickedActor: %s"), *LastClickedActor->GetName())
 
-			GrabbedObject = EBGObjectType::Board;
+			GrabbedObject = EBGActorType::Actor;
+			return;
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("INVALID"))
 }
 
 void ABGGamePlayerController::SelectObject()
@@ -175,19 +178,21 @@ void ABGGamePlayerController::SelectObject()
 	 * If we have loaded an object, execute on the Tile trace channel
 	 */
 	GetHitResultUnderCursorByChannel(
-		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGObjectType::None
+		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGActorType::None
 			                                 ? ECC_GRAB
 			                                 : ECC_TILE), true, LastHitResult);
 
 	switch (GrabbedObject)
 	{
 		/** Load an object into our LeftClick if we don't have one yet */
-	case EBGObjectType::None:
+	case EBGActorType::None:
+		UE_LOG(LogTemp, Warning, TEXT("Click 1: Loading Object"))
 		LoadObjectType();
 		break;
 
 		/** Handle executing specific functions if we already have an object loaded into our Left Click */
-	case EBGObjectType::Token:
+	case EBGActorType::Token:
+		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Token"))
 		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
 			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 		{
@@ -197,7 +202,8 @@ void ABGGamePlayerController::SelectObject()
 			ReleaseObject();
 		}
 		break;
-	case EBGObjectType::Structure:
+	case EBGActorType::Structure:
+		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Structure"))
 		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
 			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
 		{
@@ -206,8 +212,20 @@ void ABGGamePlayerController::SelectObject()
 			ReleaseObject();
 		}
 		break;
-	case EBGObjectType::Board:
-		HandleBoardSelection();
+	case EBGActorType::Actor:
+		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Actor"))
+		if (ControlMode == EBGControlMode::Move)
+		{
+			if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
+				&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Handling Actor Selection!"))
+
+				LastClickedActor = LastHitResult.GetActor();
+				HandleActorSelection();
+			}
+		}
+		ReleaseObject();
 		break;
 	default: ;
 	}
@@ -215,10 +233,10 @@ void ABGGamePlayerController::SelectObject()
 
 void ABGGamePlayerController::ReleaseObject()
 {
-	GrabbedObject = EBGObjectType::None;
+	GrabbedObject = EBGActorType::None;
 	GrabbedToken = nullptr;
 	GrabbedStructure = nullptr;
-	GrabbedBoard = nullptr;
+	GrabbedActor = nullptr;
 	LastClickedActor = nullptr;
 	LastHitResult.Reset();
 	NearestIndexToClick = -1;
@@ -606,38 +624,49 @@ void ABGGamePlayerController::DestroySplineStructure(ABGSplineStructure* SplineS
 	}
 }
 
-void ABGGamePlayerController::HandleBoardSelection()
+void ABGGamePlayerController::HandleActorSelection()
 {
-	if (GrabbedBoard)
+	/** Removed GameMasterPermission check at this time because of improper Server Defaulting */
+	
+	// if (!GetGameMasterPermissions())
+	// {
+	// 	return;
+	// }
+	
+	if (GrabbedActor && LastClickedActor)
 	{
-		if (!GetGameMasterPermissions())
-		{
-			return;
-		}
+		UE_LOG(LogTemp, Warning, TEXT("HandleActorSelection(): LastClickedActor = %s"), *LastClickedActor->GetName())
+		FVector Location;
 
-		FVector WorldPosition;
-		FVector WorldDirection;
+		if (Cast<ABGSplineStructure>(LastClickedActor)) return;
 
-		DeprojectMousePositionToWorld(WorldPosition, WorldDirection);
+		FVector ActorOrigin{};
+		FVector ActorBoxExtent{};
 
-		auto const GridSnappedIntersection = FMath::LinePlaneIntersection(WorldPosition,
-		                                                                  WorldDirection * 2000.f + WorldPosition,
-		                                                                  GrabbedBoard->GetActorLocation(),
-		                                                                  FVector(0.f, 0.f, 1.f)).GridSnap(105.f);
+		LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
 
-		MoveBoardToLocation(GridSnappedIntersection);
+		Location.X = ActorOrigin.X;
+		Location.Y = ActorOrigin.Y;
+		/** Eventually don't hardcode 300 here...make it better */
+		Location.Z = 150.f + ActorOrigin.Z + ActorBoxExtent.Z;
+
+		MoveActorToLocation(Location);
 	}
+
 }
 
-void ABGGamePlayerController::MoveBoardToLocation(FVector const& Location)
+void ABGGamePlayerController::MoveActorToLocation(FVector const& Location)
 {
-	if (GrabbedBoard)
+	if (GrabbedActor)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Grabbed Actor Is Valid"))
 		if (!HasAuthority())
 		{
-			GrabbedBoard->SetActorLocation(Location);
+			UE_LOG(LogTemp, Warning, TEXT("We don't have network authority"))
+
+			GrabbedActor->SetActorLocation(Location);
 		}
-		MoveBoardToLocation_Server(GrabbedBoard, Location);
+		MoveActorToLocation_Server(GrabbedActor, Location);
 	}
 }
 
@@ -674,6 +703,14 @@ void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
 			BoardToGrow->GrowBoard(BoardToGrow->GetBoardSize().X + 1, BoardToGrow->GetBoardSize().Y + 1);
 		}
 		GrowBoard_Server(BoardToGrow);
+	}
+}
+
+void ABGGamePlayerController::SpawnNewActor_Server_Implementation(TSubclassOf<ABGActor> ActorToSpawn)
+{
+	if (ActorToSpawn.GetDefaultObject())
+	{
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewActor(ActorToSpawn);
 	}
 }
 
@@ -1009,12 +1046,14 @@ void ABGGamePlayerController::DestroyToken(ABGToken* TokenToDestroy)
 	}
 }
 
-void ABGGamePlayerController::MoveBoardToLocation_Server_Implementation(ABGBoard* BoardToMove,
+void ABGGamePlayerController::MoveActorToLocation_Server_Implementation(ABGActor* ActorToMove,
                                                                         FVector const& NewLocation)
 {
-	if (BoardToMove)
+	if (ActorToMove)
 	{
-		BoardToMove->SetActorLocation(NewLocation);
+		UE_LOG(LogTemp, Warning, TEXT("Server: Moving Actor to Location"))
+
+		ABGGameplayGameModeBase::MoveActorToLocation(ActorToMove, FTransform(NewLocation));
 	}
 }
 
