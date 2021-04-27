@@ -63,27 +63,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/Lights/BP_Spotlight.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_LightContextMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGLight.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Lights/BGSpotlight.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGLight.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/Lights/BGSpotlight.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_BattleGrids_Actor_DEMO.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BattleGrids.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/BattleGrids.uproject" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GamePlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GamePlayerController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" afterDir="false" />
     </list>
@@ -93,6 +89,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -108,8 +109,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Lobby/BGLobbyPlayerState.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGLobbyMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGLobbyMenu.cpp" />
@@ -134,10 +133,7 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGBoard.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGSplineStructure.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGPawn.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGPawn.h" />
@@ -149,16 +145,21 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/Lights/BGSpotlight.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Lights/BGSpotlight.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGLight.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGLight.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -34007,6 +34008,7 @@
       <workItem from="1619105616629" duration="15954000" />
       <workItem from="1619191046758" duration="9112000" />
       <workItem from="1619200659322" duration="12785000" />
+      <workItem from="1619550808911" duration="3634000" />
     </task>
     <task id="LOCAL-00004" summary="added multicast function of physics and gravity and collision">
       <created>1613168694740</created>

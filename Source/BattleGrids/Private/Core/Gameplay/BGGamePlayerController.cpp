@@ -341,7 +341,8 @@ void ABGGamePlayerController::HandleSplineStructureSelection()
 		break;
 	case EBGControlMode::Edit: break;
 	case EBGControlMode::Move:
-		MoveSplineStructure();
+		/** Moving instanced static meshes over network doesn't seem to work */
+		// MoveSplineStructure();
 		break;
 	default: ;
 	}

@@ -63,6 +63,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void SelectObject();
 
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void LoadObjectType();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
