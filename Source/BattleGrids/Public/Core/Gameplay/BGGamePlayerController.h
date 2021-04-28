@@ -9,6 +9,7 @@
 
 #include "BGGamePlayerController.generated.h"
 
+class UBGSplineWallComponent;
 class ABGActor;
 class ABGBoard;
 class ABGDoor;
@@ -34,12 +35,6 @@ public:
 
 	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|ActorMovement")
 	void UpdateTransformOnServer(FTransform const& NewTransform);
-
-	// UFUNCTION(BlueprintCallable, Category = "BGPlayerController|Functions")
-	// void ToggleLoadingState(bool const bIsLoading);
-	//
-	// UFUNCTION(Server, Reliable, Category = "BGPlayerController|Network")
-	// void ServerToggleLoadingState(bool const bIsLoading);
 
 protected:
 	virtual void BeginPlay() override;
@@ -112,12 +107,13 @@ protected:
 	void HandleSplineStructureSelection();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void SpawnSplineStructureAtLocation(FVector const& Location, FName const& WallStaticMeshName,
+	void SpawnSplineStructureAtLocation(FName const& WallStaticMeshName,
 	                                    FName const& WallMaskedMaterialInstanceName,
 	                                    FName const& CornerStaticMeshName,
 	                                    FName const& CornerMaskedMaterialInstanceName,
 	                                    FName const& BaseStaticMeshName,
-	                                    FName const& BaseMaterialInstanceName);
+	                                    FName const& BaseMaterialInstanceName,
+	                                    FVector const& Location);
 
 	/**
 	 * Modifies a spline by getting the nearest Spline Point
@@ -132,7 +128,7 @@ protected:
 	 * finding the nearest index to the mouse's location and inserts it
 	 */
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void AddSplinePointToSplineStructure();
+	void AddSplinePointToSplineStructure(UBGSplineWallComponent* InSplineComponent);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void MoveSplineStructure();
@@ -176,7 +172,7 @@ protected:
 	void DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	float GetClosestKeyOnSplineAtMousePosition(ABGSplineStructure* SplineStructure, FVector& OutIntersection) const;
+	float GetClosestKeyOnSplineAtMousePosition(UBGSplineWallComponent* SplineComponent, FVector& OutIntersection) const;
 
 	/**
 	 * Structure Functions
@@ -249,21 +245,22 @@ protected:
 	 */
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void SpawnSplineStructureAtLocation_Server(FVector const& Location, FName const& WallStaticMeshName,
+	void SpawnSplineStructureAtLocation_Server(FName const& WallStaticMeshName,
 	                                           FName const& WallMaskedMaterialInstanceName,
 	                                           FName const& CornerStaticMeshName,
 	                                           FName const& CornerMaskedMaterialInstanceName,
 	                                           FName const& BaseStaticMeshName,
-	                                           FName const& BaseMaterialInstanceName);
+	                                           FName const& BaseMaterialInstanceName,
+	                                           FVector const& Location);
 
 	// Asks the GameMode to make a modification to the GrabbedStructure reference
 	UFUNCTION(Server, Unreliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void ModifyStructureLength_Server(ABGSplineStructure* SplineStructureToModify, int const& PointIndex,
+	void ModifyStructureLength_Server(UBGSplineWallComponent* InSplineComponent, int const& PointIndex,
 	                                  FVector const& NewLocation);
 
 	// Asks the GameMode to add a new spline point to the GrabbedStructure reference
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void AddSplinePointToSplineStructure_Server(ABGSplineStructure* SplineStructureToModify,
+	void AddSplinePointToSplineStructure_Server(UBGSplineWallComponent* InSplineComponent,
 	                                            FVector const& ClickLocation,
 	                                            int const& Index);
 
@@ -349,7 +346,7 @@ protected:
 	/// Variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	EBGControlMode ControlMode{EBGControlMode::Move};
+	EBGControlMode ControlMode{EBGControlMode::Build};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGActorType GrabbedObject{EBGActorType::None};
@@ -376,7 +373,7 @@ protected:
 	int NearestIndexToClick{-1};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	AActor* LastClickedActor{};
+	ABGActor* LastClickedActor{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	FHitResult LastHitResult{};

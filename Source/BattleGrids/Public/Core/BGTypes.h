@@ -40,9 +40,11 @@ UENUM(BlueprintType)
 enum class EBGActorType : uint8
 {
 	None UMETA(DisplayName = "None"),
-	Token UMETA(DisplayName = "Token"),
-	Structure UMETA(DisplayName = "Structure"),
-	Actor UMETA(DisplayName = "Actor")
+	Token UMETA(DisplayName = "Miniature"),
+	Structure UMETA(DisplayName = "Wall"),
+	Board UMETA(DisplayName = "Board"),
+	Tile UMETA(DisplayName = "Tile"),
+	Light UMETA(DisplayName = "Light")
 };
 
 UENUM(BlueprintType)
