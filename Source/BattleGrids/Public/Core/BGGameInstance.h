@@ -24,7 +24,7 @@ class UUserWidget;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSaveGame, FBGPlayerInfo const&, NewPlayerInfo);
 
 /**
- * 
+ * BattleGrids GameInstance class
  */
 UCLASS()
 class BATTLEGRIDS_API UBGGameInstance : public UGameInstance, public IBGMenuInterface

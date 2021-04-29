@@ -68,7 +68,7 @@ void ABGBoard::BuildBoard_Implementation(FVector const& CenteredLocation, int co
 				                                  GetAuthGameMode<ABGGameplayGameModeBase>()->GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
-					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+					// TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
 				}
 
 				TileToSpawn->SetTileInfo(FBGTileInfo(InnerIndex, OuterIndex, 0));
@@ -145,7 +145,7 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				                                              GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
-					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+					// TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
 				}
 
 				// Spawn the new Tile and add it to the board's array
@@ -189,7 +189,7 @@ void ABGBoard::GrowBoard_Implementation(int const& X, int const& Y)
 				                                              GetTileContextMenuClass();
 				if (TileContextMenuClass.GetDefaultObject())
 				{
-					TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
+					// TileToSpawn->SetWidgetComponentClass(TileContextMenuClass);
 				}
 
 				// Spawn the new Tile and add it to the board's array
