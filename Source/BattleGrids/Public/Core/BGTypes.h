@@ -37,10 +37,17 @@ struct FBGServerData
 };
 
 UENUM(BlueprintType)
+enum class EBGClassCategory : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Character UMETA(DisplayName = "Miniatures"),
+	Actor UMETA(DisplayName = "Environmental")
+};
+
+UENUM(BlueprintType)
 enum class EBGActorType : uint8
 {
 	None UMETA(DisplayName = "None"),
-	Token UMETA(DisplayName = "Miniature"),
 	Structure UMETA(DisplayName = "Wall"),
 	Board UMETA(DisplayName = "Board"),
 	Tile UMETA(DisplayName = "Tile"),
@@ -67,7 +74,7 @@ struct FBGStaticMeshBank : public FTableRowBase
 	class UStaticMesh* StaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EBGActorType ObjectType;
+	EBGClassCategory ClassCategory;
 };
 
 USTRUCT(BlueprintType)

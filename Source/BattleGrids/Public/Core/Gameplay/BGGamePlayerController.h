@@ -46,23 +46,25 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Gameplay Data")
-	void GetRowNamesOfObjectTypeFromGameMode(EBGActorType const& ObjectType);
+	void GetRowNamesOfObjectTypeFromGameMode(EBGClassCategory const& ClassCategory);
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Gameplay Data")
-	void GetRowNamesOfObjectTypeFromGameMode_Server(EBGActorType const& ObjectType);
+	void GetRowNamesOfObjectTypeFromGameMode_Server(EBGClassCategory const& ClassCategory);
 
 	/**
 	 * Control Functions
 	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
-	void SelectObject();
+	void SelectActor();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
-	void LoadObjectType();
+	void LoadGrabbedActor();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Control")
-	void ReleaseObject();
+	void ReleaseGrabbedActor();
+
+
 
 	UFUNCTION(Client, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Control")
 	void ToggleContextMenu();
@@ -82,7 +84,7 @@ protected:
 	 */
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void MoveTokenToLocation(bool const bHolding);
+	void MoveTokenToLocation();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void RotateToken(float Value);
@@ -96,8 +98,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
 	void ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void DestroyToken(ABGToken* TokenToDestroy);
+
 
 	/**
 	 * Spline Structure Functions
@@ -214,6 +215,9 @@ protected:
 	////////////////////////
 	/// NETWORK Functions
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Gameplay")
+	void DestroyGameActor(AActor* ActorToDestroy);
+	
 	/**
 	 * Network Token Functions
 	 */
@@ -237,8 +241,8 @@ protected:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	void ToggleTokenPermissionsForPlayer_Server(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void DestroyToken_Server(ABGToken* TokenToDestroy);
+	// UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
+	// void DestroyToken_Server(AActor* TokenToDestroy);
 
 	/**
 	 * Network Spline Structure Functions
@@ -294,8 +298,8 @@ protected:
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
 	void ResetSplineStructure_Server(ABGSplineStructure* SplineStructureToReset);
 
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void DestroySplineStructure_Server(ABGSplineStructure* SplineStructureToDestroy);
+	// UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
+	// void DestroySplineStructure_Server(ABGSplineStructure* SplineStructureToDestroy);
 
 	/**
 	 * Network Structure Functions
@@ -331,7 +335,7 @@ protected:
 	 */
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Actors|Network")
-	void MoveActorToLocation_Server(ABGActor* ActorToMove, FVector const& NewLocation);
+	void MoveActorToLocation_Server(AActor* ActorToMove, FVector const& NewLocation);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Actors|Network")
 	void SpawnNewActor_Server(TSubclassOf<ABGActor> ActorToSpawn);
@@ -349,16 +353,16 @@ protected:
 	EBGControlMode ControlMode{EBGControlMode::Build};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	EBGActorType GrabbedObject{EBGActorType::None};
+	FHitResult LastHitResult{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	ABGToken* GrabbedToken{};
+	AActor* LastClickedActor{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	ABGSplineStructure* GrabbedStructure{};
+	AActor* GrabbedActor{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	ABGActor* GrabbedActor{};
+	EBGActorType GrabbedActorType{EBGActorType::None};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	AActor* CurrentOutlinedActor{};
@@ -367,14 +371,19 @@ protected:
 	TArray<FName> TokenNames;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	TArray<FName> StructureNames;
+	TArray<FName> ActorNames;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	int NearestIndexToClick{-1};
+	
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	ABGActor* LastClickedActor{};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
-	FHitResult LastHitResult{};
+	/** To be phased out, unused */
+	
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	// ABGToken* GrabbedToken{};
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	// ABGSplineStructure* GrabbedStructure{};
+
 };
