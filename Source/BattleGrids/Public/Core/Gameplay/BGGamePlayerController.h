@@ -212,7 +212,7 @@ protected:
 
 	////////////////////////
 	/// NETWORK Functions
-
+	
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Gameplay")
 	void DestroyGameActor(AActor* ActorToDestroy);
 	

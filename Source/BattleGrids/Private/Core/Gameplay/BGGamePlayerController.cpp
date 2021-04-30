@@ -895,6 +895,7 @@ void ABGGamePlayerController::SpawnSplineStructureAtLocation_Server_Implementati
 					FTransform SpawnTransform;
 					SpawnTransform.SetLocation(Location);
 					NewSplineWall->FinishSpawning(SpawnTransform);
+					SplineComponent->Initialize();
 					UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
 				}
 			}
