@@ -51,7 +51,8 @@ enum class EBGActorType : uint8
 	Structure UMETA(DisplayName = "Wall"),
 	Board UMETA(DisplayName = "Board"),
 	Tile UMETA(DisplayName = "Tile"),
-	Light UMETA(DisplayName = "Light")
+	Light UMETA(DisplayName = "Light"),
+	Door UMETA(DisplayName = "Door")
 };
 
 UENUM(BlueprintType)

@@ -9,14 +9,13 @@
 
 #include "BGGamePlayerController.generated.h"
 
+class UBGBoardComponent;
 class UBGSplineWallComponent;
+class UBGTileComponent;
 class ABGActor;
-class ABGBoard;
 class ABGDoor;
 class ABGPlayerState;
-class ABGSplineStructure;
 class ABGStructure;
-class ABGTile;
 class ABGCharacter;
 
 /**
@@ -159,14 +158,11 @@ protected:
 	                                             FTransform const& NewInstanceTransform,
 	                                             FString const& InstanceName = "WallInstance");
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void ToggleLockSplineStructureInPlace(ABGSplineStructure* SplineStructureToLock, bool const bNewLocked);
+	// UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
+	// void ToggleLockSplineStructureInPlace(ABGActor* SplineStructureToLock, bool const bNewLocked);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	void ResetSplineStructure(UBGSplineWallComponent* InSplineComponent) const;
-
-	// UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	// void DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	float GetClosestKeyOnSplineAtMousePosition(UBGSplineWallComponent* SplineComponent, FVector& OutIntersection) const;
@@ -179,8 +175,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void DestroyStructureActor(ABGStructure* StructureToRemove);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
-	void ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked);
+	// UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
+	// void ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Structure")
 	void ToggleDoorOpenClose(ABGDoor* DoorToToggle);
@@ -188,18 +184,18 @@ protected:
 	/**
 	 * Board Functions
 	 */
+	//
+	// UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	// void HandleActorSelection();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void HandleActorSelection();
+	void ToggleTileVisibility(UBGTileComponent* TileToToggle);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void ToggleTileVisibility(ABGTile* TileToToggle);
+	void ShrinkBoard(UBGBoardComponent* BoardToShrink);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void ShrinkBoard(ABGBoard* BoardToShrink);
-
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	void GrowBoard(ABGBoard* BoardToGrow);
+	void GrowBoard(UBGBoardComponent* BoardToGrow);
 
 	/**
 	 * BGActor Functions
@@ -207,6 +203,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
 	void MoveActorToLocation(FVector const& Location);
+
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	void ToggleActorLockedState(ABGActor* InActor, bool const bSetLocked);
 
 	////////////////////////
 	/// NETWORK Functions
@@ -288,8 +287,8 @@ protected:
 	                                                    FTransform const& NewInstanceTransform,
 	                                                    FString const& InstanceName = "WallInstance");
 
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
-	void ToggleLockSplineStructureInPlace_Server(ABGSplineStructure* SplineStructureToLock, bool const bNewLocked);
+	// UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
+	// void ToggleLockSplineStructureInPlace_Server(ABGActor* SplineStructureToLock, bool const bNewLocked);
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|SplineStructure|Network")
 	void ResetSplineStructure_Server(UBGSplineWallComponent* InSplineComponent);
@@ -301,8 +300,8 @@ protected:
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
 	void DestroyStructureActor_Server(ABGStructure* StructureToRemove);
 
-	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
-	void ToggleLockStructure_Server(ABGStructure* StructureToLock, bool const bNewLocked);
+	// UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
+	// void ToggleLockStructure_Server(ABGStructure* StructureToLock, bool const bNewLocked);
 
 	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Structures|Network")
 	void ToggleDoorOpenClose_Server(ABGDoor* DoorToToggle);
@@ -315,13 +314,13 @@ protected:
 	void SpawnNewBoard_Server(int const& Zed, int const& X, int const& Y);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
-	void ToggleTileVisibility_Server(ABGTile* TileToToggle);
+	void ToggleTileVisibility_Server(UBGTileComponent* TileToToggle);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
-	void ShrinkBoard_Server(ABGBoard* BoardToShrink);
+	void ShrinkBoard_Server(UBGBoardComponent* BoardToShrink);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Board|Network")
-	void GrowBoard_Server(ABGBoard* BoardToGrow);
+	void GrowBoard_Server(UBGBoardComponent* BoardToGrow);
 
 	/**
 	 * Network BGActor Functions
@@ -332,6 +331,9 @@ protected:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Actors|Network")
 	void SpawnNewActor_Server(TSubclassOf<ABGActor> ActorToSpawn);
+
+	UFUNCTION(Server, Reliable, Category = "BGGamePlayerController|Actors|Network")
+	void ToggleActorLockedState_Server(ABGActor* InActor, bool const bSetLocked);
 
 	////////////////////////
 	/// Callback Functions
