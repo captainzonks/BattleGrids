@@ -5,9 +5,9 @@
 #include "Actors/BGBoard.h"
 #include "Actors/BGSplineStructure.h"
 #include "Actors/BGTile.h"
-#include "Characters/BGToken.h"
 #include "Actors/Structures/BGDoor.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Characters/BGCharacter.h"
 #include "Components/BGSplineWallComponent.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/MenuAnchor.h"
@@ -51,7 +51,7 @@ void ABGGamePlayerController::SetupInputComponent()
 	InputComponent->BindAction("Context", IE_Pressed, this, &ABGGamePlayerController::ToggleContextMenu);
 
 	// Token Movement Handling
-	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
+	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateCharacter);
 
 	// In Game UI
 	InputComponent->BindAction("PlayerList", IE_Pressed, this, &ABGGamePlayerController::ShowInGamePlayerListMenu);
@@ -130,13 +130,13 @@ void ABGGamePlayerController::SelectActor()
 		}
 
 		/** Execute specific functions for BGToken movement */
-		auto const GrabbedBGToken = Cast<ABGToken>(GrabbedActor);
-		if (GrabbedBGToken && LastClickedBGActor)
+		auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+		if (GrabbedBGCharacter && LastClickedBGActor)
 		{
 			if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Click 2: Token Movement"))
-				MoveTokenToLocation();
+				MoveCharacterToLocation();
 				ReleaseGrabbedActor();
 			}
 		}
@@ -209,13 +209,13 @@ void ABGGamePlayerController::LoadGrabbedActor()
 			return;
 		}
 
-		auto const LastClickedBGToken = Cast<ABGToken>(LastClickedActor);
+		auto const LastClickedBGCharacter = Cast<ABGCharacter>(LastClickedActor);
 
 		/** Did we click on a BGToken? */
-		if (LastClickedBGToken)
+		if (LastClickedBGCharacter)
 		{
 			/** Store the last clicked variables as the now grabbed variables */
-			GrabbedActor = LastClickedBGToken;
+			GrabbedActor = LastClickedBGCharacter;
 			return;
 		}
 	}
@@ -309,16 +309,16 @@ void ABGGamePlayerController::ToggleContextMenu_Implementation()
 	}
 }
 
-void ABGGamePlayerController::MoveTokenToLocation()
+void ABGGamePlayerController::MoveCharacterToLocation()
 {
 	if (GrabbedActor && LastClickedActor)
 	{
-		auto const GrabbedBGToken = Cast<ABGToken>(GrabbedActor);
-		if (GrabbedBGToken)
+		auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+		if (GrabbedBGCharacter)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastClickedActor = %s"), *LastClickedActor->GetName())
 
-			FRotator const Rotation = FRotator(0.f, GrabbedBGToken->GetActorRotation().Yaw, 0.f);
+			FRotator const Rotation = FRotator(0.f, GrabbedBGCharacter->GetActorRotation().Yaw, 0.f);
 
 			float const ZedValue = 50.f;
 
@@ -347,7 +347,7 @@ void ABGGamePlayerController::MoveTokenToLocation()
 				Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
 			}
 
-			MoveTokenToLocation_Server(GrabbedBGToken, Location, Rotation);
+			MoveCharacterToLocation_Server(GrabbedBGCharacter, Location, Rotation);
 		}
 	}
 }
@@ -910,67 +910,59 @@ void ABGGamePlayerController::SpawnNewBoard_Server_Implementation(int const& Zed
 		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewBoard(Zed, X, Y);
 	}
 }
-//
-// void ABGGamePlayerController::DestroyToken_Server_Implementation(AActor* TokenToDestroy)
-// {
-// 	if (HasAuthority() && TokenToDestroy)
-// 	{
-// 		ABGGameplayGameModeBase::DestroyToken(TokenToDestroy);
-// 	}
-// }
 
-void ABGGamePlayerController::ToggleTokenPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
-	ABGToken* TokenToToggle)
+void ABGGamePlayerController::ToggleCharacterPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
+	ABGCharacter* CharacterToToggle)
 {
-	if (HasAuthority() && PlayerStateToToggle && TokenToToggle)
+	if (HasAuthority() && PlayerStateToToggle && CharacterToToggle)
 	{
-		ABGGameplayGameModeBase::ToggleTokenPermissionsForPlayer(PlayerStateToToggle, TokenToToggle);
+		ABGGameplayGameModeBase::ToggleCharacterPermissionsForPlayer(PlayerStateToToggle, CharacterToToggle);
 	}
 }
 
-void ABGGamePlayerController::RotateToken_Server_Implementation(ABGToken* TokenToRotate, FRotator const& NewRotation)
+void ABGGamePlayerController::RotateCharacter_Server_Implementation(ABGCharacter* CharacterToRotate, FRotator const& NewRotation)
 {
-	if (HasAuthority() && TokenToRotate)
+	if (HasAuthority() && CharacterToRotate)
 	{
-		TokenToRotate->SetActorRotation(NewRotation);
+		CharacterToRotate->SetActorRotation(NewRotation);
 	}
 }
 
-void ABGGamePlayerController::ResetTokenRotation_Server_Implementation(ABGToken* TokenToReset)
+void ABGGamePlayerController::ResetCharacterRotation_Server_Implementation(ABGCharacter* CharacterToReset)
 {
-	if (HasAuthority() && TokenToReset)
+	if (HasAuthority() && CharacterToReset)
 	{
-		TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+		CharacterToReset->SetActorRotation(FRotator::ZeroRotator);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenLockInPlace_Server_Implementation(ABGToken* TokenToToggle, bool bLock)
+void ABGGamePlayerController::ToggleCharacterLockInPlace_Server_Implementation(ABGCharacter* CharacterToToggle, bool bLock)
 {
-	if (HasAuthority() && TokenToToggle)
+	if (HasAuthority() && CharacterToToggle)
 	{
-		ABGGameplayGameModeBase::ToggleTokenLockInPlace(TokenToToggle, bLock);
+		ABGGameplayGameModeBase::ToggleCharacterLockInPlace(CharacterToToggle, bLock);
 	}
 }
 
-void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(
+void ABGGamePlayerController::SpawnCharacterAtLocation_Server_Implementation(
 	FVector const& Location, FName const& MeshName, FName const& MaterialName)
 {
 	if (HasAuthority())
 	{
-		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnCharacterAtLocation(
 			Location, MeshName, MaterialName);
 
 		UE_LOG(LogTemp, Warning, TEXT("Spawning Token At Location (server)"))
 	}
 }
 
-void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, FVector const& Location,
+void ABGGamePlayerController::MoveCharacterToLocation_Server_Implementation(ABGCharacter* CharacterToMove, FVector const& Location,
                                                                         FRotator const TokenRotation)
 {
-	if (HasAuthority() && TokenToMove)
+	if (HasAuthority() && CharacterToMove)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Moving Token To Location (server)"))
-		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, Location, TokenRotation);
+		ABGGameplayGameModeBase::MoveCharacterToLocation(CharacterToMove, Location, TokenRotation);
 	}
 }
 
@@ -995,16 +987,16 @@ void ABGGamePlayerController::AddSplinePointToSplineStructure_Server_Implementat
 	}
 }
 
-void ABGGamePlayerController::RotateToken(float Value)
+void ABGGamePlayerController::RotateCharacter(float Value)
 {
 	if (Value != 0)
 	{
 		if (GrabbedActor)
 		{
-			auto const GrabbedBGToken = Cast<ABGToken>(GrabbedActor);
-			if (GrabbedBGToken)
+			auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+			if (GrabbedBGCharacter)
 			{
-				auto const OriginalRotation = GrabbedBGToken->GetActorRotation().GetDenormalized();
+				auto const OriginalRotation = GrabbedBGCharacter->GetActorRotation().GetDenormalized();
 				float const Remainder = FMath::Fmod(OriginalRotation.Yaw, 45.f);
 
 				/** If we have a Yaw that is greater than or equal to 360 degrees, use 0 instead */
@@ -1042,61 +1034,53 @@ void ABGGamePlayerController::RotateToken(float Value)
 
 				if (!HasAuthority())
 				{
-					GrabbedBGToken->SetActorRotation(NewRotation);
+					GrabbedBGCharacter->SetActorRotation(NewRotation);
 				}
-				RotateToken_Server(GrabbedBGToken, NewRotation);
+				RotateCharacter_Server(GrabbedBGCharacter, NewRotation);
 			}
 		}
 	}
 }
 
-void ABGGamePlayerController::ResetTokenRotation(ABGToken* TokenToReset)
+void ABGGamePlayerController::ResetCharacterRotation(ABGCharacter* CharacterToReset)
 {
-	if (TokenToReset)
+	if (CharacterToReset)
 	{
 		if (!HasAuthority())
 		{
-			TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+			CharacterToReset->SetActorRotation(FRotator::ZeroRotator);
 		}
-		ResetTokenRotation_Server(TokenToReset);
+		ResetCharacterRotation_Server(CharacterToReset);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenLockInPlace(ABGToken* TokenToToggle, bool bLock)
+void ABGGamePlayerController::ToggleCharacterLockInPlace(ABGCharacter* CharacterToToggle, bool bLock)
 {
-	if (TokenToToggle)
+	if (CharacterToToggle)
 	{
 		if (!HasAuthority())
 		{
-			TokenToToggle->ToggleLockTokenInPlace(bLock);
+			CharacterToToggle->ToggleLockTokenInPlace(bLock);
 		}
-		ToggleTokenLockInPlace_Server(TokenToToggle, bLock);
+		ToggleCharacterLockInPlace_Server(CharacterToToggle, bLock);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle,
-                                                              ABGToken* TokenToToggle)
+void ABGGamePlayerController::ToggleCharacterPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle,
+                                                              ABGCharacter* CharacterToToggle)
 {
-	if (PlayerStateToToggle && TokenToToggle)
+	if (PlayerStateToToggle && CharacterToToggle)
 	{
 		if (!HasAuthority())
 		{
-			TokenToToggle->PlayerHasPermissions(PlayerStateToToggle)
-				? TokenToToggle->RemovePlayerFromPermissionsArray(PlayerStateToToggle)
-				: TokenToToggle->AddPlayerToPermissionsArray(PlayerStateToToggle);
+			CharacterToToggle->PlayerHasPermissions(PlayerStateToToggle)
+				? CharacterToToggle->RemovePlayerFromPermissionsArray(PlayerStateToToggle)
+				: CharacterToToggle->AddPlayerToPermissionsArray(PlayerStateToToggle);
 		}
 
-		ToggleTokenPermissionsForPlayer_Server(PlayerStateToToggle, TokenToToggle);
+		ToggleCharacterPermissionsForPlayer_Server(PlayerStateToToggle, CharacterToToggle);
 	}
 }
-
-// void ABGGamePlayerController::DestroyToken(ABGToken* TokenToDestroy)
-// {
-// 	if (TokenToDestroy)
-// 	{
-// 		DestroyToken_Server(TokenToDestroy);
-// 	}
-// }
 
 void ABGGamePlayerController::MoveActorToLocation_Server_Implementation(AActor* ActorToMove,
                                                                         FVector const& NewLocation)
@@ -1193,11 +1177,3 @@ void ABGGamePlayerController::OutlineObject()
 		}
 	}
 }
-
-// void ABGGamePlayerController::DestroySplineStructure_Server_Implementation(ABGSplineStructure* StructureToDestroy)
-// {
-// 	if (StructureToDestroy)
-// 	{
-// 		ABGGameplayGameModeBase::DestroySplineStructure(StructureToDestroy);
-// 	}
-// }

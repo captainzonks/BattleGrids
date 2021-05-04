@@ -17,7 +17,7 @@ class ABGPlayerState;
 class ABGSplineStructure;
 class ABGStructure;
 class ABGTile;
-class ABGToken;
+class ABGCharacter;
 
 /**
  * 
@@ -78,25 +78,23 @@ protected:
 	void OutlineObject();
 
 	/**
-	 * Token Functions
+	 * Character Functions
 	 */
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void MoveTokenToLocation();
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Character")
+	void MoveCharacterToLocation();
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void RotateToken(float Value);
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Character")
+	void RotateCharacter(float Value);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void ResetTokenRotation(ABGToken* TokenToReset);
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Character")
+	void ResetCharacterRotation(ABGCharacter* CharacterToReset);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void ToggleTokenLockInPlace(ABGToken* TokenToToggle, bool bLock);
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Character")
+	void ToggleCharacterLockInPlace(ABGCharacter* CharacterToToggle, bool bLock);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Token")
-	void ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
-
-
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Character")
+	void ToggleCharacterPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle, ABGCharacter* CharacterToToggle);
 
 	/**
 	 * Spline Structure Functions
@@ -220,24 +218,24 @@ protected:
 	 * Network Token Functions
 	 */
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void SpawnTokenAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void SpawnCharacterAtLocation_Server(FVector const& Location, FName const& MeshName, FName const& MaterialName);
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void MoveTokenToLocation_Server(ABGToken* TokenToMove, FVector const& Location,
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void MoveCharacterToLocation_Server(ABGCharacter* CharacterToMove, FVector const& Location,
 	                                FRotator const TokenRotation);
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void RotateToken_Server(ABGToken* TokenToRotate, FRotator const& NewRotation);
+	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void RotateCharacter_Server(ABGCharacter* CharacterToRotate, FRotator const& NewRotation);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void ResetTokenRotation_Server(ABGToken* TokenToReset);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void ResetCharacterRotation_Server(ABGCharacter* CharacterToReset);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void ToggleTokenLockInPlace_Server(ABGToken* TokenToToggle, bool bLock);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void ToggleCharacterLockInPlace_Server(ABGCharacter* CharacterToToggle, bool bLock);
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
-	void ToggleTokenPermissionsForPlayer_Server(ABGPlayerState* PlayerStateToToggle, ABGToken* TokenToToggle);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Character|Network")
+	void ToggleCharacterPermissionsForPlayer_Server(ABGPlayerState* PlayerStateToToggle, ABGCharacter* CharacterToToggle);
 
 	// UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Token|Network")
 	// void DestroyToken_Server(AActor* TokenToDestroy);

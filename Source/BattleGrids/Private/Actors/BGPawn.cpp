@@ -133,8 +133,12 @@ void ABGPawn::Turn(float Value)
 
 void ABGPawn::UpdateTransform(FTransform const& NewTransform) const
 {
-	if (auto const BGGamePlayerController = Cast<ABGGamePlayerController>(Controller))
+	if (Controller)
 	{
-		BGGamePlayerController->UpdateTransformOnServer(NewTransform);
+		auto const BGGamePlayerController = Cast<ABGGamePlayerController>(Controller);
+		if (BGGamePlayerController)
+		{
+			BGGamePlayerController->UpdateTransformOnServer(NewTransform);
+		}
 	}
 }
