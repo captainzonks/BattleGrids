@@ -374,4 +374,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	UBGGameInstance* BGGameInstance;
 
+	int UniqueActorID{};
 };

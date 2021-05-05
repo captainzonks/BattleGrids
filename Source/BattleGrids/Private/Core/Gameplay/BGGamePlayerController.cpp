@@ -890,26 +890,9 @@ void ABGGamePlayerController::SpawnSplineStructureAtLocation_Server_Implementati
 		auto CastGameMode = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this));
 		if (CastGameMode)
 		{
-			FBGStructureInfo NewStructureInfo;
-			CastGameMode->CreateStructureInfo(NewStructureInfo, WallStaticMeshName,
+			CastGameMode->InitializeSplineWallActor(WallStaticMeshName,
 				WallMaskedMaterialInstanceName, CornerStaticMeshName, CornerMaskedMaterialInstanceName,
 				BaseStaticMeshName, BaseMaterialInstanceName, Location);
-			
-			auto const NewSplineWall = CastGameMode->CreateNewActor(EBGActorType::Structure);
-			if (NewSplineWall)
-			{
-				auto SplineComponent = Cast<UBGSplineWallComponent>(NewSplineWall->
-					GetComponentByClass(UBGSplineWallComponent::StaticClass()));
-				if (SplineComponent)
-				{
-					SplineComponent->SetStructureInfo(NewStructureInfo);
-					FTransform SpawnTransform;
-					SpawnTransform.SetLocation(Location);
-					NewSplineWall->FinishSpawning(SpawnTransform);
-					SplineComponent->Initialize();
-					UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
-				}
-			}
 		}
 	}
 }

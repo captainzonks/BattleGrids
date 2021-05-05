@@ -121,6 +121,7 @@ public:
 	FBGServerData GetServerData() const { return ServerData; }
 	void SetServerData(FBGServerData const& InServerData) { ServerData = InServerData; }
 
+	UBGPlayerSave* GetPlayerSave() const { return PlayerSave; }
 	UBGGameSave* GetGameSave() const { return GameSave; }
 
 	bool DoesSaveGameExist() const

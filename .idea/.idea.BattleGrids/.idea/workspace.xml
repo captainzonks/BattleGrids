@@ -62,40 +62,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_GameLoadRow.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGPlayerSave.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGGameLoadRow.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGPlayerSave.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameLoadRow.h" afterDir="false" />
+    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="Implemented initial saving and loading functions for Character models on the game board.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BPI_GameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BPI_GameInstance.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Lobby/BP_LobbyPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Lobby/BP_LobbyPlayerController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_InGameMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_InGameMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_OptionsMenu.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_GameLoadRow.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_GameLoadRow.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGSaveGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGSaveGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerState.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGServerRow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGServerRow.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGSaveGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGSaveGame.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +110,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGLight.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGGameHUD.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuWidget.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameHUD.h" />
@@ -133,7 +119,6 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGToken.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGToken.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameStateBase.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGamePlayerList.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGPawn.cpp" />
@@ -142,11 +127,7 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGTileComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameStateBase.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGContextMenu.cpp" />
@@ -157,23 +138,29 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGSaveGame.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGSaveGame.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGPlayerSave.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGCharacter.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGServerRow.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameLoadRow.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGGameLoadRow.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGCharacter.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerState.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -34029,14 +34016,7 @@
       <workItem from="1619805987363" duration="9351000" />
       <workItem from="1620140130607" duration="17399000" />
       <workItem from="1620160557247" duration="1653000" />
-      <workItem from="1620227951121" duration="11722000" />
-    </task>
-    <task id="LOCAL-00012" summary="Board dynamically shrinks and (almost) grows; needs more work and refinement, but the foundation is there">
-      <created>1614121976817</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1614121976817</updated>
+      <workItem from="1620227951121" duration="16193000" />
     </task>
     <task id="LOCAL-00013" summary="boards shrink and grow dynamically, spawn dynamically at different Z-axes, all with custom C++ functions; boards also can be dragged in 3D world space with snap-to-grid; cleaned up the Selection function in the PlayerController significantly to sort board vs token grabbing...big update today.">
       <created>1614209203316</created>
@@ -34374,7 +34354,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620162211755</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Implemented initial saving and loading functions for Character models on the game board.">
+      <created>1620242207326</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1620242207326</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -34407,7 +34394,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Token Lock has been swapped to disabling of Character Movement instead of locking the static mesh." />
     <MESSAGE value="Implemented Steam Online Subsystem and began a total rework of the menu system with C++ and online functionality. Server list is semi-functional and finds a LAN game successfully and adds it to the list." />
     <MESSAGE value="Steam and LAN connectivity working!!! Beginning movement of Lobby Blueprint code over to C++ now." />
     <MESSAGE value="Lobby stuff isn't working. Can't seem to get variables from Server to Client and update UI properly. Need to look into it further, or consider scrapping the Lobby entirely and going straight into the Game." />
@@ -34432,7 +34418,8 @@
     <MESSAGE value="found network bugs that need addressing: need to handle join-in-progress clients and updating spline actors on client-side; this should be done through the GameState...which needs to be fleshed out with proper functions and networking" />
     <MESSAGE value="added functionality to the GameplayGameStateBase class to allow the storage of actors and characters in the game world; clients who connect mid-session now receive SplineCurves data to update their wall actors to match the built walls on the server; fixed nullptr bugs as they appeared" />
     <MESSAGE value="fixed up a variable redirect issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed up a variable redirect issue" />
+    <MESSAGE value="Implemented initial saving and loading functions for Character models on the game board." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented initial saving and loading functions for Character models on the game board." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

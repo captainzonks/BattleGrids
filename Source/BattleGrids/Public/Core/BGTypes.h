@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/SplineComponent.h"
 #include "Engine/DataTable.h"
 #include "BGTypes.generated.h"
 
@@ -186,30 +187,32 @@ struct FBGTileInfo
 	}
 };
 
-USTRUCT(BlueprintType)
+USTRUCT()
 struct FBGCharacterModelSaveInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	int CharacterID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	FName CharacterName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	FVector CharacterLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	FName CharacterModelStaticMeshName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 	FName CharacterModelMaterialName;
 
 	FBGCharacterModelSaveInfo() = default;
 
-	FBGCharacterModelSaveInfo(int const InCharacterID, FName const InCharacterName, FVector const InCharacterLocation,
-	                          FName const InCharacterModelStaticMeshName, FName const InCharacterModelMaterialName)
+	explicit FBGCharacterModelSaveInfo(int const InCharacterID, FName const InCharacterName,
+	                                   FVector const InCharacterLocation,
+	                                   FName const InCharacterModelStaticMeshName,
+	                                   FName const InCharacterModelMaterialName)
 		: CharacterID(InCharacterID), CharacterName(InCharacterName), CharacterLocation(InCharacterLocation),
 		  CharacterModelStaticMeshName(InCharacterModelStaticMeshName),
 		  CharacterModelMaterialName(InCharacterModelMaterialName)
@@ -219,5 +222,62 @@ struct FBGCharacterModelSaveInfo
 	bool operator==(FBGCharacterModelSaveInfo const& Right) const
 	{
 		return this->CharacterID == Right.CharacterID;
+	}
+};
+
+USTRUCT()
+struct FBGWallSplineSaveInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	int WallSplineID;
+
+	UPROPERTY()
+	FName Tags;
+
+	UPROPERTY()
+	FVector Location;
+
+	UPROPERTY()
+	FSplineCurves SplineCurves;
+
+	UPROPERTY()
+	FName WallStaticMeshName;
+
+	UPROPERTY()
+	FName WallMaskedMaterialInstanceName;
+
+	UPROPERTY()
+	FName CornerStaticMeshName;
+
+	UPROPERTY()
+	FName CornerMaskedMaterialInstanceName;
+
+	UPROPERTY()
+	FName BaseStaticMeshName;
+
+	UPROPERTY()
+	FName BaseMaterialInstanceName;
+
+	FBGWallSplineSaveInfo() = default;
+
+	explicit FBGWallSplineSaveInfo(int const InWallSplineID, FName const InTags, FVector const InLocation,
+	                               FName const InWallStaticMeshName,
+	                               FName const InWallMaskedMaterialInstanceName, FName const InCornerStaticMeshName,
+	                               FName const InCornerMaskedMaterialInstanceName,
+	                               FName const InBaseStaticMeshName, FName const InBaseMaterialInstanceName)
+		: WallSplineID(InWallSplineID), Tags(InTags), Location(InLocation),
+		  WallStaticMeshName(InWallStaticMeshName),
+		  WallMaskedMaterialInstanceName(InWallMaskedMaterialInstanceName),
+		  CornerStaticMeshName(InCornerStaticMeshName),
+		  CornerMaskedMaterialInstanceName(InCornerMaskedMaterialInstanceName),
+		  BaseStaticMeshName(InBaseStaticMeshName), BaseMaterialInstanceName(InBaseMaterialInstanceName)
+	{
+	}
+
+	bool operator==(FBGWallSplineSaveInfo const& Right) const
+	{
+		return this->WallSplineID == Right.WallSplineID;
 	}
 };

@@ -19,6 +19,8 @@
 #include "Blueprint/UserWidget.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Actors/BGActor.h"
+#include "Components/BGSplineWallComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
@@ -399,6 +401,19 @@ void UBGGameInstance::SaveGameInfo()
 			{
 				Character->UpdateCharacterSaveLocation();
 				GameSave->SaveCharacterModelInfo(Character->GetCharacterModelSaveInfo());
+			}
+
+			auto SpawnedSplineWallActors = GameState->GetSpawnedActorsOfType(EBGActorType::Structure);
+
+			for (auto Structure : SpawnedSplineWallActors)
+			{
+				auto SplineWallComponent = Cast<UBGSplineWallComponent>(Structure->GetComponentByClass(
+					UBGSplineWallComponent::StaticClass()));
+				if (SplineWallComponent)
+				{
+					SplineWallComponent->UpdateWallSplineSaveInfo();
+					GameSave->SaveWallSplineInfo(SplineWallComponent->GetWallSplineSaveInfo());
+				}
 			}
 
 			UGameplayStatics::SaveGameToSlot(GameSave, DefaultGameSaveSlotName, 0);
