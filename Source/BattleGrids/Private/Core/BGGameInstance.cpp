@@ -5,6 +5,9 @@
 #include "Core/BGGameModeBase.h"
 #include "Core/BGSaveGame.h"
 #include "Core/BGTypes.h"
+#include "Core/Gameplay/BGGameplayGameStateBase.h"
+#include "Core/Save/BGPlayerSave.h"
+#include "Characters/BGCharacter.h"
 #include "UI/BGGameHUD.h"
 #include "UI/BGInGamePlayerList.h"
 #include "UI/BGLoadingScreen.h"
@@ -17,7 +20,6 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
@@ -50,10 +52,12 @@ void UBGGameInstance::Init()
 		GEngine->OnNetworkFailure().AddUObject(this, &UBGGameInstance::OnNetworkFailure);
 	}
 
-	if (UGameplayStatics::DoesSaveGameExist(DefaultSaveSlotName, 0))
+	if (UGameplayStatics::DoesSaveGameExist(DefaultPlayerSaveSlotName, 0))
 	{
-		SaveGame = Cast<UBGSaveGame>(UGameplayStatics::LoadGameFromSlot(DefaultSaveSlotName, 0));
+		PlayerSave = Cast<UBGPlayerSave>(UGameplayStatics::LoadGameFromSlot(DefaultPlayerSaveSlotName, 0));
 	}
+
+	bLoading = false;
 }
 
 void UBGGameInstance::LoadMainMenuWidget()
@@ -70,7 +74,7 @@ void UBGGameInstance::LoadMainMenuWidget()
 
 	Menu->SetMenuInterface(this);
 
-	if (!SaveGame)
+	if (!PlayerSave)
 	{
 		Menu->SetActiveWidget(2);
 	}
@@ -219,10 +223,19 @@ void UBGGameInstance::Join(int const& Index, FBGServerData const& InServerData)
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
 }
 
+
 void UBGGameInstance::StartGame()
 {
-	if (!ensure(Lobby)) return;
-	Lobby->Teardown();
+	if (bLoading)
+	{
+		if (!ensure(Menu)) return;
+		Menu->Teardown();
+	}
+	else
+	{
+		if (!ensure(Lobby)) return;
+		Lobby->Teardown();
+	}
 
 	auto Engine = GetEngine();
 	if (!ensure(Engine)) return;
@@ -242,6 +255,8 @@ void UBGGameInstance::LoadMainMenu()
 	auto PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController)) return;
 
+	bLoading = false;
+
 	PlayerController->ClientTravel("/Game/BattleGrids/Levels/MainMenu", TRAVEL_Absolute);
 }
 
@@ -253,14 +268,30 @@ void UBGGameInstance::RefreshServerList()
 	{
 		SessionSearch->MaxSearchResults = 100;
 		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		UE_LOG(LogTemp, Warning, TEXT("Starting Find Session"))
+		// UE_LOG(LogTemp, Warning, TEXT("Starting Find Session"))
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
+}
+
+void UBGGameInstance::RefreshLoadGameList()
+{
+	ToggleThinkingPopup(true);
+
+	if (UGameplayStatics::DoesSaveGameExist(DefaultGameSaveSlotName, 0))
+	{
+		TArray<UBGGameSave*> SaveGames;
+		UBGGameSave* NewSaveGame = Cast<UBGGameSave>(UGameplayStatics::LoadGameFromSlot(DefaultGameSaveSlotName, 0));
+		if (NewSaveGame)
+		{
+			SaveGames.AddUnique(NewSaveGame);
+		}
+		Menu->SetSaveGameList(SaveGames);
 	}
 }
 
 void UBGGameInstance::RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Refreshing Player Lists, Length : %d"), InPlayerInfo.Num())
+	// UE_LOG(LogTemp, Warning, TEXT("Refreshing Player Lists, Length : %d"), InPlayerInfo.Num())
 
 	if (InGamePlayerList)
 	{
@@ -273,12 +304,12 @@ void UBGGameInstance::RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerIn
 	}
 }
 
-void UBGGameInstance::ToggleLoadingScreen(bool const bLoading)
+void UBGGameInstance::ToggleLoadingScreen(bool const bIsLoading)
 {
 	auto const World = GetWorld();
 	if (World && !World->bIsTearingDown)
 	{
-		bLoading ? ShowLoadingScreen() : HideLoadingScreen();
+		bIsLoading ? ShowLoadingScreen() : HideLoadingScreen();
 	}
 }
 
@@ -291,10 +322,10 @@ void UBGGameInstance::ToggleThinkingPopup(bool const bThinking)
 	}
 }
 
-void UBGGameInstance::Save(FBGPlayerInfo const& InPlayerInfo)
-{
-	SavePlayerInfo(InPlayerInfo);
-}
+// void UBGGameInstance::SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo)
+// {
+// 	SavePlayerInfo(InPlayerInfo);
+// }
 
 void UBGGameInstance::UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo)
 {
@@ -335,27 +366,66 @@ void UBGGameInstance::CreateSession() const
 
 void UBGGameInstance::SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo)
 {
-	if (!SaveGame->IsValidLowLevel())
+	if (!PlayerSave->IsValidLowLevel())
 	{
-		SaveGame = Cast<UBGSaveGame>(UGameplayStatics::CreateSaveGameObject(UBGSaveGame::StaticClass()));
-		if (!ensure(SaveGame)) return;
+		PlayerSave = Cast<UBGPlayerSave>(UGameplayStatics::CreateSaveGameObject(UBGPlayerSave::StaticClass()));
+		if (!ensure(PlayerSave)) return;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Saving Player Info"))
-	SaveGame->SavePlayerInfo(InPlayerInfo);
+	PlayerSave->Save(InPlayerInfo);
 	OnSaveGame.Broadcast(InPlayerInfo);
-	UGameplayStatics::SaveGameToSlot(SaveGame, DefaultSaveSlotName, 0);
+	UGameplayStatics::SaveGameToSlot(PlayerSave, DefaultPlayerSaveSlotName, 0);
+}
+
+void UBGGameInstance::SaveGameInfo()
+{
+	auto const World = GetWorld();
+
+	if (!GameSave->IsValidLowLevel())
+	{
+		GameSave = Cast<UBGGameSave>(UGameplayStatics::CreateSaveGameObject(UBGGameSave::StaticClass()));
+		if (!ensure(GameSave)) return;
+	}
+
+	if (World)
+	{
+		auto GameState = World->GetGameState<ABGGameplayGameStateBase>();
+		if (GameState)
+		{
+			auto SpawnedCharacters = GameState->GetSpawnedCharacters();
+
+			for (auto Character : SpawnedCharacters)
+			{
+				Character->UpdateCharacterSaveLocation();
+				GameSave->SaveCharacterModelInfo(Character->GetCharacterModelSaveInfo());
+			}
+
+			UGameplayStatics::SaveGameToSlot(GameSave, DefaultGameSaveSlotName, 0);
+		}
+	}
 }
 
 bool UBGGameInstance::LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo)
 {
-	SaveGame = Cast<UBGSaveGame>(UGameplayStatics::LoadGameFromSlot(DefaultSaveSlotName, 0));
-	if (SaveGame->IsValidLowLevel())
+	PlayerSave = Cast<UBGPlayerSave>(UGameplayStatics::LoadGameFromSlot(DefaultPlayerSaveSlotName, 0));
+	if (PlayerSave->IsValidLowLevel())
 	{
-		OutPlayerInfo = SaveGame->GetPlayerInfo();
+		OutPlayerInfo = PlayerSave->GetPlayerInfo();
 		return true;
 	}
 	return false;
+}
+
+void UBGGameInstance::LoadGameInfo(int const& Index, UBGGameSave* InGameSave)
+{
+	if (InGameSave->IsValidLowLevel())
+	{
+		GameSave = InGameSave;
+		bLoading = true;
+
+		StartGame();
+	}
 }
 
 void UBGGameInstance::OnCreateSessionComplete(FName const SessionName, bool bSuccess)

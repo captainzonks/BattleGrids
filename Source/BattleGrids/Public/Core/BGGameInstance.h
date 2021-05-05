@@ -8,12 +8,13 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+
 #include "BGGameInstance.generated.h"
 
+class UBGPlayerSave;
 class UBGThinkingPopup;
 class FOnlineSessionSearch;
 class UBGGameHUD;
-class UBGSaveGame;
 class UBGMainMenu;
 class UBGLobbyMenu;
 class UBGInGamePlayerList;
@@ -71,16 +72,25 @@ public:
 	virtual void RefreshServerList() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void RefreshLoadGameList() override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void RefreshPlayerLists(TArray<FBGPlayerInfo> const& InPlayerInfo) override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
-	virtual void ToggleLoadingScreen(bool const bLoading) override;
+	virtual void ToggleLoadingScreen(bool const bIsLoading) override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void ToggleThinkingPopup(bool const bThinking) override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
-	virtual void Save(FBGPlayerInfo const& InPlayerInfo) override;
+	virtual void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo) override;
+
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void SaveGameInfo() override;
+
+	UFUNCTION(BlueprintCallable, Exec, Category = "BGGameInstance|Menu Interface")
+	virtual void LoadGameInfo(int const& Index, UBGGameSave* InGameSave) override;
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo) override;
@@ -90,8 +100,10 @@ public:
 
 	void CreateSession() const;
 
-	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
-	void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo);
+	bool GetLoading() const { return bLoading; }
+
+	// UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
+	// void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo);
 	
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
 	bool LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo);
@@ -109,9 +121,11 @@ public:
 	FBGServerData GetServerData() const { return ServerData; }
 	void SetServerData(FBGServerData const& InServerData) { ServerData = InServerData; }
 
+	UBGGameSave* GetGameSave() const { return GameSave; }
+
 	bool DoesSaveGameExist() const
 	{
-		if (SaveGame) return true;
+		if (PlayerSave) return true;
 		return false;
 	}
 
@@ -140,7 +154,10 @@ protected:
 	                      const FString& ErrorString);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
-	UBGSaveGame* SaveGame;
+	UBGPlayerSave* PlayerSave;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	UBGGameSave* GameSave;
 
 	///////////////////////
 	/// Blueprint References, to be set in Editor on defaults
@@ -198,7 +215,14 @@ protected:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	uint8 bLoading : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	FBGServerData ServerData;
 
-	FString DefaultSaveSlotName{"PlayerSave"};
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	FString DefaultPlayerSaveSlotName{"PlayerSave"};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	FString DefaultGameSaveSlotName{"GameSave"};
 };

@@ -186,3 +186,38 @@ struct FBGTileInfo
 	}
 };
 
+USTRUCT(BlueprintType)
+struct FBGCharacterModelSaveInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CharacterID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName CharacterName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector CharacterLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName CharacterModelStaticMeshName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName CharacterModelMaterialName;
+
+	FBGCharacterModelSaveInfo() = default;
+
+	FBGCharacterModelSaveInfo(int const InCharacterID, FName const InCharacterName, FVector const InCharacterLocation,
+	                          FName const InCharacterModelStaticMeshName, FName const InCharacterModelMaterialName)
+		: CharacterID(InCharacterID), CharacterName(InCharacterName), CharacterLocation(InCharacterLocation),
+		  CharacterModelStaticMeshName(InCharacterModelStaticMeshName),
+		  CharacterModelMaterialName(InCharacterModelMaterialName)
+	{
+	}
+
+	bool operator==(FBGCharacterModelSaveInfo const& Right) const
+	{
+		return this->CharacterID == Right.CharacterID;
+	}
+};
