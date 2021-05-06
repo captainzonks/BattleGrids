@@ -187,24 +187,24 @@ struct FBGTileInfo
 	}
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FBGCharacterModelSaveInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CharacterID;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName CharacterName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector CharacterLocation;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName CharacterModelStaticMeshName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName CharacterModelMaterialName;
 
 	FBGCharacterModelSaveInfo() = default;
@@ -225,39 +225,39 @@ struct FBGCharacterModelSaveInfo
 	}
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FBGWallSplineSaveInfo
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int WallSplineID;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName Tags;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Location;
 
 	UPROPERTY()
 	FSplineCurves SplineCurves;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName WallStaticMeshName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName WallMaskedMaterialInstanceName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName CornerStaticMeshName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName CornerMaskedMaterialInstanceName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName BaseStaticMeshName;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName BaseMaterialInstanceName;
 
 	FBGWallSplineSaveInfo() = default;

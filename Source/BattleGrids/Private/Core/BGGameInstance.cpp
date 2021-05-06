@@ -198,6 +198,8 @@ void UBGGameInstance::Host(FString const& ServerName)
 	if (SessionInterface.IsValid())
 	{
 		ServerData.Name = ServerName;
+
+		// TODO: don't hard set this
 		ServerData.MaxPlayers = 5;
 
 		auto const ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
@@ -412,7 +414,7 @@ void UBGGameInstance::SaveGameInfo()
 				if (SplineWallComponent)
 				{
 					SplineWallComponent->UpdateWallSplineSaveInfo();
-					GameSave->SaveWallSplineInfo(SplineWallComponent->GetWallSplineSaveInfo());
+					GameSave->SaveSplineWallInfo(SplineWallComponent->GetWallSplineSaveInfo());
 				}
 			}
 
@@ -439,7 +441,7 @@ void UBGGameInstance::LoadGameInfo(int const& Index, UBGGameSave* InGameSave)
 		GameSave = InGameSave;
 		bLoading = true;
 
-		StartGame();
+		Host(GameSave->GetSavedServerData().Name);
 	}
 }
 

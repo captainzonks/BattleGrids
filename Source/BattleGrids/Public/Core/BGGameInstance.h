@@ -124,9 +124,17 @@ public:
 	UBGPlayerSave* GetPlayerSave() const { return PlayerSave; }
 	UBGGameSave* GetGameSave() const { return GameSave; }
 
-	bool DoesSaveGameExist() const
+	/** TODO: rework these functions to actually be useful... */
+	
+	bool DoesPlayerSaveExist() const
 	{
 		if (PlayerSave) return true;
+		return false;
+	}
+
+	bool DoesGameSaveExist() const
+	{
+		if (GameSave) return true;
 		return false;
 	}
 

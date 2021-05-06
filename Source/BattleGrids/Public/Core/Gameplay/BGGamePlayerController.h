@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+#include "Actors/BGPawn.h"
 #include "Core/BGPlayerController.h"
 #include "Core/BGTypes.h"
 
@@ -32,7 +33,10 @@ public:
 	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "BGGamePlayerController|UI")
 	void SetupGameUI();
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable, Category = "BGGamePlayerController|ActorMovement")
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|Functions")
+	void Spawn();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BGGamePlayerController|ActorMovement")
 	void UpdateTransformOnServer(FTransform const& NewTransform);
 
 protected:
@@ -343,6 +347,9 @@ protected:
 
 	///////////////////////
 	/// Variables
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
+	TSubclassOf<ABGPawn> PlayerPawnClassReference;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BGGamePlayerController|Config")
 	EBGControlMode ControlMode{EBGControlMode::Build};

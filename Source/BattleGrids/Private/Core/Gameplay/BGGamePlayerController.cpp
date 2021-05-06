@@ -14,6 +14,7 @@
 #include "Core/BGGameInstance.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
+#include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "UI/BGGameHUD.h"
@@ -62,6 +63,41 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 
 	DOREPLIFETIME(ABGGamePlayerController, TokenNames)
 	DOREPLIFETIME(ABGGamePlayerController, ActorNames)
+}
+
+void ABGGamePlayerController::Spawn_Implementation()
+{
+	if (!PlayerPawnClassReference.Get()) return;
+	
+	TArray<AActor*> PlayerStartArray;
+	UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerStartArray);
+
+	/** Get a random PlayerStart transform */
+	FTransform const NewTransform(
+		PlayerStartArray[FMath::RandRange(
+			0,
+			PlayerStartArray.Num() - 1)]->GetTransform());
+
+	auto ControlledPawn = GetPawn();
+	if (ControlledPawn)
+	{
+		ControlledPawn->Destroy();
+	}
+	
+	auto NewPawn = Cast<ABGPawn>(UGameplayStatics::BeginDeferredActorSpawnFromClass(
+		this,
+		PlayerPawnClassReference,
+		NewTransform,
+		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn,
+		this));
+
+	if (NewPawn)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawning!"))
+
+		NewPawn->FinishSpawning(NewTransform);
+		Possess(NewPawn);
+	}
 }
 
 void ABGGamePlayerController::SelectActor()
@@ -242,15 +278,15 @@ void ABGGamePlayerController::DestroyGameActor_Implementation(AActor* ActorToDes
 
 void ABGGamePlayerController::SetupGameUI_Implementation()
 {
-	auto GameInstance = GetGameInstance<UBGGameInstance>();
-	if (GameInstance)
+	// auto GameInstance = GetGameInstance<UBGGameInstance>();
+	if (BGGameInstance)
 	{
-		if (GameInstance->GetLobby())
+		if (BGGameInstance->GetLobby())
 		{
-			GameInstance->GetLobby()->Teardown();
+			BGGameInstance->GetLobby()->Teardown();
 		}
-		GameInstance->LoadGameHUDWidget();
-		GameInstance->ToggleLoadingScreen(false);
+		BGGameInstance->LoadGameHUDWidget();
+		BGGameInstance->ToggleLoadingScreen(false);
 	}
 }
 
