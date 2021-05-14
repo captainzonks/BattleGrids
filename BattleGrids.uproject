@@ -29,7 +29,7 @@
 		},
 		{
 			"Name": "RuntimeTransformer",
-			"Enabled": true,
+			"Enabled": false,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/289c74dbc9614a77b67cf0c414ca43e0"
 		}
 	],

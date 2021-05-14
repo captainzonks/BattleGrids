@@ -385,13 +385,9 @@ void UBGGameInstance::SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo)
 void UBGGameInstance::SaveGameInfo()
 {
 	auto const World = GetWorld();
-
-	if (!GameSave->IsValidLowLevel())
-	{
-		GameSave = Cast<UBGGameSave>(UGameplayStatics::CreateSaveGameObject(UBGGameSave::StaticClass()));
-		if (!ensure(GameSave)) return;
-	}
-
+	auto NewGameSave = Cast<UBGGameSave>(UGameplayStatics::CreateSaveGameObject(UBGGameSave::StaticClass()));
+	if (!ensure(NewGameSave)) return;
+	
 	if (World)
 	{
 		auto GameState = World->GetGameState<ABGGameplayGameStateBase>();
@@ -402,7 +398,7 @@ void UBGGameInstance::SaveGameInfo()
 			for (auto Character : SpawnedCharacters)
 			{
 				Character->UpdateCharacterSaveLocation();
-				GameSave->SaveCharacterModelInfo(Character->GetCharacterModelSaveInfo());
+				NewGameSave->SaveCharacterModelInfo(Character->GetCharacterModelSaveInfo());
 			}
 
 			auto SpawnedSplineWallActors = GameState->GetSpawnedActorsOfType(EBGActorType::Structure);
@@ -414,10 +410,11 @@ void UBGGameInstance::SaveGameInfo()
 				if (SplineWallComponent)
 				{
 					SplineWallComponent->UpdateWallSplineSaveInfo();
-					GameSave->SaveSplineWallInfo(SplineWallComponent->GetWallSplineSaveInfo());
+					NewGameSave->SaveSplineWallInfo(SplineWallComponent->GetWallSplineSaveInfo());
 				}
 			}
 
+			GameSave = NewGameSave;
 			UGameplayStatics::SaveGameToSlot(GameSave, DefaultGameSaveSlotName, 0);
 		}
 	}

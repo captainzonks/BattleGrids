@@ -240,7 +240,7 @@ struct FBGWallSplineSaveInfo
 	FVector Location;
 
 	UPROPERTY()
-	FSplineCurves SplineCurves;
+	FSplineCurves SplineCurves{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName WallStaticMeshName;
