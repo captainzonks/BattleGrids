@@ -76,9 +76,10 @@ void UBGGameInstance::LoadMainMenuWidget()
 
 	Menu->SetMenuInterface(this);
 
+	/** If no PlayerSave exists, open the Player Name options panel first */
 	if (!PlayerSave)
 	{
-		Menu->SetActiveWidget(2);
+		Menu->SetActiveWidget(4);
 	}
 }
 
