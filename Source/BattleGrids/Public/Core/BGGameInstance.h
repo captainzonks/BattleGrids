@@ -104,7 +104,7 @@ public:
 
 	// UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
 	// void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo);
-	
+
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
 	bool LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo);
 
@@ -125,7 +125,7 @@ public:
 	UBGGameSave* GetGameSave() const { return GameSave; }
 
 	/** TODO: rework these functions to actually be useful... */
-	
+
 	bool DoesPlayerSaveExist() const
 	{
 		if (PlayerSave) return true;
@@ -146,7 +146,6 @@ public:
 
 
 protected:
-
 	void ShowLoadingScreen();
 	void HideLoadingScreen();
 	void ShowThinkingPopup();

@@ -21,6 +21,7 @@
 #include "OnlineSubsystem.h"
 #include "Actors/BGActor.h"
 #include "Components/BGSplineWallComponent.h"
+#include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
@@ -28,6 +29,18 @@ const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
 
 void UBGGameInstance::Init()
 {
+	if (GEngine)
+	{
+		UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+		if (UserSettings)
+		{
+			UserSettings->SetScreenResolution(UserSettings->GetDesktopResolution());
+			UserSettings->SetFullscreenMode(EWindowMode::WindowedFullscreen);
+			UserSettings->ApplySettings(false);
+		}
+	}
+	
+	/** Initialize the Online Subsystem */
 	auto const Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
 	{
