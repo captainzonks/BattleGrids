@@ -11,6 +11,7 @@
 
 #include "BGGameInstance.generated.h"
 
+class UBGOptionsMenu;
 class UBGPlayerSave;
 class UBGThinkingPopup;
 class FOnlineSessionSearch;
@@ -95,15 +96,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
 	virtual void UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo) override;
 
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void OpenOptionsMenu() override;
+	
+	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Menu Interface")
+	virtual void CloseOptionsMenu() override;
+
 	///////////////////////
 	/// Functions
 
 	void CreateSession() const;
 
 	bool GetLoading() const { return bLoading; }
-
-	// UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
-	// void SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGameInstance|Gameplay")
 	bool LoadPlayerInfo(FBGPlayerInfo& OutPlayerInfo);
@@ -112,6 +116,7 @@ public:
 	/// UI Getters
 
 	UBGLobbyMenu* GetLobby() const { return Lobby; }
+	UBGOptionsMenu* GetOptionsMenu() const { return OptionsMenu; }
 	UBGGameHUD* GetGameHUD() const { return GameHUD; }
 	UBGInGamePlayerList* GetInGamePlayerList() const { return InGamePlayerList; }
 
@@ -174,6 +179,9 @@ protected:
 	TSubclassOf<UUserWidget> MainMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGameInstance|Config")
+	TSubclassOf<UUserWidget> OptionsMenuClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGameInstance|Config")
 	TSubclassOf<UUserWidget> LobbyMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BGGameInstance|Config")
@@ -196,6 +204,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
 	UBGMainMenu* Menu;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
+	UBGOptionsMenu* OptionsMenu;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BGGameInstance|Config")
 	UBGLobbyMenu* Lobby;

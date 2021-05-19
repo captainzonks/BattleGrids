@@ -67,14 +67,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/WBP_OptionsMenu.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGOptionsMenu.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGOptionsMenu.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/BP_GameInstance.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_InGameMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_InGameMenu.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/MainMenu/WBP_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/BattleGrids.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/BattleGrids.Build.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,11 +111,8 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameHUD.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGSubContextMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGSubContextMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGToken.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGToken.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGamePlayerList.cpp" />
@@ -126,8 +132,6 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGSaveGame.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGSaveGame.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGPlayerSave.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGServerRow.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameLoadRow.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGGameLoadRow.cpp" />
@@ -148,11 +152,16 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerState.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/BattleGrids.Build.cs" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGOptionsMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGOptionsMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -35174,14 +35183,9 @@
       <workItem from="1621007547489" duration="2654000" />
       <workItem from="1621010759466" duration="12000" />
       <workItem from="1621010854056" duration="3919000" />
-      <workItem from="1621355620315" duration="8289000" />
-    </task>
-    <task id="LOCAL-00017" summary="Tokens can be placed upon the top of SplineStructures now.">
-      <created>1614807564505</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1614807564505</updated>
+      <workItem from="1621355620315" duration="8483000" />
+      <workItem from="1621443406519" duration="1968000" />
+      <workItem from="1621445483145" duration="6427000" />
     </task>
     <task id="LOCAL-00018" summary="SplineStructures can be moved, and the ControlMode enum in PlayerController properly controls the flow of logic between Move and Build for tokens and structures.">
       <created>1614813358441</created>
@@ -35519,7 +35523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621014892138</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="began implementation of the Game Options menu for Resolution and FullscreenMode settings">
+      <created>1621365098060</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1621365098060</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -35552,7 +35563,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Worked further on RPC calls for handling the Lobby player list update, and reworked the Tick in PlayerController and LobbyPlayerController for getting the GameState and PlayerState. PlayerList populates irregularly. To be investigated..." />
     <MESSAGE value="Lobby is successfully handling PlayerStates and updating all UI with timers, and each PlayerState CLIENT gets a UniqueID to be sent to the SERVER. Working finally!" />
     <MESSAGE value="Networked game start flow from Main Menu to Lobby to Game is working mostly, just needs to be smoothed out." />
     <MESSAGE value="Joining a game in progress properly updates the player lists and UI accordingly for all connected." />
@@ -35577,7 +35587,8 @@
     <MESSAGE value="reconfigured how pawn movement is handled (seems smoother?) and moved spawning code over to C++" />
     <MESSAGE value="Fixed replication bug with spline points' Arrive and Leave tangents not being normalized before NetSerialize getting called." />
     <MESSAGE value="improved UI functionality for Main Menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved UI functionality for Main Menu" />
+    <MESSAGE value="began implementation of the Game Options menu for Resolution and FullscreenMode settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="began implementation of the Game Options menu for Resolution and FullscreenMode settings" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

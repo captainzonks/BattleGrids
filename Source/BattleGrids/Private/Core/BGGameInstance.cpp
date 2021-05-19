@@ -23,12 +23,14 @@
 #include "Components/BGSplineWallComponent.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/BGOptionsMenu.h"
 
 const static FName SESSION_NAME = TEXT("BattleGrids Session");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("BattleGrids Server");
 
 void UBGGameInstance::Init()
 {
+	/** Setup the default screen settings */
 	if (GEngine)
 	{
 		UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
@@ -36,6 +38,9 @@ void UBGGameInstance::Init()
 		{
 			UserSettings->SetScreenResolution(UserSettings->GetDesktopResolution());
 			UserSettings->SetFullscreenMode(EWindowMode::WindowedFullscreen);
+
+			UserSettings->LoadSettings(false);
+
 			UserSettings->ApplySettings(false);
 		}
 	}
@@ -340,11 +345,6 @@ void UBGGameInstance::ToggleThinkingPopup(bool const bThinking)
 	}
 }
 
-// void UBGGameInstance::SavePlayerInfo(FBGPlayerInfo const& InPlayerInfo)
-// {
-// 	SavePlayerInfo(InPlayerInfo);
-// }
-
 void UBGGameInstance::UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& InPlayerInfo)
 {
 	auto const World = GetWorld();
@@ -355,6 +355,38 @@ void UBGGameInstance::UpdatePlayerInfo(int const& Index, FBGPlayerInfo const& In
 		{
 			CastGameMode->SendUpdatedPlayerInfoToPlayer(Index, InPlayerInfo);
 		}
+	}
+}
+
+void UBGGameInstance::OpenOptionsMenu()
+{
+	if (!ensure(OptionsMenuClass)) return;
+
+	if (!OptionsMenu)
+	{
+		OptionsMenu = CreateWidget<UBGOptionsMenu>(this, OptionsMenuClass);
+	}
+	if (!ensure(OptionsMenu)) return;
+
+	OptionsMenu->Setup();
+
+	OptionsMenu->SetMenuInterface(this);
+}
+
+void UBGGameInstance::CloseOptionsMenu()
+{
+	if (OptionsMenu && OptionsMenu->IsInViewport())
+	{
+		if (Menu->IsInViewport())
+		{
+			Menu->SetVisibility(ESlateVisibility::Visible);
+		}
+		else if (InGameMenu->IsInViewport())
+		{
+			InGameMenu->SetVisibility(ESlateVisibility::Visible);
+		}
+		
+		OptionsMenu->Teardown();
 	}
 }
 
