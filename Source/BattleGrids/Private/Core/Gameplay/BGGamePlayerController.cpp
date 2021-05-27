@@ -1127,6 +1127,7 @@ void ABGGamePlayerController::ToggleTileVisibility_Server_Implementation(UBGTile
 {
 	if (TileToToggle)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Toggling Tile Visibility"))
 		ABGGameplayGameModeBase::ToggleTileVisibility(TileToToggle);
 	}
 }
@@ -1142,7 +1143,7 @@ bool ABGGamePlayerController::GetGameMasterPermissions() const
 void ABGGamePlayerController::OutlineObject()
 {
 	FHitResult HitResult;
-	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, HitResult))
+	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GRAB), true, HitResult))
 	{
 		if (HitResult.GetActor()->IsValidLowLevel())
 		{
