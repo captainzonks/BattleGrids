@@ -124,6 +124,11 @@ void ABGGamePlayerController::SelectActor()
 		if (!GrabbedActor)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Click 1: Loading Actor"))
+			
+			auto const LastClickedBGActor = Cast<ABGActor>(LastClickedActor);
+			/** Return if the Actor is locked */
+			if (LastClickedBGActor && LastClickedBGActor->GetIsLocked()) return;
+			
 			LoadGrabbedActor();
 			return;
 		}
@@ -134,6 +139,10 @@ void ABGGamePlayerController::SelectActor()
 		if (GrabbedBGActor && LastClickedBGActor)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Hit a BGActor!"))
+
+			/** Make sure the Grabbed Actor isn't locked */
+			if (GrabbedBGActor->GetIsLocked()) return;
+			
 			auto const GrabbedBGActorType = GrabbedBGActor->GetActorType();
 			
 			switch (GrabbedBGActorType)
@@ -168,6 +177,9 @@ void ABGGamePlayerController::SelectActor()
 		auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
 		if (GrabbedBGCharacter && LastClickedBGActor)
 		{
+			/** Make sure the Token isn't locked */
+			if (GrabbedBGCharacter->GetIsTokenLocked()) return;
+			
 			if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Click 2: Token Movement"))
@@ -646,67 +658,38 @@ void ABGGamePlayerController::ToggleDoorOpenClose(ABGDoor* DoorToToggle)
 	}
 }
 
-void ABGGamePlayerController::ResetSplineStructure(UBGSplineWallComponent* InSplineComponent) const
+void ABGGamePlayerController::ResetSplineStructure(UBGSplineWallComponent* InSplineComponent)
 {
 	if (InSplineComponent)
 	{
-		if (!HasAuthority())
-		{
-			if (InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
-			{
-				// clear all spline points except for indices 0 and 1
-				for (int i{InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
-				{
-					InSplineComponent->GetSplineComponent()->RemoveSplinePoint(i - 1);
-				}
-			}
+		// if (!HasAuthority())
+		// {
+		// 	if (InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
+		// 	{
+		// 		// clear all spline points except for indices 0 and 1
+		// 		for (int i{InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
+		// 		{
+		// 			InSplineComponent->GetSplineComponent()->RemoveSplinePoint(i - 1);
+		// 		}
+		// 	}
+		//
+		// 	// reset Spline Point 0 to actor's origin
+		// 	InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
+		// 		0, InSplineComponent->GetOwner()->GetActorLocation(), ESplineCoordinateSpace::World, true);
+		//
+		// 	// reset Spline Point 1 to 105.f away the origin
+		// 	auto Location = InSplineComponent->GetOwner()->GetActorLocation();
+		// 	Location.X += 50.f;
+		//
+		// 	InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
+		// 		1, Location, ESplineCoordinateSpace::World, true);
+		//
+		// 	InSplineComponent->UpdateSplineStructureMesh(true);
+		// }
 
-			// reset Spline Point 0 to actor's origin
-			InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
-				0, InSplineComponent->GetOwner()->GetActorLocation(), ESplineCoordinateSpace::World, true);
-
-			// reset Spline Point 1 to 105.f away the origin
-			auto Location = InSplineComponent->GetOwner()->GetActorLocation();
-			Location.X += 50.f;
-
-			InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
-				1, Location, ESplineCoordinateSpace::World, true);
-
-			InSplineComponent->UpdateSplineStructureMesh();
-		}
+		ResetSplineStructure_Server(InSplineComponent);
 	}
 }
-
-// void ABGGamePlayerController::HandleActorSelection()
-// {
-// 	/** Removed GameMasterPermission check at this time because of improper Server Defaulting */
-// 	
-// 	// if (!GetGameMasterPermissions())
-// 	// {
-// 	// 	return;
-// 	// }
-// 	
-// 	if (GrabbedActor && LastClickedActor)
-// 	{
-// 		UE_LOG(LogTemp, Warning, TEXT("HandleActorSelection(): LastClickedActor = %s"), *LastClickedActor->GetName())
-// 		FVector Location;
-//
-// 		if (Cast<ABGActor>(LastClickedActor)->GetActorType() == EBGActorType::Structure) return;
-//
-// 		FVector ActorOrigin{};
-// 		FVector ActorBoxExtent{};
-//
-// 		LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-//
-// 		Location.X = ActorOrigin.X;
-// 		Location.Y = ActorOrigin.Y;
-// 		/** Eventually don't hardcode 300 here...make it better */
-// 		Location.Z = 150.f + ActorOrigin.Z + ActorBoxExtent.Z;
-//
-// 		MoveActorToLocation(Location);
-// 	}
-//
-// }
 
 void ABGGamePlayerController::MoveActorToLocation(FVector const& Location)
 {

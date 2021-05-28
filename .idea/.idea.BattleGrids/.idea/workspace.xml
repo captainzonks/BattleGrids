@@ -66,13 +66,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="">
+    <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="Shrinking and Growing board function is working again.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_ContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_ContextMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_SplineStructureContextMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_StructureContextMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +87,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="components-refactor" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -125,7 +130,6 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGPawn.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGPawn.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" />
@@ -143,14 +147,15 @@
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGOptionsMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGTileComponent.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGTileComponent.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -35178,14 +35183,7 @@
       <workItem from="1622071947648" duration="529000" />
       <workItem from="1622077237394" duration="801000" />
       <workItem from="1622135932054" duration="5916000" />
-      <workItem from="1622223076214" duration="2405000" />
-    </task>
-    <task id="LOCAL-00020" summary="Improved SplineStructure functions with a more generic &quot;ModifyMeshInstanceAtIndex&quot; and the ability to get a mesh instance by a string name provided.">
-      <created>1614899574015</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1614899574015</updated>
+      <workItem from="1622223076214" duration="6956000" />
     </task>
     <task id="LOCAL-00021" summary="improved movement/modifying of structures, added locking/unlocking; made a Mesh and Material data bank which is tapped for spawning tokens and structures so that meshes and materials can be selected and chosen dynamically, vs making individual token and structure classes.">
       <created>1614986158075</created>
@@ -35523,7 +35521,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622142485568</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Shrinking and Growing board function is working again.">
+      <created>1622225611224</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1622225611224</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -35556,7 +35561,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Joining a game in progress properly updates the player lists and UI accordingly for all connected." />
     <MESSAGE value="Improved user interface to have a &quot;Thinking&quot; GUI popup to visually confirm the server is doing something (searching for server list, refreshing, etc.). Added some more functionality to the Lobby, and also reworked the Save/Load functions for PlayerInfo." />
     <MESSAGE value="fixed garbage collection issue with instanced meshes on the spline structure by switching to tags instead of object name for finding the instances we want; began to refactor all the context menus" />
     <MESSAGE value="tile context menu implemented" />
@@ -35581,7 +35585,8 @@
     <MESSAGE value="began implementation of the Game Options menu for Resolution and FullscreenMode settings" />
     <MESSAGE value="Moved OptionsMenu to its own class; can now be opened from InGameMenu and settings can be modified while in-game (obviously)." />
     <MESSAGE value="fixed up the ability to grab through a wall when it has become transparent; fixed tile visibility toggling; began to refactor the Grow/Shrink Board functions, but needs to be rewritten" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed up the ability to grab through a wall when it has become transparent; fixed tile visibility toggling; began to refactor the Grow/Shrink Board functions, but needs to be rewritten" />
+    <MESSAGE value="Shrinking and Growing board function is working again." />
+    <option name="LAST_COMMIT_MESSAGE" value="Shrinking and Growing board function is working again." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

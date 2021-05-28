@@ -166,7 +166,7 @@ protected:
 	// void ToggleLockSplineStructureInPlace(ABGActor* SplineStructureToLock, bool const bNewLocked);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
-	void ResetSplineStructure(UBGSplineWallComponent* InSplineComponent) const;
+	void ResetSplineStructure(UBGSplineWallComponent* InSplineComponent);
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|SplineStructure")
 	float GetClosestKeyOnSplineAtMousePosition(UBGSplineWallComponent* SplineComponent, FVector& OutIntersection) const;
@@ -188,9 +188,6 @@ protected:
 	/**
 	 * Board Functions
 	 */
-	//
-	// UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
-	// void HandleActorSelection();
 
 	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
 	void ToggleTileVisibility(UBGTileComponent* TileToToggle);
@@ -205,10 +202,10 @@ protected:
 	 * BGActor Functions
 	 */
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Actor")
 	void MoveActorToLocation(FVector const& Location);
 
-	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Board")
+	UFUNCTION(BlueprintCallable, Category = "BGGamePlayerController|Actor")
 	void ToggleActorLockedState(ABGActor* InActor, bool const bSetLocked);
 
 	////////////////////////
