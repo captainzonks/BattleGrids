@@ -36,10 +36,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Movement")
 	void MoveRight(float Value);
 
-	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Camera")
+	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Movement")
 	void LookUp(float Value);
 
-	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Camera")
+	UFUNCTION(BlueprintCallable, Category = "ABGPawn|Movement")
 	void Turn(float Value);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -74,6 +74,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
 	FName ScalarParameterName{"Radius"};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	float MovementSpeedScalar{25.f};
 
 	uint8 bIsRightMouseButtonDown : 1;
 };

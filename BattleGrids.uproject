@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{1D4608DD-43E5-DC70-E3CF-1DBA6C3E0D1E}",
+	"EngineAssociation": "4.26",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -29,7 +29,7 @@
 		},
 		{
 			"Name": "RuntimeTransformer",
-			"Enabled": true,
+			"Enabled": false,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/289c74dbc9614a77b67cf0c414ca43e0"
 		}
 	],

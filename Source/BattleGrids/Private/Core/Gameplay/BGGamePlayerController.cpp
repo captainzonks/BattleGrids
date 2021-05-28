@@ -2,17 +2,22 @@
 
 #include "Core/Gameplay/BGGamePlayerController.h"
 
-#include "Actors/BGBoard.h"
-#include "Actors/BGSplineStructure.h"
-#include "Actors/BGTile.h"
-#include "Characters/BGToken.h"
 #include "Actors/Structures/BGDoor.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Characters/BGCharacter.h"
+#include "Components/BGBoardComponent.h"
+#include "Components/BGSplineWallComponent.h"
+#include "Components/BGTileComponent.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/MenuAnchor.h"
 #include "Components/SplineComponent.h"
 #include "Core/BGGameInstance.h"
 #include "Core/BGPlayerState.h"
 #include "Core/Gameplay/BGGameplayGameModeBase.h"
+#include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "UI/BGGameHUD.h"
 #include "UI/BGInGamePlayerList.h"
 #include "UI/BGLobbyMenu.h"
 
@@ -24,6 +29,8 @@ ABGGamePlayerController::ABGGamePlayerController()
 void ABGGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BGGameInstance = GetGameInstance<UBGGameInstance>();
 
 	SetupGameUI();
 }
@@ -40,11 +47,11 @@ void ABGGamePlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	// Handle Select (Default: Left Click w/ Mouse)
-	InputComponent->BindAction("Select", IE_Pressed, this, &ABGGamePlayerController::SelectObject);
+	InputComponent->BindAction("Select", IE_Pressed, this, &ABGGamePlayerController::SelectActor);
 	InputComponent->BindAction("Context", IE_Pressed, this, &ABGGamePlayerController::ToggleContextMenu);
 
 	// Token Movement Handling
-	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateToken);
+	InputComponent->BindAxis("RotateToken", this, &ABGGamePlayerController::RotateCharacter);
 
 	// In Game UI
 	InputComponent->BindAction("PlayerList", IE_Pressed, this, &ABGGamePlayerController::ShowInGamePlayerListMenu);
@@ -54,23 +61,232 @@ void ABGGamePlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// DOREPLIFETIME(ABGGamePlayerController, ControlMode)
-	// DOREPLIFETIME(ABGGamePlayerController, GrabbedObject)
 	DOREPLIFETIME(ABGGamePlayerController, TokenNames)
-	DOREPLIFETIME(ABGGamePlayerController, StructureNames)
+	DOREPLIFETIME(ABGGamePlayerController, ActorNames)
+}
+
+void ABGGamePlayerController::Spawn_Implementation()
+{
+	if (!PlayerPawnClassReference.Get()) return;
+	
+	TArray<AActor*> PlayerStartArray;
+	UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerStartArray);
+
+	/** Get a random PlayerStart transform */
+	FTransform const NewTransform(
+		PlayerStartArray[FMath::RandRange(
+			0,
+			PlayerStartArray.Num() - 1)]->GetTransform());
+
+	auto ControlledPawn = GetPawn();
+	if (ControlledPawn)
+	{
+		ControlledPawn->Destroy();
+	}
+	
+	auto NewPawn = Cast<ABGPawn>(UGameplayStatics::BeginDeferredActorSpawnFromClass(
+		this,
+		PlayerPawnClassReference,
+		NewTransform,
+		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn,
+		this));
+
+	if (NewPawn)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawning!"))
+
+		NewPawn->FinishSpawning(NewTransform);
+		Possess(NewPawn);
+	}
+}
+
+void ABGGamePlayerController::SelectActor()
+{
+	/** If a context menu is open, close it */
+	if (BGGameInstance)
+	{
+		BGGameInstance->GetGameHUD()->CloseContextMenu();
+	}
+
+	/**
+	 * Refresh LastHitResult with a new trace under cursor
+	 * If we haven't loaded an object yet, search on the Grab trace channel
+	 * If we have loaded an object, execute on the Tile trace channel
+	 */
+	GetHitResultUnderCursorByChannel(
+		UEngineTypes::ConvertToTraceType(!GrabbedActor ? ECC_GRAB : ECC_TILE), true, LastHitResult);
+
+	if (LastHitResult.bBlockingHit)
+	{
+		LastClickedActor = LastHitResult.GetActor();
+
+		/** Load an object into our LeftClick if we don't have one yet */
+		if (!GrabbedActor)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Click 1: Loading Actor"))
+			LoadGrabbedActor();
+			return;
+		}
+
+		/** Execute specific functions for BGActor movement */
+		auto const LastClickedBGActor = Cast<ABGActor>(LastClickedActor);
+		auto const GrabbedBGActor = Cast<ABGActor>(GrabbedActor);
+		if (GrabbedBGActor && LastClickedBGActor)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Hit a BGActor!"))
+			auto const GrabbedBGActorType = GrabbedBGActor->GetActorType();
+			
+			switch (GrabbedBGActorType)
+			{
+			case EBGActorType::None:
+				break;
+
+			case EBGActorType::Structure:
+				if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Click 2: Actor Type Structure"))
+					HandleSplineStructureSelection();
+					ReleaseGrabbedActor();
+				}
+				break;
+			
+			case EBGActorType::Light:
+				if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Click 2: Actor Type Light"))
+					LastClickedActor = GrabbedBGActor;
+					// HandleActorSelection();
+				}
+				ReleaseGrabbedActor();
+				break;
+			
+			default: ;
+			}
+		}
+
+		/** Execute specific functions for BGToken movement */
+		auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+		if (GrabbedBGCharacter && LastClickedBGActor)
+		{
+			if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Click 2: Token Movement"))
+				MoveCharacterToLocation();
+				ReleaseGrabbedActor();
+			}
+		}
+	}
+}
+
+void ABGGamePlayerController::LoadGrabbedActor()
+{
+	if (LastClickedActor)
+	{
+		auto const LastClickedBGActor = Cast<ABGActor>(LastClickedActor);
+
+		/** Did we click on a BGActor? */
+		if (LastClickedBGActor && !LastClickedBGActor->GetIsLocked())
+		{
+			auto const LastClickedBGActorType = LastClickedBGActor->GetActorType();
+			/** Don't load a tile (for now) */
+			if (LastClickedBGActorType == EBGActorType::Tile) return;
+
+			/** Store the last clicked variables as the now grabbed variables */
+			GrabbedActor = LastClickedBGActor;
+			GrabbedActorType = LastClickedBGActorType;
+
+			/** Check the type and execute specific functions as needed */
+			switch (GrabbedActorType)
+			{
+				case EBGActorType::None: break;
+
+				case EBGActorType::Structure:
+				{
+					/** Try and get a SplineComponent off the Structure actor */
+					auto const SplineComponent = Cast<UBGSplineWallComponent>(
+						GrabbedActor->GetComponentByClass(UBGSplineWallComponent::StaticClass()));
+					if (SplineComponent)
+					{
+						/** Add a new spline point if LeftAlt was held down */
+						if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
+						{
+							AddSplinePointToSplineStructure(SplineComponent);
+						}
+    
+						/** If we haven't stored a NearestIndexToClick yet, get one */
+						if (NearestIndexToClick < 0)
+						{
+							if (SplineComponent->GetInstancedStaticMeshComponentByTag("WallInstance")
+								->GetInstanceCount() < 2)
+							{
+								NearestIndexToClick = 1;
+							}
+							else
+							{
+								/** Unused variable for the out parameter */
+								FVector UnusedLocation;
+								NearestIndexToClick = FMath::RoundToInt(
+									GetClosestKeyOnSplineAtMousePosition(
+										SplineComponent, UnusedLocation));
+							}
+						}
+					}
+				} break;
+
+				case EBGActorType::Board: break;
+
+				case EBGActorType::Tile: break;
+
+				case EBGActorType::Light: break;
+
+				default: ;
+			}
+			return;
+		}
+
+		auto const LastClickedBGCharacter = Cast<ABGCharacter>(LastClickedActor);
+
+		/** Did we click on a BGToken? */
+		if (LastClickedBGCharacter)
+		{
+			/** Store the last clicked variables as the now grabbed variables */
+			GrabbedActor = LastClickedBGCharacter;
+		}
+	}
+}
+
+void ABGGamePlayerController::ReleaseGrabbedActor()
+{
+	GrabbedActorType = EBGActorType::None;
+	GrabbedActor = nullptr;
+	LastClickedActor = nullptr;
+	LastHitResult.Reset();
+	NearestIndexToClick = -1;
+}
+
+void ABGGamePlayerController::DestroyGameActor_Implementation(AActor* ActorToDestroy)
+{
+	if (ActorToDestroy)
+	{
+		auto const CastGameMode = GetWorld()->GetAuthGameMode<ABGGameplayGameModeBase>();
+		if (CastGameMode)
+		{
+			CastGameMode->DestroyGameActor(ActorToDestroy);
+		}
+	}
 }
 
 void ABGGamePlayerController::SetupGameUI_Implementation()
 {
-	auto GameInstance = GetGameInstance<UBGGameInstance>();
-	if (GameInstance)
+	// auto GameInstance = GetGameInstance<UBGGameInstance>();
+	if (BGGameInstance)
 	{
-		if (GameInstance->GetLobby())
+		if (BGGameInstance->GetLobby())
 		{
-			GameInstance->GetLobby()->Teardown();
+			BGGameInstance->GetLobby()->Teardown();
 		}
-		GameInstance->LoadGameHUDWidget();
-		GameInstance->ToggleLoadingScreen(false);
+		BGGameInstance->LoadGameHUDWidget();
+		BGGameInstance->ToggleLoadingScreen(false);
 	}
 }
 
@@ -83,257 +299,82 @@ void ABGGamePlayerController::UpdateTransformOnServer_Implementation(FTransform 
 	}
 }
 
-
-void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGActorType const& ObjectType)
+void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode(EBGClassCategory const& ClassCategory)
 {
-	GetRowNamesOfObjectTypeFromGameMode_Server(ObjectType);
+	GetRowNamesOfObjectTypeFromGameMode_Server(ClassCategory);
 }
 
 void ABGGamePlayerController::GetRowNamesOfObjectTypeFromGameMode_Server_Implementation(
-	EBGActorType const& ObjectType)
+	EBGClassCategory const& ClassCategory)
 {
-	switch (ObjectType)
+	switch (ClassCategory)
 	{
-	case EBGActorType::None: break;
-	case EBGActorType::Token:
-		TokenNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->GetRowNamesOfType(ObjectType);
+	case EBGClassCategory::None: break;
+	case EBGClassCategory::Actor:
+		ActorNames = Cast<ABGGameplayGameModeBase>(
+			UGameplayStatics::GetGameMode(this))->GetRowNamesOfType(ClassCategory);
 		break;
-	case EBGActorType::Structure:
-		StructureNames = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->
-			GetRowNamesOfType(ObjectType);
-		break;
-	case EBGActorType::Actor: break;
-	default: ;
-	}
-}
-
-void ABGGamePlayerController::LoadObjectType()
-{
-	if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
-		&& !LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
-	{
-		LastClickedActor = LastHitResult.GetActor();
-
-		if ((GrabbedToken = Cast<ABGToken>(LastClickedActor))->IsValidLowLevel())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("TOKEN: LastClickedActor: %s"), *LastClickedActor->GetName())
-
-			GrabbedObject = EBGActorType::Token;
-			return;
-		}
-
-		if ((GrabbedStructure = Cast<ABGSplineStructure>(LastClickedActor))->IsValidLowLevel())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("SPLINESTRUCTURE: LastClickedActor: %s"), *LastClickedActor->GetName())
-
-			GrabbedObject = EBGActorType::Structure;
-				
-			/** Add a new spline point if LeftAlt was held down */
-			if (GetInputAnalogKeyState(EKeys::LeftAlt) == 1)
-			{
-				AddSplinePointToSplineStructure();
-			}
-
-			/** If we haven't stored a NearestIndexToClick yet, get one */
-			if (NearestIndexToClick < 0)
-			{
-				if (GrabbedStructure->GetInstancedStaticMeshComponentByTag("WallInstance")->GetInstanceCount() < 2)
-				{
-					NearestIndexToClick = 1;
-				}
-				else
-				{
-					FVector GridSnappedIntersection;
-					NearestIndexToClick = FMath::RoundToInt(
-						GetClosestKeyOnSplineAtMousePosition(
-							GrabbedStructure, GridSnappedIntersection));
-				}
-			}
-
-			return;
-		}
-
-		if ((GrabbedActor = Cast<ABGActor>(LastClickedActor))->IsValidLowLevel())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("ACTOR: LastClickedActor: %s"), *LastClickedActor->GetName())
-
-			GrabbedObject = EBGActorType::Actor;
-			return;
-		}
-	}
-	UE_LOG(LogTemp, Warning, TEXT("INVALID"))
-}
-
-void ABGGamePlayerController::SelectObject()
-{
-	/** If a context menu is open, close it */
-	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
-	{
-		Cast<IBGActorInterface>(LastHitResult.GetActor())->CloseContextMenu();
-	}
-
-	/**
-	 * Refresh LastHitResult with a new trace under cursor
-	 * If we haven't loaded an object yet, search on the Grab trace channel
-	 * If we have loaded an object, execute on the Tile trace channel
-	 */
-	GetHitResultUnderCursorByChannel(
-		UEngineTypes::ConvertToTraceType(GrabbedObject == EBGActorType::None
-			                                 ? ECC_GRAB
-			                                 : ECC_TILE), true, LastHitResult);
-
-	switch (GrabbedObject)
-	{
-		/** Load an object into our LeftClick if we don't have one yet */
-	case EBGActorType::None:
-		UE_LOG(LogTemp, Warning, TEXT("Click 1: Loading Object"))
-		LoadObjectType();
-		break;
-
-		/** Handle executing specific functions if we already have an object loaded into our Left Click */
-	case EBGActorType::Token:
-		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Token"))
-		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
-			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
-		{
-			LastClickedActor = LastHitResult.GetActor();
-			// TODO: remove the Holding parameter, it's unused
-			MoveTokenToLocation(false);
-			ReleaseObject();
-		}
-		break;
-	case EBGActorType::Structure:
-		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Structure"))
-		if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
-			&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
-		{
-			LastClickedActor = LastHitResult.GetActor();
-			HandleSplineStructureSelection();
-			ReleaseObject();
-		}
-		break;
-	case EBGActorType::Actor:
-		UE_LOG(LogTemp, Warning, TEXT("Click 2: Object Type Actor"))
-		if (ControlMode == EBGControlMode::Move)
-		{
-			if (LastHitResult.bBlockingHit && LastHitResult.GetActor()->IsValidLowLevel()
-				&& LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Handling Actor Selection!"))
-
-				LastClickedActor = LastHitResult.GetActor();
-				HandleActorSelection();
-			}
-		}
-		ReleaseObject();
+	case EBGClassCategory::Character:
+		TokenNames = Cast<ABGGameplayGameModeBase>(
+			UGameplayStatics::GetGameMode(this))->GetRowNamesOfType(ClassCategory);
 		break;
 	default: ;
 	}
-}
-
-void ABGGamePlayerController::ReleaseObject()
-{
-	GrabbedObject = EBGActorType::None;
-	GrabbedToken = nullptr;
-	GrabbedStructure = nullptr;
-	GrabbedActor = nullptr;
-	LastClickedActor = nullptr;
-	LastHitResult.Reset();
-	NearestIndexToClick = -1;
 }
 
 void ABGGamePlayerController::ToggleContextMenu_Implementation()
 {
-	if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
+	ReleaseGrabbedActor();
+	
+	if (BGGameInstance)
 	{
-		Cast<IBGActorInterface>(LastHitResult.GetActor())->CloseContextMenu();
-	}
-
-	ReleaseObject();
-
-	if (GetHitResultUnderCursorByChannel(
-		UEngineTypes::ConvertToTraceType(ECC_RIGHT_CLICK), true, LastHitResult))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *LastHitResult.GetActor()->GetName())
-
-		if (LastHitResult.GetActor() && LastHitResult.GetActor()->Implements<UBGActorInterface>())
+		if (GetHitResultUnderCursorByChannel(
+			UEngineTypes::ConvertToTraceType(ECC_RIGHT_CLICK),
+			true,
+			LastHitResult))
 		{
-			auto CastInterface = Cast<IBGActorInterface>(LastHitResult.GetActor());
-			if (CastInterface)
-			{
-				auto ContextMenu = CastInterface->GetContextMenu();
-				if (!ContextMenu)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("No Context Menu"))
-					return;
-				}
-				ContextMenu->SetHitResult(LastHitResult);
-				ContextMenu->Update();
-				CastInterface->ToggleContextMenu();
-
-				if (CastInterface->GetContextMenu()->GetIsVisible())
-				{
-					FInputModeUIOnly const InputMode;
-					SetInputMode(InputMode);
-				}
-				else
-				{
-					FInputModeGameAndUI const InputMode;
-					SetInputMode(InputMode);
-				}
-				return;
-			}
-			UE_LOG(LogTemp, Warning, TEXT("No Actor Interface for Context Menu Retrieval"))
+			BGGameInstance->GetGameHUD()->SetContextMenuHitResult(LastHitResult);
+			UWidgetLayoutLibrary::SlotAsCanvasSlot(
+				BGGameInstance->GetGameHUD()->GetContextMenuAnchor())
+					->SetPosition(UWidgetLayoutLibrary::GetMousePositionOnViewport(this));
+			
+			BGGameInstance->GetGameHUD()->ToggleContextMenu();
 		}
 	}
 }
 
-void ABGGamePlayerController::MoveTokenToLocation(bool const bHolding)
+void ABGGamePlayerController::MoveCharacterToLocation()
 {
-	if (GrabbedToken && LastClickedActor)
+	if (GrabbedActor && LastClickedActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastClickedActor = %s"), *LastClickedActor->GetName())
-
-		FRotator const Rotation = FRotator(0.f, GrabbedToken->GetActorRotation().Yaw, 0.f);
-
-		float ZedValue;
-		bHolding ? ZedValue = 100.f : ZedValue = 50.f;
-
-		FVector Location;
-
-		if (Cast<ABGSplineStructure>(LastClickedActor))
+		auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+		if (GrabbedBGCharacter)
 		{
-			// Don't move tokens on Bases
-			if (LastHitResult.GetComponent()->GetName().Contains("Base"))
+			UE_LOG(LogTemp, Warning, TEXT("MoveTokenToLocation(): LastClickedActor = %s"), *LastClickedActor->GetName())
+
+			FRotator const Rotation = FRotator(0.f, GrabbedBGCharacter->GetActorRotation().Yaw, 0.f);
+
+			if (Cast<ABGActor>(LastClickedActor)->GetActorType() == EBGActorType::Tile)
 			{
-				return;
+				float const ZedValue = 50.f;
+				FVector Location;
+				FVector ActorOrigin{};
+				FVector ActorBoxExtent{};
+
+				LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+
+				Location.X = ActorOrigin.X;
+				Location.Y = ActorOrigin.Y;
+				Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
+
+				MoveCharacterToLocation_Server(GrabbedBGCharacter, Location, Rotation);
 			}
-
-			Location = LastHitResult.GetComponent()->Bounds.Origin + FVector(
-				0.f, 0.f, LastHitResult.GetComponent()->Bounds.BoxExtent.Z + ZedValue);
 		}
-		else
-		{
-			FVector ActorOrigin{};
-			FVector ActorBoxExtent{};
-
-			LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-
-			Location.X = ActorOrigin.X;
-			Location.Y = ActorOrigin.Y;
-			Location.Z = ZedValue + ActorOrigin.Z + ActorBoxExtent.Z;
-		}
-
-		MoveTokenToLocation_Server(GrabbedToken, Location, Rotation);
 	}
 }
 
 void ABGGamePlayerController::HandleSplineStructureSelection()
 {
-	// TODO: handle game master permissions
-	if (GrabbedStructure->GetLocked())
-		return;
-
 	switch (ControlMode)
 	{
 	case EBGControlMode::Build:
@@ -341,46 +382,57 @@ void ABGGamePlayerController::HandleSplineStructureSelection()
 		break;
 	case EBGControlMode::Edit: break;
 	case EBGControlMode::Move:
-		MoveSplineStructure();
+		/** Moving instanced static meshes over network doesn't seem to work */
+		// MoveSplineStructure();
 		break;
 	default: ;
 	}
 }
 
-void ABGGamePlayerController::SpawnSplineStructureAtLocation(FVector const& Location, FName const& WallStaticMeshName,
+void ABGGamePlayerController::SpawnSplineStructureAtLocation(FName const& WallStaticMeshName,
                                                              FName const& WallMaskedMaterialInstanceName,
                                                              FName const& CornerStaticMeshName,
                                                              FName const& CornerMaskedMaterialInstanceName,
                                                              FName const& BaseStaticMeshName,
-                                                             FName const& BaseMaterialInstanceName)
+                                                             FName const& BaseMaterialInstanceName,
+                                                             FVector const& Location)
 {
-	SpawnSplineStructureAtLocation_Server(Location, WallStaticMeshName, WallMaskedMaterialInstanceName,
+	SpawnSplineStructureAtLocation_Server(WallStaticMeshName, WallMaskedMaterialInstanceName,
 	                                      CornerStaticMeshName, CornerMaskedMaterialInstanceName, BaseStaticMeshName,
-	                                      BaseMaterialInstanceName);
+	                                      BaseMaterialInstanceName, Location);
 }
 
 void ABGGamePlayerController::ModifySplineStructureLength()
 {
-	if (GrabbedStructure && LastHitResult.GetActor()->IsValidLowLevel())
+	if (GrabbedActor && LastClickedActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
-
-		/** Check if the tile is visible */
-		if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass())
-			&& !Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
+		auto const LastClickedBGActor = Cast<ABGActor>(LastClickedActor);
+		auto const SplineComponent = Cast<UBGSplineWallComponent>(
+			GrabbedActor->GetComponentByClass(UBGSplineWallComponent::StaticClass()));
+		if (SplineComponent && LastClickedBGActor)
 		{
-			return;
+			UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastClickedActor->GetName())
+
+			if (LastClickedBGActor->GetActorType() == EBGActorType::Tile)
+			{
+				/** Return if Tile is not visible */
+				auto const TileComponent = Cast<UBGTileComponent>(LastClickedActor->GetComponentByClass(UBGTileComponent::StaticClass()));
+				if (TileComponent && !TileComponent->GetTileVisibility())
+				{
+					return;
+				}
+
+				/** Get Tile's location, and match the Z axis to the current SplineStructure Z value */
+				auto Location = LastClickedActor->GetActorLocation();
+				Location.Z = GrabbedActor->GetActorLocation().Z;
+
+				ModifyStructureLength_Server(SplineComponent, NearestIndexToClick, Location);
+			}
 		}
-
-		/** Snap the Target Location to grid, and match the Z axis to the current SplineStructure Z value */
-		auto GridSnappedIntersection = LastHitResult.GetActor()->GetActorLocation().GridSnap(100.f);
-		GridSnappedIntersection.Z = GrabbedStructure->GetActorLocation().Z;
-
-		ModifyStructureLength_Server(GrabbedStructure, NearestIndexToClick, GridSnappedIntersection);
 	}
 }
 
-float ABGGamePlayerController::GetClosestKeyOnSplineAtMousePosition(ABGSplineStructure* SplineStructure, FVector& OutIntersection) const
+float ABGGamePlayerController::GetClosestKeyOnSplineAtMousePosition(UBGSplineWallComponent* SplineComponent, FVector& OutIntersection) const
 {
 	FVector WorldPosition;
 	FVector WorldDirection;
@@ -389,25 +441,25 @@ float ABGGamePlayerController::GetClosestKeyOnSplineAtMousePosition(ABGSplineStr
 	OutIntersection = FMath::LinePlaneIntersection(
 		WorldPosition,
 		WorldDirection * 2000.f + WorldPosition,
-		SplineStructure->GetActorLocation(),
+		SplineComponent->GetOwner()->GetActorLocation(),
 		FVector(0.f, 0.f, 1.f)).GridSnap(100.f);
 
 	/** On original Z-level */
-	OutIntersection.Z = SplineStructure->GetActorLocation().Z;
+	OutIntersection.Z = SplineComponent->GetOwner()->GetActorLocation().Z;
 
-	return SplineStructure->GetSplineComponent()->FindInputKeyClosestToWorldLocation(OutIntersection);
+	return SplineComponent->GetSplineComponent()->FindInputKeyClosestToWorldLocation(OutIntersection);
 }
 
-void ABGGamePlayerController::AddSplinePointToSplineStructure()
+void ABGGamePlayerController::AddSplinePointToSplineStructure(UBGSplineWallComponent* InSplineComponent)
 {
-	if (GrabbedStructure)
+	if (InSplineComponent)
 	{
 		if (NearestIndexToClick < 0)
 		{
 			FVector Intersection;
-			auto const ClosestKey = GetClosestKeyOnSplineAtMousePosition(GrabbedStructure, Intersection);
+			auto const ClosestKey = GetClosestKeyOnSplineAtMousePosition(InSplineComponent, Intersection);
 
-			const auto TotalSplinePoints = GrabbedStructure->GetSplineComponent()->GetNumberOfSplinePoints();
+			const auto TotalSplinePoints = InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints();
 
 			/** Split apart the Integral and Decimal of the ClosestKey */
 			double IntegralPart {};
@@ -450,7 +502,7 @@ void ABGGamePlayerController::AddSplinePointToSplineStructure()
 			if (NearestIndexToClick >= 0)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("NearestIndexToClick: %i"), NearestIndexToClick)
-				AddSplinePointToSplineStructure_Server(GrabbedStructure, Intersection, NearestIndexToClick);
+				AddSplinePointToSplineStructure_Server(InSplineComponent, Intersection, NearestIndexToClick);
 			}
 		}
 	}
@@ -458,7 +510,7 @@ void ABGGamePlayerController::AddSplinePointToSplineStructure()
 
 void ABGGamePlayerController::MoveSplineStructure()
 {
-	if (GrabbedStructure)
+	if (GrabbedActor)
 	{
 		FVector Location{};
 
@@ -469,23 +521,35 @@ void ABGGamePlayerController::MoveSplineStructure()
 		if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel4), true,
 		                                     LastHitResult))
 		{
-			if (LastHitResult.GetActor()->IsA(ABGTile::StaticClass()))
+			auto const BGActor = Cast<ABGActor>(LastHitResult.GetActor());
+			if (BGActor)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Cursor Hit: %s"), *LastHitResult.GetActor()->GetName())
 
-				if (!Cast<ABGTile>(LastHitResult.GetActor())->GetStaticMeshComponent()->GetVisibleFlag())
+				/** Return if Tile is not visible */
+				if (BGActor->GetActorType() == EBGActorType::Tile)
+				{
+					auto TileComponent = Cast<UBGTileComponent>(BGActor->GetComponentByClass(UBGTileComponent::StaticClass()));
+					if (TileComponent && !TileComponent->GetTileVisibility())
+					{
+						return;
+					}
+
+					LastClickedActor = Cast<ABGActor>(LastHitResult.GetActor());
+
+					FVector ActorOrigin{};
+					FVector ActorBoxExtent{};
+
+					LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+
+					Location.X = LastClickedActor->GetActorLocation().X;
+					Location.Y = LastClickedActor->GetActorLocation().Y;
+					Location.Z = LastClickedActor->GetActorLocation().Z + ActorOrigin.Z + ActorBoxExtent.Z;
+				}
+				else
+				{
 					return;
-
-				LastClickedActor = LastHitResult.GetActor();
-
-				FVector ActorOrigin{};
-				FVector ActorBoxExtent{};
-
-				LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-
-				Location.X = LastClickedActor->GetActorLocation().X;
-				Location.Y = LastClickedActor->GetActorLocation().Y;
-				Location.Z = LastClickedActor->GetActorLocation().Z + ActorOrigin.Z + ActorBoxExtent.Z;
+				}
 			}
 			else
 			{
@@ -495,56 +559,57 @@ void ABGGamePlayerController::MoveSplineStructure()
 
 		if (!HasAuthority())
 		{
-			GrabbedStructure->SetActorLocation(Location);
+			GrabbedActor->SetActorLocation(Location);
 		}
-		MoveSplineStructure_Server(GrabbedStructure, Location);
+		
+		MoveActorToLocation(Location);
 	}
 }
 
-void ABGGamePlayerController::ModifySplineStructureInstanceMeshAtIndex(ABGSplineStructure* StructureToModify,
+void ABGGamePlayerController::ModifySplineStructureInstanceMeshAtIndex(UBGSplineWallComponent* InSplineComponent,
                                                                        int const& Index,
                                                                        FString const& NewInstanceName,
                                                                        UStaticMesh* StaticMesh,
                                                                        UMaterialInstance* MaterialInstance,
                                                                        FString const& OldInstanceName)
 {
-	if (StructureToModify)
+	if (InSplineComponent)
 	{
 		// Just go straight to server call
-		ModifyInstanceMeshAtIndex_Server(StructureToModify, Index, NewInstanceName, StaticMesh,
+		ModifyInstanceMeshAtIndex_Server(InSplineComponent, Index, NewInstanceName, StaticMesh,
 		                                 MaterialInstance, OldInstanceName);
 	}
 }
 
-void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex(ABGSplineStructure* StructureToModify,
+void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex(UBGSplineWallComponent* InSplineComponent,
                                                                         int const& Index,
                                                                         TSubclassOf<ABGStructure> StructureClassToSpawn,
                                                                         FString const& OldInstanceName)
 {
-	if (StructureToModify && StructureClassToSpawn)
+	if (InSplineComponent && StructureClassToSpawn.Get())
 	{
-		SpawnStructureActorAtSplineStructureIndex_Server(StructureToModify, Index, StructureClassToSpawn,
+		SpawnStructureActorAtSplineStructureIndex_Server(InSplineComponent, Index, StructureClassToSpawn,
 		                                                 OldInstanceName);
 	}
 }
 
-void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure(UBGSplineWallComponent* InSplineComponent,
                                                                      int const& Index, FString const& InstanceName)
 {
-	if (StructureToModify)
+	if (InSplineComponent)
 	{
-		RemoveInstanceAtIndexOnSplineStructure_Server(StructureToModify, Index, InstanceName);
+		RemoveInstanceAtIndexOnSplineStructure_Server(InSplineComponent, Index, InstanceName);
 	}
 }
 
-void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure(ABGSplineStructure* StructureToModify,
+void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure(UBGSplineWallComponent* InSplineComponent,
                                                                       int const& Index,
                                                                       FTransform const& NewInstanceTransform,
                                                                       FString const& InstanceName)
 {
-	if (StructureToModify)
+	if (InSplineComponent)
 	{
-		RestoreInstanceAtIndexOnSplineStructure_Server(StructureToModify, Index, NewInstanceTransform, InstanceName);
+		RestoreInstanceAtIndexOnSplineStructure_Server(InSplineComponent, Index, NewInstanceTransform, InstanceName);
 	}
 }
 
@@ -556,22 +621,22 @@ void ABGGamePlayerController::DestroyStructureActor(ABGStructure* StructureToRem
 	}
 }
 
-void ABGGamePlayerController::ToggleLockSplineStructureInPlace(ABGSplineStructure* SplineStructureToLock,
-                                                               bool const bNewLocked)
-{
-	if (SplineStructureToLock)
-	{
-		ToggleLockSplineStructureInPlace_Server(SplineStructureToLock, bNewLocked);
-	}
-}
-
-void ABGGamePlayerController::ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked)
-{
-	if (StructureToLock)
-	{
-		ToggleLockStructure_Server(StructureToLock, bNewLocked);
-	}
-}
+// void ABGGamePlayerController::ToggleLockSplineStructureInPlace(ABGActor* SplineStructureToLock,
+//                                                                bool const bNewLocked)
+// {
+// 	if (SplineStructureToLock)
+// 	{
+// 		ToggleLockSplineStructureInPlace_Server(SplineStructureToLock, bNewLocked);
+// 	}
+// }
+//
+// void ABGGamePlayerController::ToggleLockStructure(ABGStructure* StructureToLock, bool const bNewLocked)
+// {
+// 	if (StructureToLock)
+// 	{
+// 		ToggleLockStructure_Server(StructureToLock, bNewLocked);
+// 	}
+// }
 
 void ABGGamePlayerController::ToggleDoorOpenClose(ABGDoor* DoorToToggle)
 {
@@ -581,79 +646,67 @@ void ABGGamePlayerController::ToggleDoorOpenClose(ABGDoor* DoorToToggle)
 	}
 }
 
-void ABGGamePlayerController::ResetSplineStructure(ABGSplineStructure* SplineStructureToReset) const
+void ABGGamePlayerController::ResetSplineStructure(UBGSplineWallComponent* InSplineComponent) const
 {
-	if (SplineStructureToReset)
+	if (InSplineComponent)
 	{
 		if (!HasAuthority())
 		{
-			if (SplineStructureToReset->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
+			if (InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints() > 2)
 			{
 				// clear all spline points except for indices 0 and 1
-				for (int i{SplineStructureToReset->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
+				for (int i{InSplineComponent->GetSplineComponent()->GetNumberOfSplinePoints()}; i > 2; --i)
 				{
-					SplineStructureToReset->GetSplineComponent()->RemoveSplinePoint(i - 1);
+					InSplineComponent->GetSplineComponent()->RemoveSplinePoint(i - 1);
 				}
 			}
 
 			// reset Spline Point 0 to actor's origin
-			SplineStructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
-				0, SplineStructureToReset->GetActorLocation(), ESplineCoordinateSpace::World, true);
+			InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
+				0, InSplineComponent->GetOwner()->GetActorLocation(), ESplineCoordinateSpace::World, true);
 
 			// reset Spline Point 1 to 105.f away the origin
-			auto Location = SplineStructureToReset->GetActorLocation();
+			auto Location = InSplineComponent->GetOwner()->GetActorLocation();
 			Location.X += 50.f;
 
-			SplineStructureToReset->GetSplineComponent()->SetLocationAtSplinePoint(
+			InSplineComponent->GetSplineComponent()->SetLocationAtSplinePoint(
 				1, Location, ESplineCoordinateSpace::World, true);
 
-			SplineStructureToReset->UpdateSplineStructureMesh();
+			InSplineComponent->UpdateSplineStructureMesh();
 		}
 	}
 }
 
-void ABGGamePlayerController::DestroySplineStructure(ABGSplineStructure* SplineStructureToDestroy)
-{
-	if (SplineStructureToDestroy)
-	{
-		if (!HasAuthority())
-		{
-			SplineStructureToDestroy->Destroy();
-		}
-		DestroySplineStructure_Server(SplineStructureToDestroy);
-	}
-}
-
-void ABGGamePlayerController::HandleActorSelection()
-{
-	/** Removed GameMasterPermission check at this time because of improper Server Defaulting */
-	
-	// if (!GetGameMasterPermissions())
-	// {
-	// 	return;
-	// }
-	
-	if (GrabbedActor && LastClickedActor)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HandleActorSelection(): LastClickedActor = %s"), *LastClickedActor->GetName())
-		FVector Location;
-
-		if (Cast<ABGSplineStructure>(LastClickedActor)) return;
-
-		FVector ActorOrigin{};
-		FVector ActorBoxExtent{};
-
-		LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
-
-		Location.X = ActorOrigin.X;
-		Location.Y = ActorOrigin.Y;
-		/** Eventually don't hardcode 300 here...make it better */
-		Location.Z = 150.f + ActorOrigin.Z + ActorBoxExtent.Z;
-
-		MoveActorToLocation(Location);
-	}
-
-}
+// void ABGGamePlayerController::HandleActorSelection()
+// {
+// 	/** Removed GameMasterPermission check at this time because of improper Server Defaulting */
+// 	
+// 	// if (!GetGameMasterPermissions())
+// 	// {
+// 	// 	return;
+// 	// }
+// 	
+// 	if (GrabbedActor && LastClickedActor)
+// 	{
+// 		UE_LOG(LogTemp, Warning, TEXT("HandleActorSelection(): LastClickedActor = %s"), *LastClickedActor->GetName())
+// 		FVector Location;
+//
+// 		if (Cast<ABGActor>(LastClickedActor)->GetActorType() == EBGActorType::Structure) return;
+//
+// 		FVector ActorOrigin{};
+// 		FVector ActorBoxExtent{};
+//
+// 		LastClickedActor->GetActorBounds(false, ActorOrigin, ActorBoxExtent, false);
+//
+// 		Location.X = ActorOrigin.X;
+// 		Location.Y = ActorOrigin.Y;
+// 		/** Eventually don't hardcode 300 here...make it better */
+// 		Location.Z = 150.f + ActorOrigin.Z + ActorBoxExtent.Z;
+//
+// 		MoveActorToLocation(Location);
+// 	}
+//
+// }
 
 void ABGGamePlayerController::MoveActorToLocation(FVector const& Location)
 {
@@ -670,7 +723,15 @@ void ABGGamePlayerController::MoveActorToLocation(FVector const& Location)
 	}
 }
 
-void ABGGamePlayerController::ToggleTileVisibility(ABGTile* TileToToggle)
+void ABGGamePlayerController::ToggleActorLockedState(ABGActor* InActor, bool const bSetLocked)
+{
+	if (InActor)
+	{
+		ToggleActorLockedState_Server(InActor, bSetLocked);
+	}
+}
+
+void ABGGamePlayerController::ToggleTileVisibility(UBGTileComponent* TileToToggle)
 {
 	if (TileToToggle)
 	{
@@ -682,7 +743,7 @@ void ABGGamePlayerController::ToggleTileVisibility(ABGTile* TileToToggle)
 	}
 }
 
-void ABGGamePlayerController::ShrinkBoard(ABGBoard* BoardToShrink)
+void ABGGamePlayerController::ShrinkBoard(UBGBoardComponent* BoardToShrink)
 {
 	if (BoardToShrink)
 	{
@@ -694,7 +755,7 @@ void ABGGamePlayerController::ShrinkBoard(ABGBoard* BoardToShrink)
 	}
 }
 
-void ABGGamePlayerController::GrowBoard(ABGBoard* BoardToGrow)
+void ABGGamePlayerController::GrowBoard(UBGBoardComponent* BoardToGrow)
 {
 	if (BoardToGrow)
 	{
@@ -711,6 +772,14 @@ void ABGGamePlayerController::SpawnNewActor_Server_Implementation(TSubclassOf<AB
 	if (ActorToSpawn.GetDefaultObject())
 	{
 		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnNewActor(ActorToSpawn);
+	}
+}
+
+void ABGGamePlayerController::ToggleActorLockedState_Server_Implementation(ABGActor* InActor, bool const bSetLocked)
+{
+	if (InActor)
+	{
+		InActor->ToggleLocked(bSetLocked);
 	}
 }
 
@@ -742,31 +811,31 @@ void ABGGamePlayerController::ToggleDoorOpenClose_Server_Implementation(ABGDoor*
 	}
 }
 
-void ABGGamePlayerController::ToggleLockStructure_Server_Implementation(
-	ABGStructure* StructureToLock, bool const bNewLocked)
-{
-	if (HasAuthority() && StructureToLock)
-	{
-		StructureToLock->ToggleStructureLock(bNewLocked);
-	}
-}
+// void ABGGamePlayerController::ToggleLockStructure_Server_Implementation(
+// 	ABGStructure* StructureToLock, bool const bNewLocked)
+// {
+// 	if (HasAuthority() && StructureToLock)
+// 	{
+// 		StructureToLock->ToggleStructureLock(bNewLocked);
+// 	}
+// }
 
 void ABGGamePlayerController::RestoreInstanceAtIndexOnSplineStructure_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index, FTransform const& NewInstanceTransform,
+	UBGSplineWallComponent* InSplineComponent, int const& Index, FTransform const& NewInstanceTransform,
 	FString const& InstanceName)
 {
-	if (HasAuthority() && StructureToModify)
+	if (HasAuthority() && InSplineComponent)
 	{
-		StructureToModify->RestoreInstanceMeshAtIndex(Index, NewInstanceTransform, InstanceName);
+		InSplineComponent->RestoreInstanceMeshAtIndex(Index, NewInstanceTransform, InstanceName);
 	}
 }
 
 void ABGGamePlayerController::RemoveInstanceAtIndexOnSplineStructure_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index, FString const& InstanceName)
+	UBGSplineWallComponent* InSplineComponent, int const& Index, FString const& InstanceName)
 {
-	if (HasAuthority() && StructureToModify)
+	if (HasAuthority() && InSplineComponent)
 	{
-		StructureToModify->RemoveInstanceMeshAtIndex(Index, InstanceName);
+		InSplineComponent->RemoveInstanceMeshAtIndex(Index, InstanceName);
 	}
 }
 
@@ -780,56 +849,53 @@ void ABGGamePlayerController::DestroyStructureActor_Server_Implementation(
 }
 
 void ABGGamePlayerController::SpawnStructureActorAtSplineStructureIndex_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index, TSubclassOf<ABGStructure> StructureClassToSpawn,
+	UBGSplineWallComponent* InSplineComponent, int const& Index,
+	TSubclassOf<ABGStructure> StructureClassToSpawn,
 	FString const& OldInstanceName)
 {
-	if (HasAuthority() && StructureToModify && StructureClassToSpawn)
+	if (HasAuthority() && InSplineComponent && StructureClassToSpawn.Get())
 	{
 		ABGGameplayGameModeBase::SpawnStructureActorAtSplineStructureIndex(
-			StructureToModify, Index, StructureClassToSpawn, OldInstanceName);
+			InSplineComponent, Index, StructureClassToSpawn, OldInstanceName);
 	}
 }
 
-void ABGGamePlayerController::ToggleLockSplineStructureInPlace_Server_Implementation(
-	ABGSplineStructure* SplineStructureToLock,
-	bool const bNewLocked)
-{
-	if (HasAuthority() && SplineStructureToLock)
-	{
-		SplineStructureToLock->ToggleLockStructureInPlace(bNewLocked);
-	}
-}
+// void ABGGamePlayerController::ToggleLockSplineStructureInPlace_Server_Implementation(
+// 	ABGActor* SplineStructureToLock,
+// 	bool const bNewLocked)
+// {
+// 	if (HasAuthority() && SplineStructureToLock)
+// 	{
+// 		auto SplineWallComponent = SplineStructureToLock->GetComponentByClass(UBGSplineWallComponent::StaticClass());
+// 		if (SplineWallComponent)
+// 		{
+// 			SplineWallComponent->
+// 		}
+// 		SplineStructureToLock->ToggleLockStructureInPlace(bNewLocked);
+// 	}
+// }
 
 void ABGGamePlayerController::ModifyInstanceMeshAtIndex_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& Index, FString const& NewInstanceName, UStaticMesh* StaticMesh,
+	UBGSplineWallComponent* InSplineComponent, int const& Index, FString const& NewInstanceName, UStaticMesh* StaticMesh,
 	UMaterialInstance* MaterialInstance, FString const& OldInstanceName)
 {
-	if (HasAuthority() && StructureToModify)
+	if (HasAuthority() && InSplineComponent)
 	{
-		ABGGameplayGameModeBase::ModifySplineStructureInstanceMeshAtIndex(StructureToModify, Index, NewInstanceName,
+		ABGGameplayGameModeBase::ModifySplineStructureInstanceMeshAtIndex(InSplineComponent, Index, NewInstanceName,
 		                                                                  StaticMesh,
 		                                                                  MaterialInstance, OldInstanceName);
 	}
 }
 
-void ABGGamePlayerController::MoveSplineStructure_Server_Implementation(ABGSplineStructure* StructureToMove,
-                                                                        FVector const& Location)
+void ABGGamePlayerController::ResetSplineStructure_Server_Implementation(UBGSplineWallComponent* InSplineComponent)
 {
-	if (HasAuthority() && StructureToMove)
+	if (HasAuthority() && InSplineComponent)
 	{
-		ABGGameplayGameModeBase::MoveSplineStructure(StructureToMove, Location);
+		ABGGameplayGameModeBase::ResetSplineStructure(InSplineComponent);
 	}
 }
 
-void ABGGamePlayerController::ResetSplineStructure_Server_Implementation(ABGSplineStructure* StructureToReset)
-{
-	if (HasAuthority() && StructureToReset)
-	{
-		ABGGameplayGameModeBase::ResetSplineStructure(StructureToReset);
-	}
-}
-
-void ABGGamePlayerController::ShrinkBoard_Server_Implementation(ABGBoard* BoardToShrink)
+void ABGGamePlayerController::ShrinkBoard_Server_Implementation(UBGBoardComponent* BoardToShrink)
 {
 	if (HasAuthority() && BoardToShrink)
 	{
@@ -837,7 +903,7 @@ void ABGGamePlayerController::ShrinkBoard_Server_Implementation(ABGBoard* BoardT
 	}
 }
 
-void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToGrow)
+void ABGGamePlayerController::GrowBoard_Server_Implementation(UBGBoardComponent* BoardToGrow)
 {
 	if (HasAuthority() && BoardToGrow)
 	{
@@ -846,20 +912,24 @@ void ABGGamePlayerController::GrowBoard_Server_Implementation(ABGBoard* BoardToG
 }
 
 void ABGGamePlayerController::SpawnSplineStructureAtLocation_Server_Implementation(
-	FVector const& Location, FName const& WallStaticMeshName,
+	FName const& WallStaticMeshName,
 	FName const& WallMaskedMaterialInstanceName,
 	FName const& CornerStaticMeshName,
 	FName const& CornerMaskedMaterialInstanceName,
 	FName const& BaseStaticMeshName,
-	FName const& BaseMaterialInstanceName)
+	FName const& BaseMaterialInstanceName,
+	FVector const& Location)
 {
 	if (HasAuthority())
 	{
-		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnSplineStructureAtLocation(
-			Location, WallStaticMeshName, WallMaskedMaterialInstanceName, CornerStaticMeshName,
-			CornerMaskedMaterialInstanceName, BaseStaticMeshName,
-			BaseMaterialInstanceName);
-		UE_LOG(LogTemp, Warning, TEXT("Spawning Structure At Location (server)"))
+		/** Using Factory to produce BGActor w/ spline wall component */
+		auto CastGameMode = Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this));
+		if (CastGameMode)
+		{
+			CastGameMode->InitializeSplineWallActor(WallStaticMeshName,
+				WallMaskedMaterialInstanceName, CornerStaticMeshName, CornerMaskedMaterialInstanceName,
+				BaseStaticMeshName, BaseMaterialInstanceName, Location);
+		}
 	}
 }
 
@@ -871,182 +941,178 @@ void ABGGamePlayerController::SpawnNewBoard_Server_Implementation(int const& Zed
 	}
 }
 
-void ABGGamePlayerController::DestroyToken_Server_Implementation(ABGToken* TokenToDestroy)
+void ABGGamePlayerController::ToggleCharacterPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
+	ABGCharacter* CharacterToToggle)
 {
-	if (HasAuthority() && TokenToDestroy)
+	if (HasAuthority() && PlayerStateToToggle && CharacterToToggle)
 	{
-		ABGGameplayGameModeBase::DestroyToken(TokenToDestroy);
+		ABGGameplayGameModeBase::ToggleCharacterPermissionsForPlayer(PlayerStateToToggle, CharacterToToggle);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenPermissionsForPlayer_Server_Implementation(ABGPlayerState* PlayerStateToToggle,
-	ABGToken* TokenToToggle)
+void ABGGamePlayerController::RotateCharacter_Server_Implementation(ABGCharacter* CharacterToRotate, FRotator const& NewRotation)
 {
-	if (HasAuthority() && PlayerStateToToggle && TokenToToggle)
+	if (HasAuthority() && CharacterToRotate)
 	{
-		ABGGameplayGameModeBase::ToggleTokenPermissionsForPlayer(PlayerStateToToggle, TokenToToggle);
+		CharacterToRotate->SetActorRotation(NewRotation);
 	}
 }
 
-void ABGGamePlayerController::RotateToken_Server_Implementation(ABGToken* TokenToRotate, FRotator const& NewRotation)
+void ABGGamePlayerController::ResetCharacterRotation_Server_Implementation(ABGCharacter* CharacterToReset)
 {
-	if (HasAuthority() && TokenToRotate)
+	if (HasAuthority() && CharacterToReset)
 	{
-		TokenToRotate->SetActorRotation(NewRotation);
+		CharacterToReset->SetActorRotation(FRotator::ZeroRotator);
 	}
 }
 
-void ABGGamePlayerController::ResetTokenRotation_Server_Implementation(ABGToken* TokenToReset)
+void ABGGamePlayerController::ToggleCharacterLockInPlace_Server_Implementation(ABGCharacter* CharacterToToggle, bool bLock)
 {
-	if (HasAuthority() && TokenToReset)
+	if (HasAuthority() && CharacterToToggle)
 	{
-		TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+		ABGGameplayGameModeBase::ToggleCharacterLockInPlace(CharacterToToggle, bLock);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenLockInPlace_Server_Implementation(ABGToken* TokenToToggle, bool bLock)
-{
-	if (HasAuthority() && TokenToToggle)
-	{
-		ABGGameplayGameModeBase::ToggleTokenLockInPlace(TokenToToggle, bLock);
-	}
-}
-
-void ABGGamePlayerController::SpawnTokenAtLocation_Server_Implementation(
+void ABGGamePlayerController::SpawnCharacterAtLocation_Server_Implementation(
 	FVector const& Location, FName const& MeshName, FName const& MaterialName)
 {
 	if (HasAuthority())
 	{
-		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnTokenAtLocation(
+		Cast<ABGGameplayGameModeBase>(UGameplayStatics::GetGameMode(this))->SpawnCharacterAtLocation(
 			Location, MeshName, MaterialName);
 
 		UE_LOG(LogTemp, Warning, TEXT("Spawning Token At Location (server)"))
 	}
 }
 
-void ABGGamePlayerController::MoveTokenToLocation_Server_Implementation(ABGToken* TokenToMove, FVector const& Location,
+void ABGGamePlayerController::MoveCharacterToLocation_Server_Implementation(ABGCharacter* CharacterToMove, FVector const& Location,
                                                                         FRotator const TokenRotation)
 {
-	if (HasAuthority() && TokenToMove)
+	if (HasAuthority() && CharacterToMove)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Moving Token To Location (server)"))
-		ABGGameplayGameModeBase::MoveTokenToLocation(TokenToMove, Location, TokenRotation);
+		ABGGameplayGameModeBase::MoveCharacterToLocation(CharacterToMove, Location, TokenRotation);
 	}
 }
 
 void ABGGamePlayerController::ModifyStructureLength_Server_Implementation(
-	ABGSplineStructure* StructureToModify, int const& PointIndex,
+	UBGSplineWallComponent* InSplineComponent, int const& PointIndex,
 	FVector const& NewLocation)
 {
-	if (StructureToModify)
+	if (InSplineComponent)
 	{
-		ABGGameplayGameModeBase::ModifySplineStructureLength(StructureToModify, PointIndex, NewLocation);
+		ABGGameplayGameModeBase::ModifySplineStructureLength(InSplineComponent, PointIndex, NewLocation);
 	}
 }
 
 void ABGGamePlayerController::AddSplinePointToSplineStructure_Server_Implementation(
-	ABGSplineStructure* StructureToModify,
+	UBGSplineWallComponent* InSplineComponent,
 	FVector const& ClickLocation, int const& Index)
 {
-	if (HasAuthority() && StructureToModify)
+	if (HasAuthority() && InSplineComponent)
 	{
-		ABGGameplayGameModeBase::AddSplinePointToSplineStructure(StructureToModify, ClickLocation,
+		ABGGameplayGameModeBase::AddSplinePointToSplineStructure(InSplineComponent, ClickLocation,
 		                                                         Index);
 	}
 }
 
-void ABGGamePlayerController::RotateToken(float Value)
+void ABGGamePlayerController::RotateCharacter(float Value)
 {
 	if (Value != 0)
-		if (GrabbedToken)
+	{
+		if (GrabbedActor)
 		{
-			auto const OriginalRotation = GrabbedToken->GetActorRotation().GetDenormalized();
-			float const Remainder = FMath::Fmod(OriginalRotation.Yaw, 45.f);
-
-			// If we have a Yaw that is greater than or equal to 360 degrees, use 0 instead
-			int Quotient = (OriginalRotation.Yaw > 337.5f ? 0 : OriginalRotation.Yaw) / 45;
-
-			UE_LOG(LogTemp, Warning, TEXT("Incoming Yaw: %f"), OriginalRotation.Yaw)
-			UE_LOG(LogTemp, Warning, TEXT("Remainder: %f"), Remainder)
-			UE_LOG(LogTemp, Warning, TEXT("Quotient: %d"), Quotient)
-
-			// if our Yaw is close to 360 then don't upgrade the Quotient (lest we shoot past 45 and go to 90)
-			if (Remainder >= 22.5f && OriginalRotation.Yaw < 337.5f)
-				++Quotient;
-
-			Quotient *= 45;
-
-			if (Value > 0)
-				Quotient += 45;
-			else if (Value < 0)
+			auto const GrabbedBGCharacter = Cast<ABGCharacter>(GrabbedActor);
+			if (GrabbedBGCharacter)
 			{
-				Quotient -= 45;
+				auto const OriginalRotation = GrabbedBGCharacter->GetActorRotation().GetDenormalized();
+				float const Remainder = FMath::Fmod(OriginalRotation.Yaw, 45.f);
 
-				Quotient < 0 ? Quotient += 360 : Quotient;
+				/** If we have a Yaw that is greater than or equal to 360 degrees, use 0 instead */
+				int Quotient = (OriginalRotation.Yaw > 337.5f ? 0 : OriginalRotation.Yaw) / 45;
+
+				// UE_LOG(LogTemp, Warning, TEXT("Incoming Yaw: %f"), OriginalRotation.Yaw)
+				// UE_LOG(LogTemp, Warning, TEXT("Remainder: %f"), Remainder)
+				// UE_LOG(LogTemp, Warning, TEXT("Quotient: %d"), Quotient)
+
+				/** 
+				 * if our Yaw is close to 360 then don't upgrade the Quotient
+				 * (lest we shoot past 45 and go to 90)
+				 */
+				if (Remainder >= 22.5f && OriginalRotation.Yaw < 337.5f)
+				{
+					++Quotient;
+				}
+
+				Quotient *= 45;
+
+				if (Value > 0)
+				{
+					Quotient += 45;
+				}
+				else if (Value < 0)
+				{
+					Quotient -= 45;
+					Quotient < 0 ? Quotient += 360 : Quotient;
+				}
+
+				// UE_LOG(LogTemp, Warning, TEXT("New Angle: %d"), Quotient)
+
+				auto NewRotation = FRotator(0.f, Quotient, 0.f);
+				NewRotation.Normalize();
+
+				if (!HasAuthority())
+				{
+					GrabbedBGCharacter->SetActorRotation(NewRotation);
+				}
+				RotateCharacter_Server(GrabbedBGCharacter, NewRotation);
 			}
-
-			UE_LOG(LogTemp, Warning, TEXT("New Angle: %d"), Quotient)
-
-			auto NewRotation = FRotator(0.f, Quotient, 0.f);
-			NewRotation.Normalize();
-
-			if (!HasAuthority())
-			{
-				GrabbedToken->SetActorRotation(NewRotation);
-			}
-			RotateToken_Server(GrabbedToken, NewRotation);
 		}
+	}
 }
 
-void ABGGamePlayerController::ResetTokenRotation(ABGToken* TokenToReset)
+void ABGGamePlayerController::ResetCharacterRotation(ABGCharacter* CharacterToReset)
 {
-	if (TokenToReset)
+	if (CharacterToReset)
 	{
 		if (!HasAuthority())
 		{
-			TokenToReset->SetActorRotation(FRotator::ZeroRotator);
+			CharacterToReset->SetActorRotation(FRotator::ZeroRotator);
 		}
-		ResetTokenRotation_Server(TokenToReset);
+		ResetCharacterRotation_Server(CharacterToReset);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenLockInPlace(ABGToken* TokenToToggle, bool bLock)
+void ABGGamePlayerController::ToggleCharacterLockInPlace(ABGCharacter* CharacterToToggle, bool bLock)
 {
-	if (TokenToToggle)
+	if (CharacterToToggle)
 	{
 		if (!HasAuthority())
 		{
-			TokenToToggle->ToggleLockTokenInPlace(bLock);
+			CharacterToToggle->ToggleLockTokenInPlace(bLock);
 		}
-		ToggleTokenLockInPlace_Server(TokenToToggle, bLock);
+		ToggleCharacterLockInPlace_Server(CharacterToToggle, bLock);
 	}
 }
 
-void ABGGamePlayerController::ToggleTokenPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle,
-                                                              ABGToken* TokenToToggle)
+void ABGGamePlayerController::ToggleCharacterPermissionsForPlayer(ABGPlayerState* PlayerStateToToggle,
+                                                              ABGCharacter* CharacterToToggle)
 {
-	if (PlayerStateToToggle && TokenToToggle)
+	if (PlayerStateToToggle && CharacterToToggle)
 	{
 		if (!HasAuthority())
 		{
-			TokenToToggle->PlayerHasPermissions(PlayerStateToToggle)
-				? TokenToToggle->RemovePlayerFromPermissionsArray(PlayerStateToToggle)
-				: TokenToToggle->AddPlayerToPermissionsArray(PlayerStateToToggle);
+			CharacterToToggle->PlayerHasPermissions(PlayerStateToToggle)
+				? CharacterToToggle->RemovePlayerFromPermissionsArray(PlayerStateToToggle)
+				: CharacterToToggle->AddPlayerToPermissionsArray(PlayerStateToToggle);
 		}
 
-		ToggleTokenPermissionsForPlayer_Server(PlayerStateToToggle, TokenToToggle);
+		ToggleCharacterPermissionsForPlayer_Server(PlayerStateToToggle, CharacterToToggle);
 	}
 }
 
-void ABGGamePlayerController::DestroyToken(ABGToken* TokenToDestroy)
-{
-	if (TokenToDestroy)
-	{
-		DestroyToken_Server(TokenToDestroy);
-	}
-}
-
-void ABGGamePlayerController::MoveActorToLocation_Server_Implementation(ABGActor* ActorToMove,
+void ABGGamePlayerController::MoveActorToLocation_Server_Implementation(AActor* ActorToMove,
                                                                         FVector const& NewLocation)
 {
 	if (ActorToMove)
@@ -1057,10 +1123,11 @@ void ABGGamePlayerController::MoveActorToLocation_Server_Implementation(ABGActor
 	}
 }
 
-void ABGGamePlayerController::ToggleTileVisibility_Server_Implementation(ABGTile* TileToToggle)
+void ABGGamePlayerController::ToggleTileVisibility_Server_Implementation(UBGTileComponent* TileToToggle)
 {
 	if (TileToToggle)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Toggling Tile Visibility"))
 		ABGGameplayGameModeBase::ToggleTileVisibility(TileToToggle);
 	}
 }
@@ -1076,7 +1143,7 @@ bool ABGGamePlayerController::GetGameMasterPermissions() const
 void ABGGamePlayerController::OutlineObject()
 {
 	FHitResult HitResult;
-	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel6), true, HitResult))
+	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GRAB), true, HitResult))
 	{
 		if (HitResult.GetActor()->IsValidLowLevel())
 		{
@@ -1139,13 +1206,5 @@ void ABGGamePlayerController::OutlineObject()
 				}
 			}
 		}
-	}
-}
-
-void ABGGamePlayerController::DestroySplineStructure_Server_Implementation(ABGSplineStructure* StructureToDestroy)
-{
-	if (StructureToDestroy)
-	{
-		ABGGameplayGameModeBase::DestroySplineStructure(StructureToDestroy);
 	}
 }

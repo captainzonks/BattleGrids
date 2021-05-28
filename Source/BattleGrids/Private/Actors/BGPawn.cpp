@@ -10,6 +10,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/KismetMaterialLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialParameterCollection.h"
 
 // Sets default values
@@ -23,6 +24,14 @@ ABGPawn::ABGPawn(const FObjectInitializer& ObjectInitializer)
 	RootComponent = CapsuleComponent;
 	CapsuleComponent->SetCapsuleHalfHeight(90.f);
 	CapsuleComponent->SetCapsuleRadius(90.f);
+	CapsuleComponent->SetSimulatePhysics(true);
+
+	PawnMovementComponent = CreateDefaultSubobject<UPawnMovementComponent>(TEXT("Pawn Movement"));
+	// PawnMovementComponent->SetIsReplicated(true);
+
+	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(
+		TEXT("Floating Pawn Movement"));
+	FloatingPawnMovement->SetIsReplicated(true);
 
 	MainStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Main Body Mesh"));
 	MainStaticMeshComponent->SetupAttachment(CapsuleComponent);
@@ -44,11 +53,6 @@ ABGPawn::ABGPawn(const FObjectInitializer& ObjectInitializer)
 	SphereMask->SetCollisionProfileName("SphereMask");
 	SphereMask->SetSphereRadius(6.f);
 
-	PawnMovementComponent = CreateDefaultSubobject<UPawnMovementComponent>(TEXT("Pawn Movement"));
-
-	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(
-		TEXT("Floating Pawn Movement"));
-	FloatingPawnMovement->SetIsReplicated(true);
 
 	bIsRightMouseButtonDown = false;
 }
@@ -62,6 +66,7 @@ void ABGPawn::BeginPlay()
 
 void ABGPawn::OnConstruction(const FTransform& Transform)
 {
+	if (!SphereMask || !ParameterCollection) return;
 	SphereMask->SetRelativeScale3D(FVector(MaskRadius) / FVector(5));
 
 	if (ParameterCollection)
@@ -77,16 +82,12 @@ void ABGPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// map the MaskRadius to the SphereMask size (200 / 6 = 33.3333 repeating)
+	/** map the MaskRadius to the SphereMask size (200 / 6 = 33.3333 repeating) */
+	if (!SphereMask || !ParameterCollection) return;
 	SphereMask->SetSphereRadius(MaskRadius / 33.f);
-
-	if (ParameterCollection)
-	{
-		UKismetMaterialLibrary::SetVectorParameterValue(this, ParameterCollection, VectorParameterName,
-		                                                SphereMask->GetComponentLocation());
-
-		UKismetMaterialLibrary::SetScalarParameterValue(this, ParameterCollection, ScalarParameterName, MaskRadius);
-	}
+	UKismetMaterialLibrary::SetVectorParameterValue(this, ParameterCollection, VectorParameterName,
+	                                                SphereMask->GetComponentLocation());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ParameterCollection, ScalarParameterName, MaskRadius);
 }
 
 // Called to bind functionality to input
@@ -94,47 +95,66 @@ void ABGPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// Movement
+	/** Movement */
 	InputComponent->BindAxis("MoveForward", this, &ABGPawn::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ABGPawn::MoveRight);
 
-	// Camera
+	/** Camera */
 	InputComponent->BindAxis("LookUp", this, &ABGPawn::LookUp);
 	InputComponent->BindAxis("Turn", this, &ABGPawn::Turn);
 }
 
 void ABGPawn::MoveForward(float Value)
 {
+	if (!CameraComponent) return;
+
 	if (Value != 0.f)
-		AddMovementInput(CameraComponent->GetForwardVector(), Value);
-	UpdateTransform(GetActorTransform());
+	{
+		AddMovementInput(CameraComponent->GetForwardVector(), Value, true);
+		UpdateTransform(GetActorTransform());
+	}
 }
 
 void ABGPawn::MoveRight(float Value)
 {
+	if (!CameraComponent) return;
+
 	if (Value != 0.f)
-		AddMovementInput(CameraComponent->GetRightVector(), Value);
-	UpdateTransform(GetActorTransform());
+	{
+		AddMovementInput(CameraComponent->GetRightVector(), Value, true);
+		UpdateTransform(GetActorTransform());
+	}
 }
 
 void ABGPawn::LookUp(float Value)
 {
+	if (!Controller) return;
+
 	if (Value != 0.f)
+	{
 		SetActorRelativeRotation(GetActorRotation() + FRotator(-1.f * Value, 0.f, 0.f));
-	UpdateTransform(GetActorTransform());
+		UpdateTransform(GetActorTransform());
+	}
 }
 
 void ABGPawn::Turn(float Value)
 {
+	if (!Controller) return;
+
 	if (Value != 0.f)
+	{
 		SetActorRelativeRotation(GetActorRotation() + FRotator(0.f, Value, 0.f));
-	UpdateTransform(GetActorTransform());
+		UpdateTransform(GetActorTransform());
+	}
 }
 
 void ABGPawn::UpdateTransform(FTransform const& NewTransform) const
 {
-	if (auto const BGGamePlayerController = Cast<ABGGamePlayerController>(Controller))
+	if (!Controller) return;
+
+	auto BGPlayerController = Cast<ABGGamePlayerController>(GetController());
+	if (BGPlayerController)
 	{
-		BGGamePlayerController->UpdateTransformOnServer(NewTransform);
+		BGPlayerController->UpdateTransformOnServer(NewTransform);
 	}
 }

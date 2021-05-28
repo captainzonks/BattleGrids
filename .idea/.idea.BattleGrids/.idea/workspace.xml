@@ -57,35 +57,22 @@
     <projectFile>Intermediate/ProjectFiles/UnrealRecoverySvc.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UnrealVersionSelector.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/BootstrapPackagedGame.vcxproj</projectFile>
+    <projectFile>../../UnrealEngine/Engine/Source/Programs/IOS/DeploymentServer/DeploymentServer.csproj</projectFile>
+    <projectFile>../../UnrealEngine/Engine/Source/Programs/IOS/DeploymentServerLauncher/DeploymentServerLauncher.csproj</projectFile>
+    <projectFile>../../UnrealEngine/Engine/Source/Programs/IOS/iPhonePackager/iPhonePackager.csproj</projectFile>
+    <projectFile>Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d910db-2413-47c1-afb4-31434af52af2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/Lights/BP_Spotlight.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_LightContextMenu.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGLight.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Lights/BGSpotlight.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGLight.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/Lights/BGSpotlight.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleGrids/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BattleGrids.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/BattleGrids.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GamePlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Blueprints/Gameplay/BP_GamePlayerController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/DefaultGameMap_BuiltData.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/Levels/MainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_GameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TokenContextMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleGrids/UI/Gameplay/WBP_TileContextMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +80,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -108,57 +100,57 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Lobby/BGLobbyPlayerState.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGLobbyMenu.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGLobbyMenu.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameModeBase.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGConnectedPlayer.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGConnectedPlayer.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameStateBase.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGContextWidget.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuWidget.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextWidget.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextInterface.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameHUD.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGActorInterface.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGContextMenu.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Structures/BGDoor.cpp" />
-      <option value="$PROJECT_DIR$/Config/DefaultEngine.ini" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGToken.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGToken.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGTile.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGBoard.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGTile.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGSplineStructure.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGSplineStructure.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGPawn.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGPawn.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextMenu.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGToken.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGToken.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameModeBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGamePlayerList.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGamePlayerRow.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameStateBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGStructure.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGContextMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGContextMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGStructure.h" />
+      <option value="$PROJECT_DIR$/Config/DefaultEngine.ini" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameStateBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGPlayerSave.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGSaveGame.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGSaveGame.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGPlayerSave.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGServerRow.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGGameLoadRow.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGGameLoadRow.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Characters/BGCharacter.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Characters/BGCharacter.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/Lights/BGSpotlight.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/Lights/BGSpotlight.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Save/BGGameSave.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Save/BGGameSave.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGPawn.h" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGamePlayerController.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGActor.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGPawn.cpp" />
       <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGTypes.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGActor.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Actors/BGLight.h" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGBoard.cpp" />
-      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Actors/BGLight.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameStateBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameStateBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/Gameplay/BGGameplayGameModeBase.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerState.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/BattleGrids.Build.cs" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMenuInterface.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Core/BGGameInstance.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/BGGameInstance.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGInGameMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGInGameMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMenuWidget.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGOptionsMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGOptionsMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/UI/BGMainMenu.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/UI/BGMainMenu.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGSplineWallComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGSplineWallComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGamePlayerController.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGTileComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGTileComponent.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Core/Gameplay/BGGameplayGameModeBase.cpp" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Public/Components/BGBoardComponent.h" />
+      <option value="$PROJECT_DIR$/Source/BattleGrids/Private/Components/BGBoardComponent.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1oFnjQ4oPt2qU7ANBb6ax3eqYfl" />
@@ -172,13 +164,13 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.45213193" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.50442475" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="XThreadsFramesViewSplitterKey" value="0.3873553" />
+    <property name="XThreadsFramesViewSplitterKey" value="0.3471668" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -186,7 +178,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="C++ Project.BattleGrids">
@@ -291,6 +283,16 @@
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
       </configuration_10>
+      <configuration_11>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/BattleGrids.vcxproj" />
+        <option name="EXE_PATH" value="$(TargetPath)" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+        <option name="WORKING_DIRECTORY" value="$(ProjectDir)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_11>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/BattleGrids.vcxproj" />
       <method v="2">
         <option name="Build" />
@@ -25081,6 +25083,16 @@
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
       </configuration_10>
+      <configuration_11>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UE4.vcxproj" />
+        <option name="EXE_PATH" value="$(TargetPath)" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+        <option name="WORKING_DIRECTORY" value="$(ProjectDir)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_11>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UE4.vcxproj" />
       <method v="2">
         <option name="Build" />
@@ -30168,6 +30180,1092 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="UnrealLaunchDaemon" type="CppProject" factoryName="C++ Project">
+      <configuration_1>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_1>
+      <configuration_2>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_2>
+      <configuration_3>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_3>
+      <configuration_4>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_4>
+      <configuration_5>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_5>
+      <configuration_6>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_6>
+      <configuration_7>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_7>
+      <configuration_8>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_8>
+      <configuration_9>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_9>
+      <configuration_10>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_10>
+      <configuration_11>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_11>
+      <configuration_12>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_12>
+      <configuration_13>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_13>
+      <configuration_14>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_14>
+      <configuration_15>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_15>
+      <configuration_16>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_16>
+      <configuration_17>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_17>
+      <configuration_18>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_18>
+      <configuration_19>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_19>
+      <configuration_20>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_20>
+      <configuration_21>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_21>
+      <configuration_22>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_22>
+      <configuration_23>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_23>
+      <configuration_24>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_24>
+      <configuration_25>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_25>
+      <configuration_26>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_26>
+      <configuration_27>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_27>
+      <configuration_28>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_28>
+      <configuration_29>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_29>
+      <configuration_30>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_30>
+      <configuration_31>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_31>
+      <configuration_32>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_32>
+      <configuration_33>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_33>
+      <configuration_34>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_34>
+      <configuration_35>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_35>
+      <configuration_36>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_36>
+      <configuration_37>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_37>
+      <configuration_38>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_38>
+      <configuration_39>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_39>
+      <configuration_40>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_40>
+      <configuration_41>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_41>
+      <configuration_42>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_42>
+      <configuration_43>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_43>
+      <configuration_44>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_44>
+      <configuration_45>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_45>
+      <configuration_46>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_46>
+      <configuration_47>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_47>
+      <configuration_48>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_48>
+      <configuration_49>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_49>
+      <configuration_50>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_50>
+      <configuration_51>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_51>
+      <configuration_52>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_52>
+      <configuration_53>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_53>
+      <configuration_54>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_54>
+      <configuration_55>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_55>
+      <configuration_56>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_56>
+      <configuration_57>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_57>
+      <configuration_58>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_58>
+      <configuration_59>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_59>
+      <configuration_60>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_60>
+      <configuration_61>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_61>
+      <configuration_62>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_62>
+      <configuration_63>
+        <option name="CONFIGURATION" value="Debug Client" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_63>
+      <configuration_64>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_64>
+      <configuration_65>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_65>
+      <configuration_66>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_66>
+      <configuration_67>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_67>
+      <configuration_68>
+        <option name="CONFIGURATION" value="Test Server" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_68>
+      <configuration_69>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_69>
+      <configuration_70>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_70>
+      <configuration_71>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_71>
+      <configuration_72>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_72>
+      <configuration_73>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_73>
+      <configuration_74>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_74>
+      <configuration_75>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_75>
+      <configuration_76>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_76>
+      <configuration_77>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_77>
+      <configuration_78>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_78>
+      <configuration_79>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_79>
+      <configuration_80>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_80>
+      <configuration_81>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_81>
+      <configuration_82>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_82>
+      <configuration_83>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_83>
+      <configuration_84>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_84>
+      <configuration_85>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_85>
+      <configuration_86>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_86>
+      <configuration_87>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_87>
+      <configuration_88>
+        <option name="CONFIGURATION" value="DebugGame" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_88>
+      <configuration_89>
+        <option name="CONFIGURATION" value="Test" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_89>
+      <configuration_90>
+        <option name="CONFIGURATION" value="Shipping Client" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_90>
+      <configuration_91>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_91>
+      <configuration_92>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_92>
+      <configuration_93>
+        <option name="CONFIGURATION" value="Debug Server" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_93>
+      <configuration_94>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_94>
+      <configuration_95>
+        <option name="CONFIGURATION" value="DebugGame Client" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_95>
+      <configuration_96>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_96>
+      <configuration_97>
+        <option name="CONFIGURATION" value="Shipping Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_97>
+      <configuration_98>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="IOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_98>
+      <configuration_99>
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="Win32" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_99>
+      <configuration_100>
+        <option name="CONFIGURATION" value="Development" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_100>
+      <configuration_101>
+        <option name="CONFIGURATION" value="Shipping" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_101>
+      <configuration_102>
+        <option name="CONFIGURATION" value="DebugGame Server" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_102>
+      <configuration_103>
+        <option name="CONFIGURATION" value="Test Client" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_103>
+      <configuration_104>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="Mac" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_104>
+      <configuration_105>
+        <option name="CONFIGURATION" value="DebugGame Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_105>
+      <configuration_106>
+        <option name="CONFIGURATION" value="Debug Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_106>
+      <configuration_107>
+        <option name="CONFIGURATION" value="Development Client" />
+        <option name="PLATFORM" value="HoloLens" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_107>
+      <configuration_108>
+        <option name="CONFIGURATION" value="Debug" />
+        <option name="PLATFORM" value="TVOS" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      </configuration_108>
+      <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/UnrealLaunchDaemon.vcxproj" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <configuration name="UnrealLightmass" type="CppProject" factoryName="C++ Project">
       <configuration_1>
         <option name="CONFIGURATION" value="Development" />
@@ -33852,6 +34950,42 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="DeploymentServer" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../UnrealEngine/Engine/Source/Programs/IOS/DeploymentServer/DeploymentServer.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="DeploymentServerLauncher" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../UnrealEngine/Engine/Source/Programs/IOS/DeploymentServerLauncher/DeploymentServerLauncher.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <configuration name="GitDependencies" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -33897,6 +35031,24 @@
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../UnrealEngine/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="iPhonePackager" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../UnrealEngine/Engine/Source/Programs/IOS/iPhonePackager/iPhonePackager.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
       <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
@@ -34007,118 +35159,26 @@
       <workItem from="1619105616629" duration="15954000" />
       <workItem from="1619191046758" duration="9112000" />
       <workItem from="1619200659322" duration="12785000" />
-    </task>
-    <task id="LOCAL-00004" summary="added multicast function of physics and gravity and collision">
-      <created>1613168694740</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1613168694740</updated>
-    </task>
-    <task id="LOCAL-00005" summary="lobby data is replicating properly and updating for connected clients; created child classes of BGPlayerController for Gameplay and Lobby specifics">
-      <created>1613587195111</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1613587195111</updated>
-    </task>
-    <task id="LOCAL-00006" summary="color selection added to lobby">
-      <created>1613589929040</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1613589929040</updated>
-    </task>
-    <task id="LOCAL-00007" summary="ready / not ready button and colors flip-flop; start game button disables when players haven't selected colors or are not ready">
-      <created>1613597143650</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1613597143650</updated>
-    </task>
-    <task id="LOCAL-00008" summary="network code fixed up with proper calls to Destroy Session; added a Pause Menu in game to leave or quit">
-      <created>1613671400353</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1613671400353</updated>
-    </task>
-    <task id="LOCAL-00009" summary="began adding in permissions-per-player function so that Game Masters can set token permissions, but it needs more work done for client-side player list populating">
-      <created>1613682880580</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1613682880580</updated>
-    </task>
-    <task id="LOCAL-00010" summary="We can delete tiles! But we can't add them back...why?">
-      <created>1613775840159</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1613775840159</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Player names are now prompted at game start if a save file is not found, and server and client properly load/save the data in the lobby">
-      <created>1614116580180</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1614116580180</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Board dynamically shrinks and (almost) grows; needs more work and refinement, but the foundation is there">
-      <created>1614121976817</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1614121976817</updated>
-    </task>
-    <task id="LOCAL-00013" summary="boards shrink and grow dynamically, spawn dynamically at different Z-axes, all with custom C++ functions; boards also can be dragged in 3D world space with snap-to-grid; cleaned up the Selection function in the PlayerController significantly to sort board vs token grabbing...big update today.">
-      <created>1614209203316</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1614209203316</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Spline Structure tool is now working and network code works too; needs to be moved into C++">
-      <created>1614380343601</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1614380343602</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Moved SplineStructure functions from Blueprints to C++, and began movement of PlayerController selection functions to C++; reorganized C++ folder and file structure.">
-      <created>1614728522852</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1614728522852</updated>
-    </task>
-    <task id="LOCAL-00016" summary="All PlayerController functions now moved over to C++">
-      <created>1614803754978</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1614803754978</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Tokens can be placed upon the top of SplineStructures now.">
-      <created>1614807564505</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1614807564505</updated>
-    </task>
-    <task id="LOCAL-00018" summary="SplineStructures can be moved, and the ControlMode enum in PlayerController properly controls the flow of logic between Move and Build for tokens and structures.">
-      <created>1614813358441</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1614813358441</updated>
-    </task>
-    <task id="LOCAL-00019" summary="StructureSplines now support multiple instanced meshes and material instances for more complex structures, and Doors can be dynamically added (to be refined and improved!)">
-      <created>1614895416168</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1614895416168</updated>
+      <workItem from="1619550808911" duration="3855000" />
+      <workItem from="1619623442120" duration="19533000" />
+      <workItem from="1619709516807" duration="18869000" />
+      <workItem from="1619796266193" duration="9408000" />
+      <workItem from="1619805987363" duration="9351000" />
+      <workItem from="1620140130607" duration="17399000" />
+      <workItem from="1620160557247" duration="1653000" />
+      <workItem from="1620227951121" duration="16442000" />
+      <workItem from="1620314167820" duration="16442000" />
+      <workItem from="1620745246791" duration="23527000" />
+      <workItem from="1621007547489" duration="2654000" />
+      <workItem from="1621010759466" duration="12000" />
+      <workItem from="1621010854056" duration="3919000" />
+      <workItem from="1621355620315" duration="8483000" />
+      <workItem from="1621443406519" duration="1968000" />
+      <workItem from="1621445483145" duration="6631000" />
+      <workItem from="1622071947648" duration="529000" />
+      <workItem from="1622077237394" duration="801000" />
+      <workItem from="1622135932054" duration="5916000" />
+      <workItem from="1622223076214" duration="2405000" />
     </task>
     <task id="LOCAL-00020" summary="Improved SplineStructure functions with a more generic &quot;ModifyMeshInstanceAtIndex&quot; and the ability to get a mesh instance by a string name provided.">
       <created>1614899574015</created>
@@ -34351,7 +35411,119 @@
       <option name="project" value="LOCAL" />
       <updated>1619199212873</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Initial design of the Factory in the GameplayGameModeBase class, to spawn BGActors with custom components. SplineWallComponent created. Need to re-do existing inherited classes as components instead (Composition VS Inheritance).">
+      <created>1619554533108</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1619554533109</updated>
+    </task>
+    <task id="LOCAL-00054" summary="BGActor refactored to be created with components by the GameMode at runtime; SplineComponent, TileComponent, BoardComponent all implemented. PlayerController fixed with ability to modify SplineComponents on a selected BGActor. Big big big solutions! Hooray!">
+      <created>1619647116289</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1619647116289</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Refactored PlayerController to handle BGToken VS BGActor selection and movement">
+      <created>1619715706547</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1619715706548</updated>
+    </task>
+    <task id="LOCAL-00056" summary="fixed tile static mesh replication issues, and token collision w/ tiles on client-side">
+      <created>1619718387209</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1619718387209</updated>
+    </task>
+    <task id="LOCAL-00057" summary="further refactoring work done on context menus, spline structures and controls of their components; noticed some networking control problems (?) with a powershell build of the game...should be investigated further">
+      <created>1619730697284</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1619730697284</updated>
+    </task>
+    <task id="LOCAL-00058" summary="found network bugs that need addressing: need to handle join-in-progress clients and updating spline actors on client-side; this should be done through the GameState...which needs to be fleshed out with proper functions and networking">
+      <created>1619816678439</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1619816678440</updated>
+    </task>
+    <task id="LOCAL-00059" summary="added functionality to the GameplayGameStateBase class to allow the storage of actors and characters in the game world; clients who connect mid-session now receive SplineCurves data to update their wall actors to match the built walls on the server; fixed nullptr bugs as they appeared">
+      <created>1620155880656</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1620155880656</updated>
+    </task>
+    <task id="LOCAL-00060" summary="fixed up a variable redirect issue">
+      <created>1620162211754</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1620162211755</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Implemented initial saving and loading functions for Character models on the game board.">
+      <created>1620242207326</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1620242207326</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Spline structures save and load properly; PlayerInfo is properly loaded if loading into a game and not seamlessly traveling from the lobby level.">
+      <created>1620246521216</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1620246521217</updated>
+    </task>
+    <task id="LOCAL-00063" summary="reconfigured how pawn movement is handled (seems smoother?) and moved spawning code over to C++">
+      <created>1620329396073</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1620329396073</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Fixed replication bug with spline points' Arrive and Leave tangents not being normalized before NetSerialize getting called.">
+      <created>1621012895166</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1621012895166</updated>
+    </task>
+    <task id="LOCAL-00065" summary="improved UI functionality for Main Menu">
+      <created>1621014892138</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1621014892138</updated>
+    </task>
+    <task id="LOCAL-00066" summary="began implementation of the Game Options menu for Resolution and FullscreenMode settings">
+      <created>1621365098060</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1621365098060</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Moved OptionsMenu to its own class; can now be opened from InGameMenu and settings can be modified while in-game (obviously).">
+      <created>1621452794699</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1621452794699</updated>
+    </task>
+    <task id="LOCAL-00068" summary="fixed up the ability to grab through a wall when it has become transparent; fixed tile visibility toggling; began to refactor the Grow/Shrink Board functions, but needs to be rewritten">
+      <created>1622142485568</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1622142485568</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -34384,22 +35556,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed a bug with the wall mesh, moved Base mesh generation for corners into the Corner mesh generation function to be handled separately." />
-    <MESSAGE value="Added separate BGStructure class which allows for a more complex Door object (opening/closing doors, animations, etc.); Created new functionality for spawning this Actor in-game, however network code on client-side is having replication issues with removal of wall instances." />
-    <MESSAGE value="Fixed network issues with multicasting removal and restoring of wall instanced meshes when adding and removing door actors. Also cleaned up some code and functions that were unnecessary." />
-    <MESSAGE value="Token Model now attaches to ModelRoot socket on Token Base properly, and has a root CapsuleComponent that handles gravity and physics separately, with a custom collision profile set to overlap (doesn't collide, it just provides &quot;weight&quot; to the Token)." />
-    <MESSAGE value="SplineStructure collision boxes now disable and enable properly when adding and removing Doors (allowing for gaps in visibility to occur when a Door is opened for moving Tokens through them)." />
-    <MESSAGE value="added outline renderer for selections" />
-    <MESSAGE value="Improved outline function by rendering an outline around all static mesh components owned by the hit Actor instead of just the hit component." />
-    <MESSAGE value="Tokens are now Character classes instead of Pawns, with CharacterMovement to resolve &quot;Gravity&quot; problem over network. Tiles ignore the Pawn when they disappear to allow for falling (CharacterMovementComponent operates on the Query channel, not Physics!).&#10;&#10;Tokens now move through doorways successfully when they are open." />
-    <MESSAGE value="Token Lock has been swapped to disabling of Character Movement instead of locking the static mesh." />
-    <MESSAGE value="Implemented Steam Online Subsystem and began a total rework of the menu system with C++ and online functionality. Server list is semi-functional and finds a LAN game successfully and adds it to the list." />
-    <MESSAGE value="Steam and LAN connectivity working!!! Beginning movement of Lobby Blueprint code over to C++ now." />
-    <MESSAGE value="Lobby stuff isn't working. Can't seem to get variables from Server to Client and update UI properly. Need to look into it further, or consider scrapping the Lobby entirely and going straight into the Game." />
-    <MESSAGE value="Lobby updates properly and lobby list adds connected players as they join." />
-    <MESSAGE value="Worked further on RPC calls for handling the Lobby player list update, and reworked the Tick in PlayerController and LobbyPlayerController for getting the GameState and PlayerState. PlayerList populates irregularly. To be investigated..." />
-    <MESSAGE value="Lobby is successfully handling PlayerStates and updating all UI with timers, and each PlayerState CLIENT gets a UniqueID to be sent to the SERVER. Working finally!" />
-    <MESSAGE value="Networked game start flow from Main Menu to Lobby to Game is working mostly, just needs to be smoothed out." />
     <MESSAGE value="Joining a game in progress properly updates the player lists and UI accordingly for all connected." />
     <MESSAGE value="Improved user interface to have a &quot;Thinking&quot; GUI popup to visually confirm the server is doing something (searching for server list, refreshing, etc.). Added some more functionality to the Lobby, and also reworked the Save/Load functions for PlayerInfo." />
     <MESSAGE value="fixed garbage collection issue with instanced meshes on the spline structure by switching to tags instead of object name for finding the instances we want; began to refactor all the context menus" />
@@ -34409,7 +35565,23 @@
     <MESSAGE value="spline structures optimized and player controller functions fixed - garbage collection issues resolved!" />
     <MESSAGE value="Created a BGActor parent Actor class which implements the actor interface and holds the context menu functions, reducing duplicate code" />
     <MESSAGE value="character's facade is working correctly, spawns an actor that holds a context menu and redirects the context menu's parent to itself!" />
-    <option name="LAST_COMMIT_MESSAGE" value="character's facade is working correctly, spawns an actor that holds a context menu and redirects the context menu's parent to itself!" />
+    <MESSAGE value="Initial design of the Factory in the GameplayGameModeBase class, to spawn BGActors with custom components. SplineWallComponent created. Need to re-do existing inherited classes as components instead (Composition VS Inheritance)." />
+    <MESSAGE value="BGActor refactored to be created with components by the GameMode at runtime; SplineComponent, TileComponent, BoardComponent all implemented. PlayerController fixed with ability to modify SplineComponents on a selected BGActor. Big big big solutions! Hooray!" />
+    <MESSAGE value="Refactored PlayerController to handle BGToken VS BGActor selection and movement" />
+    <MESSAGE value="fixed tile static mesh replication issues, and token collision w/ tiles on client-side" />
+    <MESSAGE value="further refactoring work done on context menus, spline structures and controls of their components; noticed some networking control problems (?) with a powershell build of the game...should be investigated further" />
+    <MESSAGE value="found network bugs that need addressing: need to handle join-in-progress clients and updating spline actors on client-side; this should be done through the GameState...which needs to be fleshed out with proper functions and networking" />
+    <MESSAGE value="added functionality to the GameplayGameStateBase class to allow the storage of actors and characters in the game world; clients who connect mid-session now receive SplineCurves data to update their wall actors to match the built walls on the server; fixed nullptr bugs as they appeared" />
+    <MESSAGE value="fixed up a variable redirect issue" />
+    <MESSAGE value="Implemented initial saving and loading functions for Character models on the game board." />
+    <MESSAGE value="Spline structures save and load properly; PlayerInfo is properly loaded if loading into a game and not seamlessly traveling from the lobby level." />
+    <MESSAGE value="reconfigured how pawn movement is handled (seems smoother?) and moved spawning code over to C++" />
+    <MESSAGE value="Fixed replication bug with spline points' Arrive and Leave tangents not being normalized before NetSerialize getting called." />
+    <MESSAGE value="improved UI functionality for Main Menu" />
+    <MESSAGE value="began implementation of the Game Options menu for Resolution and FullscreenMode settings" />
+    <MESSAGE value="Moved OptionsMenu to its own class; can now be opened from InGameMenu and settings can be modified while in-game (obviously)." />
+    <MESSAGE value="fixed up the ability to grab through a wall when it has become transparent; fixed tile visibility toggling; began to refactor the Grow/Shrink Board functions, but needs to be rewritten" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed up the ability to grab through a wall when it has become transparent; fixed tile visibility toggling; began to refactor the Grow/Shrink Board functions, but needs to be rewritten" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
